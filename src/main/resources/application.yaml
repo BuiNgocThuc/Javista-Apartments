@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /funds
+    context-path: /javista
   port: 8080
 
 spring:
