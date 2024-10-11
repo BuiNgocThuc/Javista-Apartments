@@ -3,6 +3,8 @@ package com.example.javista.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -30,40 +32,42 @@ public class User {
         String avatar;
 
         @Column(name = "is_first_login")
-        private Byte isFirstLogin;
+        Boolean isFirstLogin;
 
         @Column(name = "email")
-        private String email;
+        String email;
 
         @Column(name = "phone")
-        private String phone;
+        String phone;
 
         @Column(name = "gender")
-        private String gender;
+        String gender;
 
         @Column(name = "full_name")
-        private String fullName;
+        String fullName;
 
         @Column(name = "nation_id")
-        private String nationId;
+        String nationId;
 
         @Column(name = "user_type")
-        private String userType;
+        String userType;
 
         @Column(name = "date_of_birth")
-        private LocalDateTime dateOfBirth;
+        LocalDateTime dateOfBirth;
 
         @Column(name = "is_staying")
-        private Byte isStaying;
+        Boolean isStaying;
 
+        @CreatedDate
         @Column(name = "created_at")
-        private LocalDateTime createdAt;
+        LocalDateTime createdAt;
 
+        @LastModifiedDate
         @Column(name = "updated_at")
-        private LocalDateTime updatedAt;
+        LocalDateTime updatedAt;
 
         @Column(name = "deleted_at")
-        private LocalDateTime deletedAt;
+        LocalDateTime deletedAt;
 
         @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                         CascadeType.DETACH, CascadeType.REFRESH})

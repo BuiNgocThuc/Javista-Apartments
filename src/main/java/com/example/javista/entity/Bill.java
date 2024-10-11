@@ -3,6 +3,8 @@ package com.example.javista.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -38,9 +40,11 @@ public class Bill {
         @Column(name = "status")
         String status;
 
+        @CreatedDate
         @Column(name = "created_at")
         LocalDateTime createdAt;
 
+        @LastModifiedDate
         @Column(name = "updated_at")
         LocalDateTime updatedAt;
 

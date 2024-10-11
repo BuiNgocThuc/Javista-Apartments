@@ -1,4 +1,4 @@
-package com.example.javista.dto;
+package com.example.javista.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

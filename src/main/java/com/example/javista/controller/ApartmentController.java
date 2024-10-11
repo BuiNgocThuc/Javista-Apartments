@@ -1,7 +1,9 @@
 package com.example.javista.controller;
 
-import com.example.javista.dto.PageResponse;
+import com.example.javista.dto.request.apartment.ApartmentQueryRequest;
+import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.request.apartment.ApartmentCreationRequest;
+import com.example.javista.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.javista.dto.response.apartment.ApartmentResponse;
 import com.example.javista.service.ApartmentService;
 import lombok.AccessLevel;
@@ -21,10 +23,14 @@ public class ApartmentController {
         // Query
         @GetMapping
         PageResponse<ApartmentResponse> getApartments(
-                        @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-                        @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-                        @RequestParam(value = "sort", required = false, defaultValue = "createdAt") String  sort) {
-                return apartmentService.getApartments(page, size, sort);
+                        @RequestParam ApartmentQueryRequest query) {
+                return apartmentService.getApartments(query);
+        }
+
+        // Query by id
+        @GetMapping("/{id}")
+        ApartmentResponse getApartmentById(@PathVariable String id) {
+                return apartmentService.getApartmentById(id);
         }
 
         // Create
@@ -32,5 +38,20 @@ public class ApartmentController {
         ApartmentResponse createApartment(@RequestBody ApartmentCreationRequest request) {
                 return apartmentService.createApartment(request);
         }
+
+        // Update
+        @PutMapping("/{id}")
+        ApartmentResponse updateApartment(@PathVariable String id, @RequestBody ApartmentUpdateRequest request) {
+                return apartmentService.updateApartment(id, request);
+        }
+
+        //Delete
+        @DeleteMapping("/{id}")
+        void deleteApartment(@PathVariable String id) {
+                apartmentService.deleteApartment(id);
+        }
+
+//        @PatchMapping("/{id}")
+
 
 }
