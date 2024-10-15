@@ -23,6 +23,6 @@ public class BillUpdateRequest {
 
         String status;
 
-        String relationshipId;
+        Integer relationshipId;
 
 }

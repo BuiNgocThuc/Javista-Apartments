@@ -1,5 +1,6 @@
 package com.example.javista.service.Implements;
 
+import com.example.javista.dto.request.apartment.ApartmentPatchRequest;
 import com.example.javista.dto.request.apartment.ApartmentQueryRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.request.apartment.ApartmentCreationRequest;
@@ -65,20 +66,24 @@ public class ApartmentServiceImpl implements ApartmentService {
                                 .orElseThrow(() ->  new RuntimeException("Apartment Not Found"));
 
                 apartmentMapper.updateRequestToEntity(apartment, request);
-                return apartmentMapper.entityToResponse(apartmentRepository.save((apartment)));
+                return apartmentMapper.entityToResponse(apartmentRepository.save(apartment));
+        }
+
+        @Override
+        public ApartmentResponse patchApartment(String id, ApartmentPatchRequest request) {
+                Apartment apartment = apartmentRepository.findById(id)
+                                .orElseThrow(() ->  new RuntimeException("Apartment Not Found"));
+
+                apartmentMapper.patchRequestToEntity(apartment, request);
+                return apartmentMapper.entityToResponse(apartmentRepository.save(apartment));
         }
 
         @Override
         public void deleteApartment(String id) {
-                apartmentRepository.deleteById(id);
-        }
-
-        public void patchApartment(String id, ApartmentUpdateRequest request) {
                 Apartment apartment = apartmentRepository.findById(id)
-                                .orElseThrow(() ->  new RuntimeException("Apartment Not Found"));
+                                .orElseThrow(() -> new RuntimeException("Apartment Not Found"));
 
-                apartmentMapper.updateRequestToEntity(apartment, request);
-                apartment.setUpdatedAt(LocalDateTime.now());
-                apartmentRepository.save((apartment));
+                apartment.setDeletedAt(LocalDateTime.now());
+                apartmentRepository.save(apartment);
         }
 }

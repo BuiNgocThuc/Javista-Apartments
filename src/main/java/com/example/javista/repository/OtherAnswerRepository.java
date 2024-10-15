@@ -1,4 +1,9 @@
 package com.example.javista.repository;
 
-public interface OtherAnswerRepository {
+import com.example.javista.entity.OtherAnswer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface OtherAnswerRepository extends JpaRepository<OtherAnswer, Integer> {
 }

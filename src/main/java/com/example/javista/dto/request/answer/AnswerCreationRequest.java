@@ -12,5 +12,5 @@ import org.mapstruct.MappingTarget;
 public class AnswerCreationRequest {
         String content;
 
-        String questionId;
+        Integer questionId;
 }

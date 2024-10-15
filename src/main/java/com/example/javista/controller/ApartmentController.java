@@ -1,5 +1,6 @@
 package com.example.javista.controller;
 
+import com.example.javista.dto.request.apartment.ApartmentPatchRequest;
 import com.example.javista.dto.request.apartment.ApartmentQueryRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.request.apartment.ApartmentCreationRequest;
@@ -51,7 +52,10 @@ public class ApartmentController {
                 apartmentService.deleteApartment(id);
         }
 
-//        @PatchMapping("/{id}")
-
+        // Patch
+        @PatchMapping("/{id}")
+        void patchApartment(@PathVariable String id, @RequestBody ApartmentPatchRequest request) {
+                apartmentService.patchApartment(id, request);
+        }
 
 }

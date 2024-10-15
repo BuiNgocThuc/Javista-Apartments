@@ -7,7 +7,6 @@ import com.example.javista.dto.response.service.ServiceResponse;
 import com.example.javista.entity.Service;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
