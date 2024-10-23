@@ -7,6 +7,8 @@ import com.example.javista.dto.request.question.QuestionUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.question.QuestionResponse;
 import com.example.javista.entity.Question;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.mapper.QuestionMapper;
 import com.example.javista.repository.QuestionRepository;
 import com.example.javista.repository.SurveyRepository;
@@ -40,6 +42,13 @@ public class QuestionServiceImpl implements QuestionService {
 
         @Override
         public QuestionResponse createQuestion(QuestionCreationRequest request) {
+
+                // check existence of question's content
+                if (questionRepository.existsByContent(request.getContent())) {
+                        ErrorCode.ENTITY_EXISTED.setMessage("Question's content already exists");
+                        throw new AppException(ErrorCode.ENTITY_EXISTED);
+                }
+
                 Question question = questionMapper.creationRequestToEntity(request);
 
                 question.setSurvey(surveyRepository.findById(request.getSurveyId())

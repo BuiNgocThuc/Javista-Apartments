@@ -15,7 +15,7 @@ public class ItemPatchRequest {
 
         String description;
 
-        Byte isReceive;
+        Boolean isReceive;
 
         Integer userId;
 }

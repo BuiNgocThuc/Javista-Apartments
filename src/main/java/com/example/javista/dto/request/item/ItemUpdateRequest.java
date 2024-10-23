@@ -13,7 +13,7 @@ public class ItemUpdateRequest {
 
         String description;
 
-        Byte isReceive;
+        Boolean isReceive;
 
         Integer userId;
 }

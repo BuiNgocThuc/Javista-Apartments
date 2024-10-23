@@ -2,10 +2,12 @@ package com.example.javista.controller;
 
 import com.example.javista.dto.request.apartment.ApartmentPatchRequest;
 import com.example.javista.dto.request.apartment.ApartmentQueryRequest;
+import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.request.apartment.ApartmentCreationRequest;
 import com.example.javista.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.javista.dto.response.apartment.ApartmentResponse;
+import com.example.javista.entity.Apartment;
 import com.example.javista.service.ApartmentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +38,12 @@ public class ApartmentController {
 
         // Create
         @PostMapping
-        ApartmentResponse createApartment(@RequestBody ApartmentCreationRequest request) {
-                return apartmentService.createApartment(request);
+        ApiResponse<ApartmentResponse>  createApartment(@RequestBody ApartmentCreationRequest request) {
+                ApiResponse<ApartmentResponse> apiResponse = new ApiResponse<>();
+
+                apiResponse.setResult(apartmentService.createApartment(request));
+
+                return apiResponse;
         }
 
         // Update

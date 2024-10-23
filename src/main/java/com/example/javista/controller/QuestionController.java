@@ -7,6 +7,7 @@ import com.example.javista.dto.request.question.QuestionUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.question.QuestionResponse;
 import com.example.javista.service.QuestionService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -35,7 +36,7 @@ public class QuestionController {
 
         // Create
         @PostMapping
-        QuestionResponse createQuestion(@RequestBody QuestionCreationRequest request) {
+        QuestionResponse createQuestion(@RequestBody @Valid QuestionCreationRequest request) {
                 return questionService.createQuestion(request);
         }
 

@@ -14,7 +14,7 @@ public class ItemCreationRequest {
 
         String description;
 
-        Byte isReceive;
+        Boolean isReceive;
 
         Integer userId;
 }

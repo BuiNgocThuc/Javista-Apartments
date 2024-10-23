@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.question;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuestionCreationRequest {
+        @NotNull
         String content;
 
         Integer surveyId;

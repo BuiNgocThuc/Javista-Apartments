@@ -22,7 +22,7 @@ public class SettingServiceImpl implements SettingService {
         SettingRepository settingRepository;
 
         @Override
-        public SettingResponse getSetting() {
+        public SettingResponse getSettings() {
                 return settingMapper.entityToResponse(settingRepository.findAll().get(0))       ;
         }
 

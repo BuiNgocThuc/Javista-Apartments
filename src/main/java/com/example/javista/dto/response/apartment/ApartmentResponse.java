@@ -14,17 +14,17 @@ import java.time.LocalDateTime;
 public class ApartmentResponse {
         String id;
 
-        Float area;
+        String area;
 
         String description;
 
-        Integer floorNumber;
+        String floorNumber;
 
-        Integer apartmentNumber;
+        String apartmentNumber;
 
         String status;
 
-        LocalDateTime createdAt;
-
-        LocalDateTime updatedAt;
+//        String createdAt;
+//
+//        String updatedAt;
 }
