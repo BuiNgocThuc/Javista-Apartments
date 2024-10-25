@@ -19,12 +19,15 @@ public class GlobalExceptionHandler {
 
         // uncategorized exception
         @ExceptionHandler(value = Exception.class)
-        public ResponseEntity<ApiResponse> handlingUncategorizedException() {
+        public ResponseEntity<ApiResponse> handlingUncategorizedException(Exception e) {
                 ApiResponse apiResponse = new ApiResponse();
 
                 apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
                 apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
+                log.error("exception: {}", e.getMessage());
+                // log the line error
+//                e.printStackTrace();
                 return ResponseEntity.badRequest().body(apiResponse);
         }
 

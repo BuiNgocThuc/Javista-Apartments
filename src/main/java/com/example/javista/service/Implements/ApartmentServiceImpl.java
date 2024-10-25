@@ -7,19 +7,26 @@ import com.example.javista.dto.request.apartment.ApartmentCreationRequest;
 import com.example.javista.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.javista.dto.response.apartment.ApartmentResponse;
 import com.example.javista.entity.Apartment;
+import com.example.javista.filter.FilterCriteria;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.ApartmentMapper;
 import com.example.javista.repository.ApartmentRepository;
 import com.example.javista.service.ApartmentService;
+import com.example.javista.utils.FilteringUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,15 +34,27 @@ public class ApartmentServiceImpl implements ApartmentService {
         ApartmentRepository apartmentRepository;
         ApartmentMapper apartmentMapper;
 
+        // class filters
+        FilterSpecification filterSpecification;
+
+
         @Override
         public PageResponse<ApartmentResponse> getApartments(ApartmentQueryRequest query) {
 
+                // Pagination
                 int page = query.getCurrentPage();
                 int size = query.getSize();
-                Sort sort = Sort.by(query.getSort()).descending();
+                Sort sort = Sort.by( query.getSort()).ascending();
                 Pageable pageable = PageRequest.of(page - 1, size, sort);
 
-                var pageData = apartmentRepository.findAll(pageable);
+                //Filtering
+                List<FilterCriteria> filterSpecifications = FilteringUtils.setUpFilterCriterion(query);
+
+                // Filtering by specification
+                Specification<Apartment> spec = filterSpecification.filteringBySpecification(filterSpecifications);
+
+                // Call repository
+                var pageData = apartmentRepository.findAll(spec, pageable);
 
                 return PageResponse.<ApartmentResponse>builder()
                                 .currentPage(page)

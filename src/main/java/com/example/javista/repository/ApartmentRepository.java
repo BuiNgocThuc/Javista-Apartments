@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApartmentRepository  extends JpaRepository<Apartment, String>, JpaSpecificationExecutor<Apartment> {
-        Page<Apartment> findAll(Pageable pageable);
 }

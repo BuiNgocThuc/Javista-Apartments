@@ -11,11 +11,11 @@ import lombok.experimental.FieldDefaults;
 public class ApartmentQueryRequest extends PageRequest {
         String id;
 
-        Float area;
+        String area;
 
-        Integer floorNumber;
+        String floorNumber;
 
-        Integer apartmentNumber;
+        String apartmentNumber;
 
         String status;
 }
