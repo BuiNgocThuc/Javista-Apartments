@@ -1,10 +1,15 @@
 package com.example.javista.utils;
 
+import com.example.javista.filter.FilteringAndSearchingOperator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 public class StringManipulation {
+        //define replace method
+        public static String replace(String str, char oldChar, char newChar) {
+                return str.replace(oldChar, newChar);
+        }
+
         // define substring method
         public static String substring(String str, int start, int end) {
                 return str.substring(start, end);
@@ -14,7 +19,7 @@ public class StringManipulation {
                 // define index of start and end
                 int endIndex = str.indexOf(endChar);
                 if (endIndex == -1) {
-                        return null;
+                        return FilteringAndSearchingOperator.CONTAINS.toString();
                 }
 
                 // call substring method
@@ -24,25 +29,12 @@ public class StringManipulation {
         public static String definingValueInParameters(String str, char startChar) {
                 // define index of start and end
                 int startIndex = str.indexOf(startChar);
+                // if start index is -1, that will be searching function
                 if (startIndex == -1) {
-                        return null;
+                        return replace(str, '-', ' ');
                 }
                 // call substring method
                 return substring(str, startIndex + 1, str.length());
         }
-
-//        public static void main(String[] args) {
-//                StringManipulation stringManipulation = new StringManipulation();
-//                // define string
-//                String str = "lt:50.5";
-//                // define start and end
-//                char milestone = ':';
-//                // call substring method
-//                String result = StringManipulation.definingOperatorInParameters(str, milestone);
-//                String result2 = StringManipulation.definingValueInParameters(str, milestone);
-//                // print result
-//                System.out.println(result);
-//                System.out.println(result2);
-//        }
 }
 

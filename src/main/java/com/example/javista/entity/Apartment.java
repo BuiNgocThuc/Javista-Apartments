@@ -1,5 +1,6 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.ApartmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -35,8 +36,9 @@ public class Apartment {
         @Column(name = "apartment_number")
         Integer apartmentNumber;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "status")
-        String status;
+        ApartmentStatus status;
 
         @CreatedDate
         @Column(name = "created_at")

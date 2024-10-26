@@ -1,5 +1,6 @@
 package com.example.javista.dto.response.apartment;
 
+import com.example.javista.enums.ApartmentStatus;
 import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,9 +23,5 @@ public class ApartmentResponse {
 
         String apartmentNumber;
 
-        String status;
-
-//        String createdAt;
-//
-//        String updatedAt;
+        ApartmentStatus status;
 }

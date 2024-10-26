@@ -67,6 +67,10 @@ public class FilterSpecification<T> {
                                                 predicates.add(contains);
                                                 break;
 
+                                        case JOIN_TABLE:
+
+                                                break;
+
                                         default:
                                                 throw new IllegalStateException("Unexpected value: " + criteria.getOperator());
                                 }
@@ -75,4 +79,6 @@ public class FilterSpecification<T> {
                         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 };
         }
+
+
 }

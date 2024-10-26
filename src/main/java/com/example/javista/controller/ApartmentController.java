@@ -28,7 +28,6 @@ public class ApartmentController {
         @GetMapping
         PageResponse<ApartmentResponse> getApartments(
                         @ModelAttribute ApartmentQueryRequest query) {
-                log.info("area: {}, floorNumber: {}", query.getArea(), query.getFloorNumber());
                 return apartmentService.getApartments(query);
         }
 

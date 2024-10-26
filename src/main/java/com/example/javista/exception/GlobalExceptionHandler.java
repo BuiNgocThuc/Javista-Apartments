@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 
                 log.error("exception: {}", e.getMessage());
                 // log the line error
-//                e.printStackTrace();
+                e.printStackTrace();
                 return ResponseEntity.badRequest().body(apiResponse);
         }
 

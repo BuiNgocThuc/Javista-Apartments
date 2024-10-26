@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.apartment;
 
+import com.example.javista.enums.ApartmentStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,5 +20,5 @@ public class ApartmentPatchRequest {
 
         Integer apartmentNumber;
 
-        String status;
+        ApartmentStatus status;
 }

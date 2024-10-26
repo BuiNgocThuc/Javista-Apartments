@@ -21,9 +21,9 @@ public class AnswerController {
 
         // query
         @GetMapping
-        PageResponse<AnswerResponse> getAnswers(@RequestParam AnswerQueryRequest query) {
-//                return answerService.getAnswers(query);
-                return null;
+        PageResponse<AnswerResponse> getAnswers(@ModelAttribute
+                                                AnswerQueryRequest query) {
+                return answerService.getAnswers(query);
         }
 
         // get by id

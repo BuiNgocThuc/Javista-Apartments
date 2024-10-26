@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.apartment;
 
+import com.example.javista.enums.ApartmentStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,5 +22,5 @@ public class ApartmentCreationRequest {
 
         Integer apartmentNumber;
 
-        String status;
+        ApartmentStatus status;
 }

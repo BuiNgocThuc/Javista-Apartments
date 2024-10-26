@@ -7,16 +7,25 @@ import com.example.javista.dto.request.answer.AnswerUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.answer.AnswerResponse;
 import com.example.javista.entity.Answer;
+import com.example.javista.filter.FilterCriteria;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.AnswerMapper;
 import com.example.javista.repository.AnswerRepository;
 import com.example.javista.repository.QuestionRepository;
 import com.example.javista.service.AnswerService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +37,30 @@ public class AnswerServiceImpl implements AnswerService {
 
         QuestionRepository questionRepository;
 
+        FilterSpecification filterSpecification;
+
         @Override
         public PageResponse<AnswerResponse> getAnswers(AnswerQueryRequest query) {
-                return null;
+                // Pagination
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                // Filtering by specification
+                Specification<Answer> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                // execute the query
+                Page<Answer> pageData = answerRepository.findAll(spec, pageable);
+
+                return  PageResponse.<AnswerResponse>builder()
+                                .currentPage(pageable.getPageNumber() + 1)
+                                .pageSize(pageData.getSize())
+                                .totalPages(pageData.getTotalPages())
+                                .totalElements(pageData.getTotalElements())
+                                .data(pageData.getContent().stream()
+                                                .map(answerMapper::entityToResponse)
+                                                .toList())
+                                .build();
         }
 
         @Override

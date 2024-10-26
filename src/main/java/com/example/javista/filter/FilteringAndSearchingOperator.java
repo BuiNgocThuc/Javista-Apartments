@@ -14,6 +14,9 @@ public enum FilteringAndSearchingOperator {
 
         // Searching
         CONTAINS,
+
+        // Join table
+        JOIN_TABLE
         ;
         
         public static FilteringAndSearchingOperator convertParametersToOperators(String input) {

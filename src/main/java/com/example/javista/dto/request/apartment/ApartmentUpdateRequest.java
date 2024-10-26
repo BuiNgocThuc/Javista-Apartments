@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.apartment;
 
+import com.example.javista.enums.ApartmentStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,5 +18,5 @@ public class ApartmentUpdateRequest {
 
         Integer apartmentNumber;
 
-        String status;
+        ApartmentStatus status;
 }
