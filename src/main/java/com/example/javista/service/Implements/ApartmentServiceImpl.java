@@ -31,7 +31,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         ApartmentMapper apartmentMapper;
 
         // class filters
-        FilterSpecification filterSpecification;
+        FilterSpecification<Apartment> filterSpecification;
 
 
         @Override

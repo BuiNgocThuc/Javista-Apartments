@@ -7,13 +7,17 @@ import com.example.javista.dto.request.rejectionReason.RejectionReasonUpdateRequ
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.rejectionReason.RejectionReasonResponse;
 import com.example.javista.entity.RejectionReason;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.RejectionReasonMapper;
 import com.example.javista.repository.RejectionReasonRepository;
 import com.example.javista.repository.ReportRepository;
 import com.example.javista.service.RejectionReasonService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,9 +31,21 @@ public class RejectionReasonServiceImpl implements RejectionReasonService {
 
         ReportRepository reportRepository;
 
+        FilterSpecification<RejectionReason> filterSpecification;
+
         @Override
         public PageResponse<RejectionReasonResponse> getRejectionReasons(RejectionReasonQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<RejectionReason> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = rejectionReasonRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, rejectionReasonMapper::entityToResponse);
         }
 
         @Override

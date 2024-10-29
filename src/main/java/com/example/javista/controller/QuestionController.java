@@ -24,7 +24,8 @@ public class QuestionController {
 
         // Query
         @GetMapping
-        PageResponse<QuestionResponse> getQuestions(@RequestParam QuestionQueryRequest query) {
+        PageResponse<QuestionResponse> getQuestions(@ModelAttribute
+                                        QuestionQueryRequest query) {
                 return questionService.getQuestions(query);
         }
 

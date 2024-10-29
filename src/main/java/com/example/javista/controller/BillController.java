@@ -2,7 +2,9 @@ package com.example.javista.controller;
 
 import com.example.javista.dto.request.bill.BillCreationRequest;
 import com.example.javista.dto.request.bill.BillPatchRequest;
+import com.example.javista.dto.request.bill.BillQueryRequest;
 import com.example.javista.dto.request.bill.BillUpdateRequest;
+import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.bill.BillResponse;
 import com.example.javista.service.BillService;
 import lombok.AccessLevel;
@@ -16,6 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BillController {
         BillService billService;
+
+        // query
+        @GetMapping
+        PageResponse<BillResponse> getBills(@ModelAttribute
+                                BillQueryRequest query) {
+                return billService.getBills(query);
+        }
 
         // get by id
         @GetMapping("/{id}")

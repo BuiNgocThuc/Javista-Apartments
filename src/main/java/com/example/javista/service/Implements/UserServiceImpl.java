@@ -6,13 +6,19 @@ import com.example.javista.dto.request.user.UserQueryRequest;
 import com.example.javista.dto.request.user.UserUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
+import com.example.javista.entity.Relationship;
 import com.example.javista.entity.User;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserMapper;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.UserService;
+import com.example.javista.utils.QueryUtils;
+import jakarta.persistence.criteria.Join;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,9 +30,22 @@ public class UserServiceImpl implements UserService {
         UserMapper userMapper;
         UserRepository userRepository;
 
+        FilterSpecification<User> filterSpecification;
+
         @Override
         public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<User> spec = filterSpecification.filteringBySpecification(
+                          QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = userRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
+
         }
 
         @Override
@@ -66,5 +85,29 @@ public class UserServiceImpl implements UserService {
 
                 user.setDeletedAt(LocalDateTime.now());
                 userRepository.save(user);
+        }
+
+        @Override
+        public PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role) {
+                // Pagination and sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                // Filtering and searching by specification
+//                List<FilterCriteria> criterion = new ArrayList<>();
+
+                Specification<User> spec = filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
+
+                Specification<User> roleSpec = (root, query1, criteriaBuilder) -> {
+                        Join<User, Relationship> relationshipJoin = root.join("relationships");
+                        return criteriaBuilder.equal(relationshipJoin.get("role"), role);
+                };
+
+                spec = spec.and(roleSpec);
+
+                // Call repository
+                var pageData = userRepository.findAll(spec, pageable);
+
+                // Use the utility method to build the PageResponse
+                return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
         }
 }

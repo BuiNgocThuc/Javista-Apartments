@@ -1,5 +1,7 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.UserGender;
+import com.example.javista.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -40,8 +42,9 @@ public class User {
         @Column(name = "phone")
         String phone;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "gender")
-        String gender;
+        UserGender gender;
 
         @Column(name = "full_name")
         String fullName;
@@ -49,8 +52,9 @@ public class User {
         @Column(name = "nation_id")
         String nationId;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "user_type")
-        String userType;
+        UserType userType;
 
         @Column(name = "date_of_birth")
         LocalDateTime dateOfBirth;

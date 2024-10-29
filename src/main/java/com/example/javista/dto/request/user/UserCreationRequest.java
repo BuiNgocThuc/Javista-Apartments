@@ -1,5 +1,7 @@
 package com.example.javista.dto.request.user;
 
+import com.example.javista.enums.UserGender;
+import com.example.javista.enums.UserType;
 import com.example.javista.validator.DobConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,13 +34,13 @@ public class UserCreationRequest {
 
         String phone;
 
-        String gender;
+        UserGender gender;
 
         String fullName;
 
         String nationId;
 
-        String userType;
+        UserType userType;
 
         @DobConstraint(min = 18, message = "INVALID_DOB")
         LocalDateTime dateOfBirth;

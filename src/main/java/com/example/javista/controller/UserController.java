@@ -23,8 +23,17 @@ public class UserController {
 
         // Query
         @GetMapping
-        PageResponse<UserResponse> getUsers(@RequestParam UserQueryRequest query) {
+        PageResponse<UserResponse> getUsers(@ModelAttribute
+                                                UserQueryRequest query) {
                 return userService.getUsers(query);
+        }
+
+        // Filtering users by relationship_role [OWNER - USER]
+        @GetMapping("/{role}")
+        PageResponse<UserResponse> getUsersByRelationshipRole(
+                        @ModelAttribute UserQueryRequest query,
+                        @PathVariable String role) {
+                return userService.getUsersByRelationshipRole(query, role);
         }
 
         // Query by id

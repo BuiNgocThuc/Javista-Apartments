@@ -69,15 +69,15 @@ public class QueryUtils {
         public static  Sort getSortCriterion(String sortParams) {
                 String[] sortParamsArray = sortParams.split(",");
                 List<Sort.Order> orders = new ArrayList<>();
-                Boolean isDesc;
+                Boolean isDesc = false;
                 for (String sortParam : sortParamsArray) {
 
                         sortParam.trim();
                         // Determine the sort direction
-                        isDesc = sortParam.startsWith("-");
-
-                        // Remove the '-'  and '+' character
-                        sortParam = sortParam.substring(1);
+                        if (sortParam.startsWith("-")) {
+                                isDesc = true;
+                                sortParam = sortParam.substring(1);
+                        }
 
                         // Add the sort order to the list
                         orders.add(new Sort.Order(isDesc ? Sort.Direction.DESC : Sort.Direction.ASC, sortParam));

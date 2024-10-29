@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.report;
 
+import com.example.javista.enums.ReportStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,7 +14,7 @@ public class ReportUpdateRequest {
 
         String title;
 
-        String status;
+        ReportStatus status;
 
         Integer relationshipId;
 

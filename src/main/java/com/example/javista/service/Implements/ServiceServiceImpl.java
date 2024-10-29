@@ -7,12 +7,16 @@ import com.example.javista.dto.request.service.ServiceUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.service.ServiceResponse;
 import com.example.javista.entity.Service;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.ServiceMapper;
 import com.example.javista.repository.ServiceRepository;
 import com.example.javista.service.ServiceService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 
@@ -23,9 +27,21 @@ public class ServiceServiceImpl implements ServiceService {
         ServiceMapper serviceMapper;
         ServiceRepository serviceRepository;
 
+        FilterSpecification<Service> filterSpecification;
+
         @Override
         public PageResponse<ServiceResponse> getServices(ServiceQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<Service> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = serviceRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, serviceMapper::entityToResponse);
         }
 
         @Override

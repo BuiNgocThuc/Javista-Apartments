@@ -23,7 +23,7 @@ public class SurveyController {
 
         // Query
         @GetMapping
-        PageResponse<SurveyResponse> getSurveys(@RequestParam SurveyQueryRequest query) {
+        PageResponse<SurveyResponse> getSurveys(@ModelAttribute SurveyQueryRequest query) {
                 return surveyService.getSurveys(query);
         }
 

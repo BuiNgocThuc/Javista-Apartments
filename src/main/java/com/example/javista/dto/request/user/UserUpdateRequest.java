@@ -1,5 +1,7 @@
 package com.example.javista.dto.request.user;
 
+import com.example.javista.enums.UserGender;
+import com.example.javista.enums.UserType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,13 +25,13 @@ public class UserUpdateRequest {
 
         String phone;
 
-        String gender;
+        UserGender gender;
 
         String fullName;
 
         String nationId;
 
-        String userType;
+        UserType userType;
 
         LocalDateTime dateOfBirth;
 

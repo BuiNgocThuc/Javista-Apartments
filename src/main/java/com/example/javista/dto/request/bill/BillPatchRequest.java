@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.bill;
 
+import com.example.javista.enums.BillStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +24,7 @@ public class BillPatchRequest {
 
         LocalDateTime waterReadingDate;
 
-        String status;
+        BillStatus status;
 
         String relationshipId;
 

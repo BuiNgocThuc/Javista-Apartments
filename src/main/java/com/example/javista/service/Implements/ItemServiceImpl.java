@@ -7,13 +7,17 @@ import com.example.javista.dto.request.item.ItemUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.item.ItemResponse;
 import com.example.javista.entity.Item;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.ItemMapper;
 import com.example.javista.repository.ItemRepository;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.ItemService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,9 +31,21 @@ public class ItemServiceImpl implements ItemService {
 
         UserRepository userRepository;
 
+        FilterSpecification<Item> filterSpecification;
+
         @Override
         public PageResponse<ItemResponse> getItems(ItemQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<Item> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = itemRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, itemMapper::entityToResponse);
         }
 
         @Override

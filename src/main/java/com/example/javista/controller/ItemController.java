@@ -23,7 +23,8 @@ public class ItemController {
 
         // Query
         @GetMapping
-        PageResponse<ItemResponse> getItems(@RequestParam ItemQueryRequest query) {
+        PageResponse<ItemResponse> getItems(@ModelAttribute
+                                ItemQueryRequest query) {
                 return itemService.getItems(query);
         }
 

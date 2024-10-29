@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.setting;
 
+import com.example.javista.enums.SystemStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class SettingPatchRequest {
         String currentMonthly;
 
-        String systemStatus;
+        SystemStatus systemStatus;
 
         Float roomPricePerM2;
 

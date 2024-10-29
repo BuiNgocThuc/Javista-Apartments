@@ -23,7 +23,7 @@ public class RelationshipController {
 
         // Query
         @GetMapping
-        PageResponse<RelationshipResponse> getRelationships(@RequestParam RelationshipQueryRequest query) {
+        PageResponse<RelationshipResponse> getRelationships(@ModelAttribute RelationshipQueryRequest query) {
                 return relationshipService.getRelationships(query);
         }
 

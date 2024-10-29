@@ -9,13 +9,17 @@ import com.example.javista.dto.response.question.QuestionResponse;
 import com.example.javista.entity.Question;
 import com.example.javista.exception.AppException;
 import com.example.javista.exception.ErrorCode;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.QuestionMapper;
 import com.example.javista.repository.QuestionRepository;
 import com.example.javista.repository.SurveyRepository;
 import com.example.javista.service.QuestionService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,9 +33,21 @@ public class QuestionServiceImpl implements QuestionService {
 
         SurveyRepository surveyRepository;
 
+        FilterSpecification<Question> filterSpecification;
+
         @Override
         public PageResponse<QuestionResponse> getQuestions(QuestionQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<Question> spec = filterSpecification.filteringBySpecification(
+                          QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = questionRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, questionMapper::entityToResponse);
         }
 
         @Override

@@ -1,5 +1,6 @@
 package com.example.javista.dto.response.report;
 
+import com.example.javista.enums.ReportStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ public class ReportResponse {
 
         String title;
 
-        String status;
+        ReportStatus status;
 
         LocalDateTime createdAt;
 

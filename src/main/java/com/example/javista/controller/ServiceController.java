@@ -23,7 +23,7 @@ public class ServiceController {
 
         // Query
         @GetMapping
-        PageResponse<ServiceResponse> getServices(@RequestParam ServiceQueryRequest query) {
+        PageResponse<ServiceResponse> getServices(@ModelAttribute ServiceQueryRequest query) {
                 return serviceService.getServices(query);
         }
 

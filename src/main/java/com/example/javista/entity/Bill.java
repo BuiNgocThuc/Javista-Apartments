@@ -1,5 +1,6 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.BillStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,8 +38,9 @@ public class Bill {
         @Column(name = "water_reading_date")
         LocalDateTime waterReadingDate;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "status")
-        String status;
+        BillStatus status;
 
         @CreatedDate
         @Column(name = "created_at")

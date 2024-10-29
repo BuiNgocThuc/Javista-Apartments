@@ -2,7 +2,9 @@ package com.example.javista.controller;
 
 import com.example.javista.dto.request.billDetail.BillDetailCreationRequest;
 import com.example.javista.dto.request.billDetail.BillDetailPatchRequest;
+import com.example.javista.dto.request.billDetail.BillDetailQueryRequest;
 import com.example.javista.dto.request.billDetail.BillDetailUpdateRequest;
+import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.billDetail.BillDetailResponse;
 import com.example.javista.service.BillDetailService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class BillDetailController {
         BillDetailService billDetailService;
+
+        // query
+        @GetMapping
+        PageResponse<BillDetailResponse> getBillDetails(@ModelAttribute
+                                                        BillDetailQueryRequest query) {
+                return billDetailService.getBillDetails(query);
+        }
 
         // get by id
         @GetMapping("/{id}")

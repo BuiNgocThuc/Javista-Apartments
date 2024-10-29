@@ -23,7 +23,7 @@ public class ReportController {
 
         // Query
         @GetMapping
-        PageResponse<ReportResponse> getReports(@RequestParam ReportQueryRequest query) {
+        PageResponse<ReportResponse> getReports(@ModelAttribute ReportQueryRequest query) {
                 return reportService.getReports(query);
         }
 

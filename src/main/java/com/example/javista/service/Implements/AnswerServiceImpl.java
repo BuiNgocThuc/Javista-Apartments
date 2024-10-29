@@ -37,7 +37,7 @@ public class AnswerServiceImpl implements AnswerService {
 
         QuestionRepository questionRepository;
 
-        FilterSpecification filterSpecification;
+        FilterSpecification<Answer> filterSpecification;
 
         @Override
         public PageResponse<AnswerResponse> getAnswers(AnswerQueryRequest query) {
@@ -52,15 +52,17 @@ public class AnswerServiceImpl implements AnswerService {
                 // execute the query
                 Page<Answer> pageData = answerRepository.findAll(spec, pageable);
 
-                return  PageResponse.<AnswerResponse>builder()
-                                .currentPage(pageable.getPageNumber() + 1)
-                                .pageSize(pageData.getSize())
-                                .totalPages(pageData.getTotalPages())
-                                .totalElements(pageData.getTotalElements())
-                                .data(pageData.getContent().stream()
-                                                .map(answerMapper::entityToResponse)
-                                                .toList())
-                                .build();
+//                return  PageResponse.<AnswerResponse>builder()
+//                                .currentPage(pageable.getPageNumber() + 1)
+//                                .pageSize(pageData.getSize())
+//                                .totalPages(pageData.getTotalPages())
+//                                .totalElements(pageData.getTotalElements())
+//                                .data(pageData.getContent().stream()
+//                                                .map(answerMapper::entityToResponse)
+//                                                .toList())
+//                                .build();
+
+                return QueryUtils.buildPageResponse(pageData, pageable, answerMapper::entityToResponse);
         }
 
         @Override

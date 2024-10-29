@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.setting;
 
+import com.example.javista.enums.SystemStatus;
 import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class SettingCreationRequest {
         String currentMonthly;
 
-        String systemStatus;
+        SystemStatus systemStatus;
 
         Float roomPricePerM2;
 

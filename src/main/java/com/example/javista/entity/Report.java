@@ -1,5 +1,6 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.ReportStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,8 +28,9 @@ public class Report {
         @Column(name = "title")
         String title;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "status")
-        String status;
+        ReportStatus status;
 
         @CreatedDate
         @Column(name = "created_at")

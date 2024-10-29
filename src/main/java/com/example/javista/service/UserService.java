@@ -19,4 +19,6 @@ public interface UserService {
         UserResponse patchUser(Integer id, UserPatchRequest request);
 
         void deleteUser(Integer id);
+
+        PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role);
 }

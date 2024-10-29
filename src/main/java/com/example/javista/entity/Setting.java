@@ -1,5 +1,6 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.SystemStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,8 +21,9 @@ public class Setting {
         @Column(name = "current_monthly")
         String currentMonthly;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "system_status")
-        String systemStatus;
+        SystemStatus systemStatus;
 
         @Column(name = "room_price_per_m2")
         Float roomPricePerM2;

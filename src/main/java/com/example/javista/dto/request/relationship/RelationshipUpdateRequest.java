@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.relationship;
 
+import com.example.javista.enums.RelationshipRole;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RelationshipUpdateRequest {
-        String role;
+        RelationshipRole role;
 
         String apartmentId;
 

@@ -7,14 +7,18 @@ import com.example.javista.dto.request.userAnswer.UserAnswerUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.userAnswer.UserAnswerResponse;
 import com.example.javista.entity.UserAnswer;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserAnswerMapper;
 import com.example.javista.repository.AnswerRepository;
 import com.example.javista.repository.UserAnswerRepository;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.UserAnswerService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,9 +33,21 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         UserRepository userRepository;
         AnswerRepository answerRepository;
 
+        FilterSpecification<UserAnswer> filterSpecification;
+
         @Override
         public PageResponse<UserAnswerResponse> getUserAnswers(UserAnswerQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<UserAnswer> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = userAnswerRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, userAnswerMapper::entityToResponse);
         }
 
         @Override

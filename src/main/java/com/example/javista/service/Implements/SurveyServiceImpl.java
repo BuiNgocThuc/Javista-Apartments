@@ -7,13 +7,17 @@ import com.example.javista.dto.request.survey.SurveyUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.survey.SurveyResponse;
 import com.example.javista.entity.Survey;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.SurveyMapper;
 import com.example.javista.repository.SurveyRepository;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.SurveyService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,9 +31,21 @@ public class SurveyServiceImpl implements SurveyService {
 
         UserRepository userRepository;
 
+        FilterSpecification<Survey> filterSpecification;
+
         @Override
         public PageResponse<SurveyResponse> getSurveys(SurveyQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<Survey> spec = filterSpecification.filteringBySpecification(
+                          QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = surveyRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, surveyMapper::entityToResponse);
         }
 
         @Override

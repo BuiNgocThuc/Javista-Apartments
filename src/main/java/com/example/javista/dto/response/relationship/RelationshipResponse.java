@@ -1,5 +1,6 @@
 package com.example.javista.dto.response.relationship;
 
+import com.example.javista.enums.RelationshipRole;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 public class RelationshipResponse {
         Integer id;
 
-        String role;
+        RelationshipRole role;
 
         LocalDateTime createdAt;
 

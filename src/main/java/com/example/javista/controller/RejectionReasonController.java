@@ -23,7 +23,7 @@ public class RejectionReasonController {
 
         // Query
         @GetMapping
-        PageResponse<RejectionReasonResponse> getRejectionReasons(@RequestParam RejectionReasonQueryRequest query) {
+        PageResponse<RejectionReasonResponse> getRejectionReasons(@ModelAttribute RejectionReasonQueryRequest query) {
                 return rejectionReasonService.getRejectionReasons(query);
         }
 

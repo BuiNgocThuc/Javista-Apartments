@@ -23,7 +23,8 @@ public class OtherAnswerController {
 
         // Query
         @GetMapping
-        PageResponse<OtherAnswerResponse> getOtherAnswers(@RequestParam OtherAnswerQueryRequest query) {
+        PageResponse<OtherAnswerResponse> getOtherAnswers(@ModelAttribute
+                                        OtherAnswerQueryRequest query) {
                 return otherAnswerService.getOtherAnswers(query);
         }
 

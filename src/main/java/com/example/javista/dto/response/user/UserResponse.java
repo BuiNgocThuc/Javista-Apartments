@@ -1,5 +1,7 @@
 package com.example.javista.dto.response.user;
 
+import com.example.javista.enums.UserGender;
+import com.example.javista.enums.UserType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
@@ -24,13 +26,13 @@ public class UserResponse {
 
         String phone;
 
-        String gender;
+        UserGender gender;
 
         String fullName;
 
         String nationId;
 
-        String userType;
+        UserType userType;
 
         LocalDateTime dateOfBirth;
 

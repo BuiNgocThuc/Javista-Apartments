@@ -1,5 +1,6 @@
 package com.example.javista.dto.response.bill;
 
+import com.example.javista.enums.BillStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -24,7 +25,7 @@ public class BillResponse {
 
         LocalDateTime waterReadingDate;
 
-        String status;
+        BillStatus status;
 
         LocalDateTime createdAt;
 

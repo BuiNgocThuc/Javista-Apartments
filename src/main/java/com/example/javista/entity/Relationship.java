@@ -1,5 +1,6 @@
 package com.example.javista.entity;
 
+import com.example.javista.enums.RelationshipRole;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,8 +23,9 @@ public class Relationship {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         Integer id;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "role")
-        String role;
+        RelationshipRole role;
 
         @CreatedDate
         @Column(name = "created_at")

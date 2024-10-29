@@ -2,6 +2,8 @@ package com.example.javista.dto.request.user;
 
 import java.time.LocalDateTime;
 
+import com.example.javista.enums.UserGender;
+import com.example.javista.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,13 +27,13 @@ public class UserPatchRequest {
 
         String phone;
 
-        String gender;
+        UserGender gender;
 
         String fullName;
 
         String nationId;
 
-        String userType;
+        UserType userType;
 
         LocalDateTime dateOfBirth;
 

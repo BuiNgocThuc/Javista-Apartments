@@ -23,7 +23,7 @@ public class UserAnswerController {
 
         // Query
         @GetMapping
-        PageResponse<UserAnswerResponse> getUserAnswers(@RequestParam UserAnswerQueryRequest query) {
+        PageResponse<UserAnswerResponse> getUserAnswers(@ModelAttribute UserAnswerQueryRequest query) {
                 return userAnswerService.getUserAnswers(query);
         }
 

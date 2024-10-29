@@ -7,14 +7,18 @@ import com.example.javista.dto.request.billDetail.BillDetailUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.billDetail.BillDetailResponse;
 import com.example.javista.entity.BillDetail;
+import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.BillDetailMapper;
 import com.example.javista.repository.BillDetailRepository;
 import com.example.javista.repository.BillRepository;
 import com.example.javista.repository.ServiceRepository;
 import com.example.javista.service.BillDetailService;
+import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,9 +33,21 @@ public class BillDetailServiceImpl implements BillDetailService {
         BillRepository billRepository;
         ServiceRepository serviceRepository;
 
+        FilterSpecification<BillDetail> filterSpecification;
+
         @Override
         public PageResponse<BillDetailResponse> getBillDetails(BillDetailQueryRequest query) {
-                return null;
+                // Pagination and Sorting
+                Pageable pageable = QueryUtils.getPagination(query);
+
+                //Filtering and searching by specification
+                Specification<BillDetail> spec = filterSpecification.filteringBySpecification(
+                                QueryUtils.getFilterCriterion(query)
+                );
+
+                var pageData = billDetailRepository.findAll(spec, pageable);
+
+                return QueryUtils.buildPageResponse(pageData, pageable, billDetailMapper::entityToResponse);
         }
 
         @Override
