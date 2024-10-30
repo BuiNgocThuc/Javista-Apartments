@@ -27,23 +27,31 @@ public class UserCreationRequest {
 
         String avatar;
 
+        @NotNull
         Boolean isFirstLogin;
 
-        @NotBlank(message = "EMAIL_INVALID")
+        @NotNull(message = "EMAIL_INVALID")
         String email;
 
+        @NotNull
         String phone;
 
+        @NotNull
         UserGender gender;
 
+        @NotNull
         String fullName;
 
+        @NotNull
         String nationId;
 
+        @NotNull
         UserType userType;
 
         @DobConstraint(min = 18, message = "INVALID_DOB")
+        @NotNull
         LocalDateTime dateOfBirth;
 
+        @NotNull
         Boolean isStaying;
 }

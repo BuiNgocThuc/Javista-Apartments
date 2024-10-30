@@ -13,5 +13,6 @@ public class QuestionCreationRequest {
         @NotNull
         String content;
 
+        @NotNull
         Integer surveyId;
 }
