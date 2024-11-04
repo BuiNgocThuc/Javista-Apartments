@@ -8,11 +8,14 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.entity.Relationship;
 import com.example.javista.entity.User;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserMapper;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.UserService;
 import com.example.javista.utils.QueryUtils;
+import com.example.javista.utils.SecurityUtils;
 import jakarta.persistence.criteria.Join;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
                 //Filtering and searching by specification
                 Specification<User> spec = filterSpecification.filteringBySpecification(
-                          QueryUtils.getFilterCriterion(query)
+                                QueryUtils.getFilterCriterion(query)
                 );
 
                 var pageData = userRepository.findAll(spec, pageable);
@@ -56,7 +59,15 @@ public class UserServiceImpl implements UserService {
 
         @Override
         public UserResponse createUser(UserCreationRequest request) {
+                // check if the username is already exist
+                if (userRepository.existsByUsername(request.getUsername())) {
+                        throw new AppException(ErrorCode.USERNAME_EXISTED);
+                }
                 User user = userMapper.creationRequestToEntity(request);
+
+                // Encrypt the password
+                user.setPassword(SecurityUtils.encryptPassword(request.getPassword()));
+
                 return userMapper.entityToResponse(userRepository.save(user));
         }
 
