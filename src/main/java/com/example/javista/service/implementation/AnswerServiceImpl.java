@@ -1,4 +1,4 @@
-package com.example.javista.service.Implements;
+package com.example.javista.service.implementation;
 
 import com.example.javista.dto.request.answer.AnswerCreationRequest;
 import com.example.javista.dto.request.answer.AnswerPatchRequest;
@@ -7,7 +7,6 @@ import com.example.javista.dto.request.answer.AnswerUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.answer.AnswerResponse;
 import com.example.javista.entity.Answer;
-import com.example.javista.filter.FilterCriteria;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.AnswerMapper;
 import com.example.javista.repository.AnswerRepository;
@@ -18,14 +17,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

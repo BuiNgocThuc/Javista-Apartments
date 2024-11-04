@@ -1,4 +1,4 @@
-package com.example.javista.service.Implements;
+package com.example.javista.service.implementation;
 
 import com.example.javista.dto.request.report.ReportCreationRequest;
 import com.example.javista.dto.request.report.ReportPatchRequest;

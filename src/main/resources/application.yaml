@@ -16,3 +16,16 @@ spring:
                         hibernate:
                                 format_sql: true
 
+momo:
+        momoApiUrl: "https://test-payment.momo.vn/v2/gateway/api/create"
+        secretKey: "K951B6PE1waDMi640xX08PD3vg6EkVlz"
+        accessKey: "F8BBA842ECF85"
+        returnUrl: "http://localhost:5173/payment"
+        notifyUrl: " https://6545-125-235-239-167.ngrok-free.app/demoMoMo/bills/{{id}}/momo-callback"
+        partnerCode: "MOMO"
+
+cloudinary:
+        cloudName: "daxuovzwp"
+        apiKey: "723427193596933"
+        secretKey: "NJufPii1Wh2R9SQsR3s71SSDbRc"
+        secure: true
