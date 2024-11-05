@@ -1,4 +1,4 @@
-# Zity Apartment Management
+# Javista Apartments 
 
 ## Team Members:
 
@@ -6,10 +6,12 @@
 Saigon University ,Faculty of Information Technology ,Major in Software Engineering
 
 ID          | Full Name
-3121410379    Nguyen Tien Phat
-3121410066    Bui Hong Bao
-3121410401    Tran Nhu Phu Quang
 3121410491    Bui Ngoc Thuc
+3121410379    Nguyen Tien Phat
+3121410401    Tran Nhu Phu Quang
+3121410066    Bui Hong Bao
+
+
 
 ```
 
