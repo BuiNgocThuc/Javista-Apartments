@@ -2,6 +2,8 @@ package com.example.javista.service.implementation;
 
 import com.cloudinary.Cloudinary;
 import com.example.javista.configuration.CloudinaryConfig;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.service.media.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,8 +20,13 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         Cloudinary cloudinary;
 
         // upload file by cloudinary
-        public Map uploadFile(MultipartFile file, String folderName) throws IOException {
-                return cloudinary.uploader().upload(file.getBytes(),
-                        Map.of("folder", folderName));
+        @Override
+        public Map uploadFile(MultipartFile file)  {
+                try{
+                        Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+                        return data;
+                }catch (IOException io){
+                        throw new AppException(ErrorCode.FILE_UPLOAD_FAILED);
+                }
         }
 }

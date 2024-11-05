@@ -4,13 +4,19 @@ import com.example.javista.dto.request.user.UserCreationRequest;
 import com.example.javista.dto.request.user.UserPatchRequest;
 import com.example.javista.dto.request.user.UserQueryRequest;
 import com.example.javista.dto.request.user.UserUpdateRequest;
+import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.service.UserService;
+import com.example.javista.service.media.CloudinaryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +24,19 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
         UserService userService;
+        CloudinaryService cloudinaryService;
 
         // test postman Http: http://localhost:8080/javista/users
+
+        // upload avatar
+        @PostMapping("/upload_avatar")
+        ApiResponse<Map> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
+                Map data = cloudinaryService.uploadFile(file);
+                return ApiResponse.<Map>builder()
+                        .message("Upload avatar Successfully")
+                        .result(data)
+                        .build();
+        }
 
         // Query
         @GetMapping
@@ -29,12 +46,12 @@ public class UserController {
         }
 
         // Filtering users by relationship_role [OWNER - USER]
-        @GetMapping("/{role}")
-        PageResponse<UserResponse> getUsersByRelationshipRole(
-                        @ModelAttribute UserQueryRequest query,
-                        @PathVariable String role) {
-                return userService.getUsersByRelationshipRole(query, role);
-        }
+//        @GetMapping("/{role}")
+//        PageResponse<UserResponse> getUsersByRelationshipRole(
+//                        @ModelAttribute UserQueryRequest query,
+//                        @PathVariable String role) {
+//                return userService.getUsersByRelationshipRole(query, role);
+//        }
 
         // Query by id
         @GetMapping("/{id}")

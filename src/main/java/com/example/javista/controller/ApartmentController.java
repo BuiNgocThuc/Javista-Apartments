@@ -40,11 +40,10 @@ public class ApartmentController {
         // Create
         @PostMapping
         ApiResponse<ApartmentResponse>  createApartment(@RequestBody ApartmentCreationRequest request) {
-                ApiResponse<ApartmentResponse> apiResponse = new ApiResponse<>();
 
-                apiResponse.setResult(apartmentService.createApartment(request));
-
-                return apiResponse;
+                return ApiResponse.<ApartmentResponse>builder()
+                        .result(apartmentService.createApartment(request))
+                        .build();
         }
 
         // Update

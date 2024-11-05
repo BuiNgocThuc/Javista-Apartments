@@ -13,6 +13,7 @@ public enum ErrorCode {
         INVALID_PHONE_NUMBER(1003, "Phone number must be in the VN region"),
         INVALID_EMAIL(1004, "Email must be in correct format"),
         INVALID_DOB(1005, "Date of birth must be at least {min} years ago"),
+        FILE_UPLOAD_FAILED(1006, "file upload failed"),
         ;
 
         int code;
