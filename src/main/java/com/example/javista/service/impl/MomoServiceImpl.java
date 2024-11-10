@@ -1,4 +1,4 @@
-package com.example.javista.service.implementation;
+package com.example.javista.service.impl;
 
 import com.example.javista.configuration.MomoConfig;
 import com.example.javista.dto.request.payment.ExtraData;

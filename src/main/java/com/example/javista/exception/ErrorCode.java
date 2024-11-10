@@ -16,6 +16,7 @@ public enum ErrorCode {
         FILE_UPLOAD_FAILED(1006, "file upload failed"),
         USER_NOT_FOUND(1006, "User not found"),
         USERNAME_EXISTED(1007, "Username already exists"),
+        INVALID_PASSWORD(1008, "Invalid password"),
         ;
 
         int code;

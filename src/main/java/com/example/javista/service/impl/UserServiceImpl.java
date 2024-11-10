@@ -1,5 +1,6 @@
-package com.example.javista.service.implementation;
+package com.example.javista.service.impl;
 
+import com.example.javista.dto.request.mail.MailCreationRequest;
 import com.example.javista.dto.request.user.UserCreationRequest;
 import com.example.javista.dto.request.user.UserPatchRequest;
 import com.example.javista.dto.request.user.UserQueryRequest;
@@ -14,8 +15,10 @@ import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserMapper;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.UserService;
+import com.example.javista.service.media.EmailService;
 import com.example.javista.utils.QueryUtils;
 import com.example.javista.utils.SecurityUtils;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +39,8 @@ public class UserServiceImpl implements UserService {
         UserRepository userRepository;
 
         FilterSpecification<User> filterSpecification;
+
+        EmailService mailService;
 
         @Override
         public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
@@ -54,7 +61,7 @@ public class UserServiceImpl implements UserService {
         @Override
         public UserResponse getUserById(Integer id) {
                 return userMapper.entityToResponse(userRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("User Not Found")));
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
         }
 
         @Override
@@ -68,13 +75,37 @@ public class UserServiceImpl implements UserService {
                 // Encrypt the password
                 user.setPassword(SecurityUtils.encryptPassword(request.getPassword()));
 
-                return userMapper.entityToResponse(userRepository.save(user));
+                // Save the user
+                user = userRepository.save(user);
+
+                // send email to verify the account
+                try {
+                        Map<String, Object> props = new HashMap<>();
+                        props.put("username", user.getUsername());
+                        props.put("password", request.getPassword());
+                        props.put("fullName", user.getFullName());
+
+                        MailCreationRequest mailRequest = MailCreationRequest.builder()
+                                        .to(user.getEmail())
+                                        .subject("Verify your account")
+                                        .content("Please verify your account by clicking the link below")
+                                        .props(props)
+                                        .build();
+
+                        mailService.sendEmail(mailRequest, "ConfirmationEmail");
+
+                } catch (MessagingException e) {
+                        // handle exception
+                        e.printStackTrace();
+                }
+
+                return userMapper.entityToResponse(user);
         }
 
         @Override
         public UserResponse updateUser(Integer id, UserUpdateRequest request) {
                 User user = userRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("User Not Found"));
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
                 userMapper.updateRequestToEntity(user, request);
                 return userMapper.entityToResponse(userRepository.save(user));
@@ -83,16 +114,17 @@ public class UserServiceImpl implements UserService {
         @Override
         public UserResponse patchUser(Integer id, UserPatchRequest request) {
                 User user = userRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("User Not Found"));
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
                 userMapper.patchRequestToEntity(user, request);
+                user.setPassword(SecurityUtils.encryptPassword(request.getPassword()));
                 return userMapper.entityToResponse(userRepository.save(user));
         }
 
         @Override
         public void deleteUser(Integer id) {
                 User user = userRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("User Not Found"));
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
                 user.setDeletedAt(LocalDateTime.now());
                 userRepository.save(user);

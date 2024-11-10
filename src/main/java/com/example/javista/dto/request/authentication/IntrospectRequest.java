@@ -1,4 +1,4 @@
-package com.example.javista.dto.request;
+package com.example.javista.dto.request.authentication;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationRequest {
-        String username;
-        String password;
+public class IntrospectRequest {
+        String token;
 }

@@ -1,4 +1,4 @@
-package com.example.javista.service.implementation;
+package com.example.javista.service.impl;
 
 import com.example.javista.dto.request.userAnswer.UserAnswerCreationRequest;
 import com.example.javista.dto.request.userAnswer.UserAnswerPatchRequest;

@@ -1,4 +1,4 @@
-package com.example.javista.dto.response;
+package com.example.javista.dto.response.authentication;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-        Boolean isAuthenticated;
+public class IntrospectResponse {
+        Boolean isValid;
 }

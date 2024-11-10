@@ -1,7 +1,6 @@
-package com.example.javista.service.implementation;
+package com.example.javista.service.impl;
 
 import com.cloudinary.Cloudinary;
-import com.example.javista.configuration.CloudinaryConfig;
 import com.example.javista.exception.AppException;
 import com.example.javista.exception.ErrorCode;
 import com.example.javista.service.media.CloudinaryService;

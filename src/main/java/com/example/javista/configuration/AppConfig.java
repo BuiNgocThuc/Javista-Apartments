@@ -1,5 +1,6 @@
 package com.example.javista.configuration;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,7 @@ public class AppConfig {
         @Bean
         public ObjectMapper objectMapper() {
                 ObjectMapper objectMapper = new ObjectMapper();
-                // handling ...
+                objectMapper.registerModule(new JavaTimeModule());
 
                 return objectMapper;
         }
