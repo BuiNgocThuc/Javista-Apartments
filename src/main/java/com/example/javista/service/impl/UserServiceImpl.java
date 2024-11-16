@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,8 @@ public class UserServiceImpl implements UserService {
         FilterSpecification<User> filterSpecification;
 
         EmailService mailService;
+
+        SecurityUtils securityUtils;
 
         @Override
         public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService {
                 User user = userMapper.creationRequestToEntity(request);
 
                 // Encrypt the password
-                user.setPassword(SecurityUtils.encryptPassword(request.getPassword()));
+                user.setPassword(securityUtils.encryptPassword(request.getPassword()));
 
                 // Save the user
                 user = userRepository.save(user);
@@ -117,7 +120,7 @@ public class UserServiceImpl implements UserService {
                                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
                 userMapper.patchRequestToEntity(user, request);
-                user.setPassword(SecurityUtils.encryptPassword(request.getPassword()));
+                user.setPassword(securityUtils.encryptPassword(request.getPassword()));
                 return userMapper.entityToResponse(userRepository.save(user));
         }
 
@@ -128,6 +131,15 @@ public class UserServiceImpl implements UserService {
 
                 user.setDeletedAt(LocalDateTime.now());
                 userRepository.save(user);
+        }
+
+        @Override
+        public UserResponse getMyInfo() {
+                var context = SecurityContextHolder.getContext();
+                String name = context.getAuthentication().getName();
+
+                return userMapper.entityToResponse(userRepository.findByUsername(name)
+                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
         }
 
         @Override

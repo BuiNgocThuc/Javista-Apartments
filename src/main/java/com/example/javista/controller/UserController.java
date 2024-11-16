@@ -12,12 +12,15 @@ import com.example.javista.service.media.CloudinaryService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -27,6 +30,12 @@ public class UserController {
         CloudinaryService cloudinaryService;
 
         // test postman Http: http://localhost:8080/javista/users
+
+        // get my info
+        @GetMapping("/myInfo")
+        UserResponse getMyInfo() {
+                return userService.getMyInfo();
+        }
 
         // upload avatar
         @PostMapping("/upload_avatar")
@@ -42,6 +51,11 @@ public class UserController {
         @GetMapping
         PageResponse<UserResponse> getUsers(@ModelAttribute
                                                 UserQueryRequest query) {
+                var auth = SecurityContextHolder.getContext().getAuthentication();
+
+                log.info("Username: {}", auth.getName());
+                auth.getAuthorities().forEach(authority -> log.info("Authority: {}", authority.getAuthority()));
+
                 return userService.getUsers(query);
         }
 

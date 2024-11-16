@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -20,27 +21,44 @@ public class GlobalExceptionHandler {
         // uncategorized exception
         @ExceptionHandler(value = Exception.class)
         public ResponseEntity<ApiResponse> handlingUncategorizedException(Exception e) {
-                ApiResponse apiResponse = new ApiResponse();
-
-                apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-                apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
-
                 log.error("exception: {}", e.getMessage());
-                // log the line error
-                e.printStackTrace();
-                return ResponseEntity.badRequest().body(apiResponse);
+                ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
+
+                return ResponseEntity.status(errorCode.getHttpStatusCode())
+                        .body(
+                                ApiResponse.builder()
+                                        .code(errorCode.getCode())
+                                        .message(errorCode.getMessage())
+                                        .build()
+                        );
         }
 
         // defined exception
         @ExceptionHandler(value = AppException.class)
         public ResponseEntity<ApiResponse> handlingAppException(AppException e) {
                 ErrorCode errorCode = e.getErrorCode();
-                ApiResponse apiResponse = new ApiResponse();
 
-                apiResponse.setCode(errorCode.getCode());
-                apiResponse.setMessage(errorCode.getMessage());
+                return ResponseEntity.status(errorCode.getHttpStatusCode())
+                        .body(
+                                ApiResponse.builder()
+                                        .code(errorCode.getCode())
+                                        .message(errorCode.getMessage())
+                                        .build()
+                        );
+        }
 
-                return ResponseEntity.badRequest().body(apiResponse);
+        // access denied exception
+        @ExceptionHandler(value = AccessDeniedException.class)
+        public ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException e) {
+                ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+
+                return ResponseEntity.status(errorCode.getHttpStatusCode())
+                        .body(
+                                ApiResponse.builder()
+                                        .code(errorCode.getCode())
+                                        .message(errorCode.getMessage())
+                                        .build()
+                        );
         }
 
         // validation exception
@@ -72,7 +90,7 @@ public class GlobalExceptionHandler {
                 apiResponse.setCode(errorCode.getCode());
                 apiResponse.setMessage(mappedMessage);
 
-                return ResponseEntity.badRequest().body(apiResponse);
+                return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiResponse);
         }
 
         private String mapAttribute(String message, Map<String, Object> attributes) {

@@ -23,6 +23,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         public Map uploadFile(MultipartFile file)  {
                 try{
                         Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+                        //get secure url from data
+                        String secureUrl = (String) data.get("secure_url");
                         return data;
                 }catch (IOException io){
                         throw new AppException(ErrorCode.FILE_UPLOAD_FAILED);

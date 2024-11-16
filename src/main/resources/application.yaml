@@ -39,4 +39,5 @@ cloudinary:
         secure: true
 
 jwt:
-        signerKey: "CaU6G64EBe0SZ4i8H4DzwjUfek8Z7NLKwkK3ua1tMsSn4ZcDYoXu6bbiQ4F5AL"
+        signerKey: "gKzxk9xGfL9xFiyxQ7ng+CLmK2POHD8Z3LkgqMDlx3AQcjZ6a3CcdGeLRSF2HJak"
+

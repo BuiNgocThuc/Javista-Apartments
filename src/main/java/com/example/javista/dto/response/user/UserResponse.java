@@ -16,11 +16,11 @@ public class UserResponse {
 
         String username;
 
-        String password;
-
         String avatar;
 
         Boolean isFirstLogin;
+
+        String password;
 
         String email;
 

@@ -1,5 +1,6 @@
 package com.example.javista.dto.request.user;
 
+import com.example.javista.dto.request.PageRequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserQueryRequest {
+public class UserQueryRequest extends PageRequest{
         String id;
 
         String username;
