@@ -9,9 +9,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillDetailUpdateRequest {
-        Float price;
+    Float price;
 
-        Integer billId;
+    Integer billId;
 
-        Integer serviceId;
+    Integer serviceId;
 }

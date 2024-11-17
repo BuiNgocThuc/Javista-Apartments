@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class MailRequest {
-        String fullName;
-        String email;
-        String password;
+    String fullName;
+    String email;
+    String password;
 }

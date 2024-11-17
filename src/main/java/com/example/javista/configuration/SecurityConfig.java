@@ -1,9 +1,7 @@
 package com.example.javista.configuration;
 
-import com.example.javista.exception.AppException;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +17,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import javax.crypto.spec.SecretKeySpec;
+import com.example.javista.exception.AppException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 @Configuration
 @EnableWebSecurity
@@ -28,50 +30,45 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-        JwtDecoderConfig jwtDecoderConfig;
+    JwtDecoderConfig jwtDecoderConfig;
 
-        String[] PUBLIC_ENDPOINTS = {
-                "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
-        };
+    String[] PUBLIC_ENDPOINTS = {"/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"};
 
-        @Value("${jwt.signerKey}")
-        @NonFinal
-        String signerKey;
+    @Value("${jwt.signerKey}")
+    @NonFinal
+    String signerKey;
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception, AppException {
-                http.authorizeHttpRequests(request ->
-                        request
-                                .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                                .requestMatchers( "/swagger-ui/**", "/v3/api-docs*/**").permitAll()
-                                .anyRequest()
-                                .authenticated());
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception, AppException {
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+                .permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs*/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated());
 
-                http.oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> jwt.decoder(jwtDecoderConfig)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                                        .authenticationEntryPoint(new AuthenticateEntryPointConfig()));
+        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(
+                        jwt -> jwt.decoder(jwtDecoderConfig).jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .authenticationEntryPoint(new AuthenticateEntryPointConfig()));
 
-                http.csrf(AbstractHttpConfigurer::disable);
-                return http.build();
-        }
+        http.csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
 
-        @Bean
-        JwtAuthenticationConverter jwtAuthenticationConverter() {
-                JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-                jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-                JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-                jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-                return jwtAuthenticationConverter;
-        }
+    @Bean
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+    }
 
-        @Bean
-        public JwtDecoder jwtDecoder() {
-                SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS256");
-                return NimbusJwtDecoder
-                        .withSecretKey(secretKeySpec)
-                        .macAlgorithm(MacAlgorithm.HS256)
-                        .build();
-        }
-
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS256");
+        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
+                .macAlgorithm(MacAlgorithm.HS256)
+                .build();
+    }
 }

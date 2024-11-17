@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.service;
 
 import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,12 +11,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ServiceCreationRequest {
-        @NotNull
-        String name;
+    @NotNull
+    String name;
 
-        @NotNull
-        String description;
+    @NotNull
+    String description;
 
-        @NotNull
-        Integer price;
+    @NotNull
+    Integer price;
 }

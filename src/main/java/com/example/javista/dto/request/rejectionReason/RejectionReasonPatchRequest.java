@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.rejectionReason;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RejectionReasonPatchRequest {
-        String content;
+    String content;
 
-        Integer reportId;
+    Integer reportId;
 }

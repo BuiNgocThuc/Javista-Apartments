@@ -1,11 +1,9 @@
 package com.example.javista.dto.response.apartment;
 
 import com.example.javista.enums.ApartmentStatus;
-import jakarta.persistence.Column;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,15 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApartmentResponse {
-        String id;
+    String id;
 
-        String area;
+    String area;
 
-        String description;
+    String description;
 
-        String floorNumber;
+    String floorNumber;
 
-        String apartmentNumber;
+    String apartmentNumber;
 
-        ApartmentStatus status;
+    ApartmentStatus status;
 }

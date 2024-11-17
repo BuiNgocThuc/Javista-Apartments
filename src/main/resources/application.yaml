@@ -41,4 +41,3 @@ cloudinary:
 jwt:
         signerKey: "gKzxk9xGfL9xFiyxQ7ng+CLmK2POHD8Z3LkgqMDlx3AQcjZ6a3CcdGeLRSF2HJak"
         valid-duration: 7 # 7 days
-        refresh-duration: 120 # 1 minute

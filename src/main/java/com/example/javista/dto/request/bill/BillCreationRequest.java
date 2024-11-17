@@ -1,12 +1,13 @@
 package com.example.javista.dto.request.bill;
 
-import com.example.javista.enums.BillStatus;
-import jakarta.persistence.Column;
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.NotNull;
+
+import com.example.javista.enums.BillStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -15,24 +16,24 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NotNull
 public class BillCreationRequest {
-        @NotNull
-        String monthly;
+    @NotNull
+    String monthly;
 
-        @NotNull
-        Float totalPrice;
+    @NotNull
+    Float totalPrice;
 
-        @NotNull
-        Integer oldWater;
+    @NotNull
+    Integer oldWater;
 
-        @NotNull
-        Integer newWater;
+    @NotNull
+    Integer newWater;
 
-        @NotNull
-        LocalDateTime waterReadingDate;
+    @NotNull
+    LocalDateTime waterReadingDate;
 
-        @NotNull
-        BillStatus status;
+    @NotNull
+    BillStatus status;
 
-        @NotNull
-        Integer relationshipId;
+    @NotNull
+    Integer relationshipId;
 }

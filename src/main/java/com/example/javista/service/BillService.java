@@ -11,19 +11,19 @@ import com.example.javista.dto.response.bill.BillResponse;
 import com.example.javista.dto.response.payment.MomoPaymentResponse;
 
 public interface BillService {
-        void handleMomoCallback(Integer billId, MomoCallbackRequest request);
+    void handleMomoCallback(Integer billId, MomoCallbackRequest request);
 
-        MomoPaymentResponse createMomoPayment(Integer billId, MomoPaymentCreationRequest request);
+    MomoPaymentResponse createMomoPayment(Integer billId, MomoPaymentCreationRequest request);
 
-        PageResponse<BillResponse> getBills(BillQueryRequest query);
+    PageResponse<BillResponse> getBills(BillQueryRequest query);
 
-        BillResponse getBillById(Integer id);
+    BillResponse getBillById(Integer id);
 
-        BillResponse createBill(BillCreationRequest request);
+    BillResponse createBill(BillCreationRequest request);
 
-        BillResponse updateBill(Integer id, BillUpdateRequest request);
+    BillResponse updateBill(Integer id, BillUpdateRequest request);
 
-        BillResponse patchBill(Integer id, BillPatchRequest request);
+    BillResponse patchBill(Integer id, BillPatchRequest request);
 
-        void deleteBill(Integer id);
+    void deleteBill(Integer id);
 }

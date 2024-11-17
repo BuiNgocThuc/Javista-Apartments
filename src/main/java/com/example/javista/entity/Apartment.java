@@ -1,15 +1,18 @@
 package com.example.javista.entity;
 
-import com.example.javista.enums.ApartmentStatus;
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import com.example.javista.enums.ApartmentStatus;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -20,38 +23,39 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "apartments")
 public class Apartment {
-        @Id
-        @Column(name = "id")
-        String id;
+    @Id
+    @Column(name = "id")
+    String id;
 
-        @Column(name = "area")
-        Float area;
+    @Column(name = "area")
+    Float area;
 
-        @Column(name = "description")
-        String description;
+    @Column(name = "description")
+    String description;
 
-        @Column(name = "floor_number")
-        Integer floorNumber;
+    @Column(name = "floor_number")
+    Integer floorNumber;
 
-        @Column(name = "apartment_number")
-        Integer apartmentNumber;
+    @Column(name = "apartment_number")
+    Integer apartmentNumber;
 
-        @Enumerated(EnumType.STRING)
-        @Column(name = "status")
-        ApartmentStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    ApartmentStatus status;
 
-        @CreatedDate
-        @Column(name = "created_at")
-        LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
 
-        @LastModifiedDate
-        @Column(name = "updated_at")
-        LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    LocalDateTime updatedAt;
 
-        @Column(name = "deleted_at")
-        LocalDateTime deletedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
-        @OneToMany(mappedBy = "apartment", cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                        CascadeType.DETACH, CascadeType.REFRESH})
-        Set<Relationship> relationships;
+    @OneToMany(
+            mappedBy = "apartment",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    Set<Relationship> relationships;
 }

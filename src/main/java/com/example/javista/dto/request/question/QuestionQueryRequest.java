@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.question;
 
 import com.example.javista.dto.request.PageRequest;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +13,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuestionQueryRequest extends PageRequest {
-        String id;
+    String id;
 
-        String content;
+    String content;
 
-        String createdAt;
+    String createdAt;
 
-        String updatedAt;
+    String updatedAt;
 
-        String surveyId;
+    String surveyId;
 }

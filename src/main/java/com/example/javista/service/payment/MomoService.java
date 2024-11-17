@@ -5,5 +5,5 @@ import com.example.javista.dto.response.payment.MomoPaymentResponse;
 import com.example.javista.entity.Bill;
 
 public interface MomoService {
-        MomoPaymentResponse createPayment(Bill bill, MomoPaymentCreationRequest request) throws Exception;
+    MomoPaymentResponse createPayment(Bill bill, MomoPaymentCreationRequest request) throws Exception;
 }

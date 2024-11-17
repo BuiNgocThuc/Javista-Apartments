@@ -1,5 +1,17 @@
 package com.example.javista.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.mail.MessagingException;
+import jakarta.persistence.criteria.Join;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.example.javista.dto.request.mail.MailCreationRequest;
 import com.example.javista.dto.request.user.UserCreationRequest;
 import com.example.javista.dto.request.user.UserPatchRequest;
@@ -18,151 +30,136 @@ import com.example.javista.service.UserService;
 import com.example.javista.service.media.EmailService;
 import com.example.javista.utils.QueryUtils;
 import com.example.javista.utils.SecurityUtils;
-import jakarta.mail.MessagingException;
-import jakarta.persistence.criteria.Join;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
-        UserMapper userMapper;
-        UserRepository userRepository;
+    UserMapper userMapper;
+    UserRepository userRepository;
 
-        FilterSpecification<User> filterSpecification;
+    FilterSpecification<User> filterSpecification;
 
-        EmailService mailService;
+    EmailService mailService;
 
-        SecurityUtils securityUtils;
+    SecurityUtils securityUtils;
 
-        @Override
-        public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
-                // Pagination and Sorting
-                Pageable pageable = QueryUtils.getPagination(query);
+    @Override
+    public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
+        // Pagination and Sorting
+        Pageable pageable = QueryUtils.getPagination(query);
 
-                //Filtering and searching by specification
-                Specification<User> spec = filterSpecification.filteringBySpecification(
-                                QueryUtils.getFilterCriterion(query)
-                );
+        // Filtering and searching by specification
+        Specification<User> spec = filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
 
-                var pageData = userRepository.findAll(spec, pageable);
+        var pageData = userRepository.findAll(spec, pageable);
 
-                return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
+        return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
+    }
 
+    @Override
+    public UserResponse getUserById(Integer id) {
+        return userMapper.entityToResponse(
+                userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+    }
+
+    @Override
+    public UserResponse createUser(UserCreationRequest request) {
+        // check if the username is already exist
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+        User user = userMapper.creationRequestToEntity(request);
+
+        // Encrypt the password
+        user.setPassword(securityUtils.encryptPassword(request.getPassword()));
+
+        // Save the user
+        user = userRepository.save(user);
+
+        // send email to verify the account
+        try {
+            Map<String, Object> props = new HashMap<>();
+            props.put("username", user.getUsername());
+            props.put("password", request.getPassword());
+            props.put("fullName", user.getFullName());
+
+            MailCreationRequest mailRequest = MailCreationRequest.builder()
+                    .to(user.getEmail())
+                    .subject("Verify your account")
+                    .content("Please verify your account by clicking the link below")
+                    .props(props)
+                    .build();
+
+            mailService.sendEmail(mailRequest, "ConfirmationEmail");
+
+        } catch (MessagingException e) {
+            // handle exception
+            e.printStackTrace();
         }
 
-        @Override
-        public UserResponse getUserById(Integer id) {
-                return userMapper.entityToResponse(userRepository.findById(id)
-                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-        }
+        return userMapper.entityToResponse(user);
+    }
 
-        @Override
-        public UserResponse createUser(UserCreationRequest request) {
-                // check if the username is already exist
-                if (userRepository.existsByUsername(request.getUsername())) {
-                        throw new AppException(ErrorCode.USERNAME_EXISTED);
-                }
-                User user = userMapper.creationRequestToEntity(request);
+    @Override
+    public UserResponse updateUser(Integer id, UserUpdateRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-                // Encrypt the password
-                user.setPassword(securityUtils.encryptPassword(request.getPassword()));
+        userMapper.updateRequestToEntity(user, request);
+        return userMapper.entityToResponse(userRepository.save(user));
+    }
 
-                // Save the user
-                user = userRepository.save(user);
+    @Override
+    public UserResponse patchUser(Integer id, UserPatchRequest request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-                // send email to verify the account
-                try {
-                        Map<String, Object> props = new HashMap<>();
-                        props.put("username", user.getUsername());
-                        props.put("password", request.getPassword());
-                        props.put("fullName", user.getFullName());
+        userMapper.patchRequestToEntity(user, request);
+        user.setPassword(securityUtils.encryptPassword(request.getPassword()));
+        return userMapper.entityToResponse(userRepository.save(user));
+    }
 
-                        MailCreationRequest mailRequest = MailCreationRequest.builder()
-                                        .to(user.getEmail())
-                                        .subject("Verify your account")
-                                        .content("Please verify your account by clicking the link below")
-                                        .props(props)
-                                        .build();
+    @Override
+    public void deleteUser(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-                        mailService.sendEmail(mailRequest, "ConfirmationEmail");
+        user.setDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
+    }
 
-                } catch (MessagingException e) {
-                        // handle exception
-                        e.printStackTrace();
-                }
+    @Override
+    public UserResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
 
-                return userMapper.entityToResponse(user);
-        }
+        return userMapper.entityToResponse(
+                userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+    }
 
-        @Override
-        public UserResponse updateUser(Integer id, UserUpdateRequest request) {
-                User user = userRepository.findById(id)
-                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    @Override
+    public PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role) {
+        // Pagination and sorting
+        Pageable pageable = QueryUtils.getPagination(query);
 
-                userMapper.updateRequestToEntity(user, request);
-                return userMapper.entityToResponse(userRepository.save(user));
-        }
+        // Filtering and searching by specification
+        //                List<FilterCriteria> criterion = new ArrayList<>();
 
-        @Override
-        public UserResponse patchUser(Integer id, UserPatchRequest request) {
-                User user = userRepository.findById(id)
-                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        Specification<User> spec = filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
 
-                userMapper.patchRequestToEntity(user, request);
-                user.setPassword(securityUtils.encryptPassword(request.getPassword()));
-                return userMapper.entityToResponse(userRepository.save(user));
-        }
+        Specification<User> roleSpec = (root, query1, criteriaBuilder) -> {
+            Join<User, Relationship> relationshipJoin = root.join("relationships");
+            return criteriaBuilder.equal(relationshipJoin.get("role"), role);
+        };
 
-        @Override
-        public void deleteUser(Integer id) {
-                User user = userRepository.findById(id)
-                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        spec = spec.and(roleSpec);
 
-                user.setDeletedAt(LocalDateTime.now());
-                userRepository.save(user);
-        }
+        // Call repository
+        var pageData = userRepository.findAll(spec, pageable);
 
-        @Override
-        public UserResponse getMyInfo() {
-                var context = SecurityContextHolder.getContext();
-                String name = context.getAuthentication().getName();
-
-                return userMapper.entityToResponse(userRepository.findByUsername(name)
-                                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-        }
-
-        @Override
-        public PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role) {
-                // Pagination and sorting
-                Pageable pageable = QueryUtils.getPagination(query);
-
-                // Filtering and searching by specification
-//                List<FilterCriteria> criterion = new ArrayList<>();
-
-                Specification<User> spec = filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
-
-                Specification<User> roleSpec = (root, query1, criteriaBuilder) -> {
-                        Join<User, Relationship> relationshipJoin = root.join("relationships");
-                        return criteriaBuilder.equal(relationshipJoin.get("role"), role);
-                };
-
-                spec = spec.and(roleSpec);
-
-                // Call repository
-                var pageData = userRepository.findAll(spec, pageable);
-
-                // Use the utility method to build the PageResponse
-                return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
-        }
+        // Use the utility method to build the PageResponse
+        return QueryUtils.buildPageResponse(pageData, pageable, userMapper::entityToResponse);
+    }
 }

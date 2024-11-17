@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.survey;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,9 +12,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SurveyPatchRequest {
-        String title;
+    String title;
 
-        Integer totalQuestions;
+    Integer totalQuestions;
 
-        Integer userId;
+    Integer userId;
 }

@@ -1,5 +1,11 @@
 package com.example.javista.service.impl;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.example.javista.dto.request.item.ItemCreationRequest;
 import com.example.javista.dto.request.item.ItemPatchRequest;
 import com.example.javista.dto.request.item.ItemQueryRequest;
@@ -13,84 +19,75 @@ import com.example.javista.repository.ItemRepository;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.ItemService;
 import com.example.javista.utils.QueryUtils;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ItemServiceImpl implements ItemService {
-        ItemMapper itemMapper;
-        ItemRepository itemRepository;
+    ItemMapper itemMapper;
+    ItemRepository itemRepository;
 
-        UserRepository userRepository;
+    UserRepository userRepository;
 
-        FilterSpecification<Item> filterSpecification;
+    FilterSpecification<Item> filterSpecification;
 
-        @Override
-        public PageResponse<ItemResponse> getItems(ItemQueryRequest query) {
-                // Pagination and Sorting
-                Pageable pageable = QueryUtils.getPagination(query);
+    @Override
+    public PageResponse<ItemResponse> getItems(ItemQueryRequest query) {
+        // Pagination and Sorting
+        Pageable pageable = QueryUtils.getPagination(query);
 
-                //Filtering and searching by specification
-                Specification<Item> spec = filterSpecification.filteringBySpecification(
-                                QueryUtils.getFilterCriterion(query)
-                );
+        // Filtering and searching by specification
+        Specification<Item> spec = filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
 
-                var pageData = itemRepository.findAll(spec, pageable);
+        var pageData = itemRepository.findAll(spec, pageable);
 
-                return QueryUtils.buildPageResponse(pageData, pageable, itemMapper::entityToResponse);
-        }
+        return QueryUtils.buildPageResponse(pageData, pageable, itemMapper::entityToResponse);
+    }
 
-        @Override
-        public ItemResponse getItemById(Integer id) {
-                return itemMapper.entityToResponse(itemRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Item Not Found")));
-        }
+    @Override
+    public ItemResponse getItemById(Integer id) {
+        return itemMapper.entityToResponse(
+                itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item Not Found")));
+    }
 
-        @Override
-        public ItemResponse createItem(ItemCreationRequest request) {
-                Item item = itemMapper.creationRequestToEntity(request);
+    @Override
+    public ItemResponse createItem(ItemCreationRequest request) {
+        Item item = itemMapper.creationRequestToEntity(request);
 
-                item.setUser(userRepository.findById(request.getUserId())
-                                .orElseThrow(() -> new RuntimeException("User Not Found")));
+        item.setUser(
+                userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
 
-                return itemMapper.entityToResponse(itemRepository.save(item));
-        }
+        return itemMapper.entityToResponse(itemRepository.save(item));
+    }
 
-        @Override
-        public ItemResponse updateItem(Integer id, ItemUpdateRequest request) {
-                Item item = itemRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Item Not Found"));
+    @Override
+    public ItemResponse updateItem(Integer id, ItemUpdateRequest request) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item Not Found"));
 
-                item.setUser(userRepository.findById(request.getUserId())
-                                .orElseThrow(() -> new RuntimeException("User Not Found")));
+        item.setUser(
+                userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
 
-                itemMapper.updateRequestToEntity(item, request);
-                return itemMapper.entityToResponse(itemRepository.save(item));
-        }
+        itemMapper.updateRequestToEntity(item, request);
+        return itemMapper.entityToResponse(itemRepository.save(item));
+    }
 
-        @Override
-        public ItemResponse patchItem(Integer id, ItemPatchRequest request) {
-                Item item = itemRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Item Not Found"));
+    @Override
+    public ItemResponse patchItem(Integer id, ItemPatchRequest request) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item Not Found"));
 
-                itemMapper.patchRequestToEntity(item, request);
-                return itemMapper.entityToResponse(itemRepository.save(item));
-        }
+        itemMapper.patchRequestToEntity(item, request);
+        return itemMapper.entityToResponse(itemRepository.save(item));
+    }
 
-        @Override
-        public void deleteItem(Integer id) {
-                Item item = itemRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Item Not Found"));
+    @Override
+    public void deleteItem(Integer id) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new RuntimeException("Item Not Found"));
 
-                item.setDeletedAt(LocalDateTime.now());
-                itemRepository.save(item);
-        }
+        item.setDeletedAt(LocalDateTime.now());
+        itemRepository.save(item);
+    }
 }

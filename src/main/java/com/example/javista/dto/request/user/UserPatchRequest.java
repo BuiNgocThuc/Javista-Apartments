@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.example.javista.enums.UserGender;
 import com.example.javista.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,27 +16,27 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserPatchRequest {
-        String username;
+    String username;
 
-        String password;
+    String password;
 
-        String avatar;
+    String avatar;
 
-        Boolean isFirstLogin;
+    Boolean isFirstLogin;
 
-        String email;
+    String email;
 
-        String phone;
+    String phone;
 
-        UserGender gender;
+    UserGender gender;
 
-        String fullName;
+    String fullName;
 
-        String nationId;
+    String nationId;
 
-        UserType userType;
+    UserType userType;
 
-        LocalDateTime dateOfBirth;
+    LocalDateTime dateOfBirth;
 
-        Boolean isStaying;
+    Boolean isStaying;
 }
