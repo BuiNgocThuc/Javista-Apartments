@@ -19,7 +19,7 @@ public enum ErrorCode {
         USER_NOT_FOUND(1006, "User not found",  HttpStatus.NOT_FOUND),
         USERNAME_EXISTED(1007, "Username already exists", HttpStatus.BAD_REQUEST),
         INVALID_PASSWORD(1008, "Your password is incorrect", HttpStatus.UNAUTHORIZED),
-        UNAUTHENTICATED(1009, "You need to authenticate permissions", HttpStatus.UNAUTHORIZED),
+        UNAUTHENTICATED(1009, "You need to login", HttpStatus.UNAUTHORIZED),
         UNAUTHORIZED(1010, "You don't have permission", HttpStatus.FORBIDDEN),
 
         ;

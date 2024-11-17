@@ -3,6 +3,7 @@ package com.example.javista.service.impl;
 import com.example.javista.dto.request.authentication.AuthenticationRequest;
 import com.example.javista.dto.request.authentication.IntrospectRequest;
 import com.example.javista.dto.request.authentication.LogoutRequest;
+import com.example.javista.dto.request.authentication.RefreshTokenRequest;
 import com.example.javista.dto.response.authentication.AuthenticationResponse;
 import com.example.javista.dto.response.authentication.IntrospectResponse;
 import com.example.javista.entity.InvalidatedToken;
@@ -17,9 +18,11 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -54,11 +57,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         @Override
         public IntrospectResponse introspect(IntrospectRequest request)  throws ParseException, JOSEException{
+                boolean isValid = true;
                 if (!securityUtils.verifyToken(request.getToken()) || isInvalidatedToken(request.getToken())) {
-                        throw new AppException(ErrorCode.UNAUTHENTICATED);
+                        isValid = false;
                 }
                 return IntrospectResponse.builder()
-                        .isValid(true)
+                        .isValid(isValid)
                         .build();
         }
 
@@ -84,5 +88,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build();
 
                 invalidatedTokenRepository.save(invalidatedToken);
+        }
+
+        // schedule a task to delete invalidated tokens
+        @Scheduled(fixedRate = 86400000) // Run once every 24 hours
+        @Transactional
+        public void cleanUpExpiredTokens() {
+                invalidatedTokenRepository.deleteExpiredTokens();
+                System.out.println("Expired tokens cleaned up successfully.");
+        }
+
+
+        @Override
+        public AuthenticationResponse refreshToken(RefreshTokenRequest request) throws ParseException, JOSEException {
+                SignedJWT signedJWT = SignedJWT.parse(request.getToken());
+
+                var jit = signedJWT.getJWTClaimsSet().getJWTID();
+                var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+                InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                        .id(jit)
+                        .expiryTime(expiryTime)
+                        .build();
+
+                invalidatedTokenRepository.save(invalidatedToken);
+
+                var username = signedJWT.getJWTClaimsSet().getSubject();
+
+                var user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+                var token = securityUtils.generateToken(user);
+
+                return AuthenticationResponse.builder()
+                        .token(token)
+                        .isAuthenticated(true)
+                        .build();
         }
 }

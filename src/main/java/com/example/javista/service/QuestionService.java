@@ -6,8 +6,10 @@ import com.example.javista.dto.request.question.QuestionQueryRequest;
 import com.example.javista.dto.request.question.QuestionUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.question.QuestionResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 public interface QuestionService {
+        @PreAuthorize("hasRole('RESIDENT')")
         PageResponse<QuestionResponse> getQuestions(QuestionQueryRequest query);
 
         QuestionResponse getQuestionById(Integer id);

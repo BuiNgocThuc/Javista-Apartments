@@ -1,6 +1,9 @@
 package com.example.javista.configuration;
 
-import com.example.javista.enums.UserType;
+import com.example.javista.exception.AppException;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,16 +24,22 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
-        private final String[] PUBLIC_ENDPOINTS = {
-                "/auth/login", "/auth/introspect", "/auth/logout"
+
+        JwtDecoderConfig jwtDecoderConfig;
+
+        String[] PUBLIC_ENDPOINTS = {
+                "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh"
         };
 
         @Value("${jwt.signerKey}")
-        private String signerKey;
+        @NonFinal
+        String signerKey;
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception, AppException {
                 http.authorizeHttpRequests(request ->
                         request
                                 .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
@@ -39,8 +48,9 @@ public class SecurityConfig {
                                 .authenticated());
 
                 http.oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> jwt.decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                        oauth2.jwt(jwt -> jwt.decoder(jwtDecoderConfig)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                        .authenticationEntryPoint(new AuthenticateEntryPointConfig()));
 
                 http.csrf(AbstractHttpConfigurer::disable);
                 return http.build();
@@ -56,11 +66,12 @@ public class SecurityConfig {
         }
 
         @Bean
-        JwtDecoder jwtDecoder() {
+        public JwtDecoder jwtDecoder() {
                 SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS256");
                 return NimbusJwtDecoder
                         .withSecretKey(secretKeySpec)
                         .macAlgorithm(MacAlgorithm.HS256)
                         .build();
         }
+
 }

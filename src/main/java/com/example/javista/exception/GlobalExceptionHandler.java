@@ -4,6 +4,9 @@ import com.example.javista.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.authorization.method.MethodAuthorizationDeniedHandler;
+import org.springframework.security.authorization.method.ThrowingMethodAuthorizationDeniedHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +24,7 @@ public class GlobalExceptionHandler {
         // uncategorized exception
         @ExceptionHandler(value = Exception.class)
         public ResponseEntity<ApiResponse> handlingUncategorizedException(Exception e) {
-                log.error("exception: {}", e.getMessage());
+                log.error("exception: {}", e.getClass().getCanonicalName());
                 ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
 
                 return ResponseEntity.status(errorCode.getHttpStatusCode())
@@ -48,8 +51,8 @@ public class GlobalExceptionHandler {
         }
 
         // access denied exception
-        @ExceptionHandler(value = AccessDeniedException.class)
-        public ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException e) {
+        @ExceptionHandler(value = AuthorizationDeniedException.class)
+        public ResponseEntity<ApiResponse> handlingAccessDeniedException(AuthorizationDeniedException e) {
                 ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
 
                 return ResponseEntity.status(errorCode.getHttpStatusCode())

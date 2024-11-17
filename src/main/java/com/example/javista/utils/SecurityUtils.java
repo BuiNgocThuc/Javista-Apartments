@@ -27,6 +27,10 @@ public class SecurityUtils {
         @NonFinal
         protected String SIGNER_KEY;
 
+        @Value("${jwt.valid-duration}")
+        @NonFinal
+        protected String VALID_DURATION;
+
         // encrypt password function
         public  String encryptPassword(String password) {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -44,7 +48,7 @@ public class SecurityUtils {
                         .issueTime(new Date())
                         .expirationTime(
                                 new Date(
-                                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                                        Instant.now().plus(Long.parseLong(VALID_DURATION), ChronoUnit.DAYS).toEpochMilli()
                                 )
                         )
                         .jwtID(UUID.randomUUID().toString())

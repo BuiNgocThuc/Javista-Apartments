@@ -3,6 +3,7 @@ package com.example.javista.controller;
 import com.example.javista.dto.request.authentication.AuthenticationRequest;
 import com.example.javista.dto.request.authentication.IntrospectRequest;
 import com.example.javista.dto.request.authentication.LogoutRequest;
+import com.example.javista.dto.request.authentication.RefreshTokenRequest;
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.authentication.AuthenticationResponse;
 import com.example.javista.dto.response.authentication.IntrospectResponse;
@@ -50,6 +51,16 @@ public class AuthenticationController {
                 authenticationService.logout(request);
                 return ApiResponse.<Void>builder()
                         .message("Logout Successfully")
+                        .build();
+        }
+
+        @PostMapping("/refresh")
+        ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request)
+                throws ParseException, JOSEException {
+                var response = authenticationService.refreshToken(request);
+                return ApiResponse.<AuthenticationResponse>builder()
+                        .message("Refresh Token Successfully")
+                        .result(response)
                         .build();
         }
 }

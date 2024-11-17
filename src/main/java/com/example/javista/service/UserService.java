@@ -12,7 +12,6 @@ public interface UserService {
         @PreAuthorize("hasRole('ADMIN')")
         PageResponse<UserResponse> getUsers(UserQueryRequest query);
 
-        @PreAuthorize("hasRole('ADMIN')")
         UserResponse getUserById(Integer id);
 
         UserResponse createUser(UserCreationRequest request);
