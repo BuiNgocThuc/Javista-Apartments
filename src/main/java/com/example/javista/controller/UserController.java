@@ -2,14 +2,11 @@ package com.example.javista.controller;
 
 import java.util.Map;
 
+import com.example.javista.dto.request.user.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.javista.dto.request.user.UserCreationRequest;
-import com.example.javista.dto.request.user.UserPatchRequest;
-import com.example.javista.dto.request.user.UserQueryRequest;
-import com.example.javista.dto.request.user.UserUpdateRequest;
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
@@ -32,8 +29,19 @@ public class UserController {
 
     // test postman Http: http://localhost:8080/javista/users
 
+    // change password when first login
+
+    // change password
+    @PostMapping("/me/update-password")
+    ApiResponse<Void> changePassword(@RequestBody PasswordUpdateRequest request) {
+        userService.changePassword(request);
+        return ApiResponse.<Void>builder()
+                .message("Change password Successfully")
+                .build();
+    }
+
     // get my info
-    @GetMapping("/myInfo")
+    @GetMapping("/me")
     UserResponse getMyInfo() {
         return userService.getMyInfo();
     }

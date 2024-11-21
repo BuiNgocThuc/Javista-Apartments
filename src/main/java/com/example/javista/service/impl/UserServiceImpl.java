@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.javista.dto.request.user.*;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 
@@ -12,11 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.javista.dto.request.mail.MailCreationRequest;
-import com.example.javista.dto.request.user.UserCreationRequest;
-import com.example.javista.dto.request.user.UserPatchRequest;
-import com.example.javista.dto.request.user.UserQueryRequest;
-import com.example.javista.dto.request.user.UserUpdateRequest;
+import com.example.javista.dto.request.contact.MailSendRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.entity.Relationship;
@@ -88,7 +85,7 @@ public class UserServiceImpl implements UserService {
             props.put("password", request.getPassword());
             props.put("fullName", user.getFullName());
 
-            MailCreationRequest mailRequest = MailCreationRequest.builder()
+            MailSendRequest mailRequest = MailSendRequest.builder()
                     .to(user.getEmail())
                     .subject("Verify your account")
                     .content("Please verify your account by clicking the link below")
@@ -140,6 +137,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void createPasswordWhenFirstLogin(PasswordCreationRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new AppException(ErrorCode.CONFIRM_PASSWORD_NOT_MATCH);
+        }
+
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name)
+            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (user.getIsFirstLogin()) {
+            user.setPassword(securityUtils.encryptPassword(request.getPassword()));
+            user.setIsFirstLogin(false);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void changePassword(PasswordUpdateRequest request) {
+        String oldPassword = request.getOldPassword();
+        String newPassword = request.getNewPassword();
+        String confirmPassword = request.getConfirmPassword();
+        if (!newPassword.equals(confirmPassword)) {
+            throw new AppException(ErrorCode.CONFIRM_PASSWORD_NOT_MATCH);
+        }
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (!securityUtils.checkMatchPassword(oldPassword, user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        user.setPassword(securityUtils.encryptPassword(newPassword));
+        userRepository.save(user);
+    }
+
     public PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role) {
         // Pagination and sorting
         Pageable pageable = QueryUtils.getPagination(query);

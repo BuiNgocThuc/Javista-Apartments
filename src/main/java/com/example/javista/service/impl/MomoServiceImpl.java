@@ -90,7 +90,6 @@ public class MomoServiceImpl implements MomoService {
         // Create the HTTP entity with the request data and headers
         HttpEntity<MomoDataRequest> httpEntity = new HttpEntity<>(requestData, headers);
 
-        System.out.println(momoConfig.getNotifyUrl());
         try {
             // Make the HTTP POST request to the Momo API and capture the response
             ResponseEntity<MomoPaymentResponse> response = restTemplate.exchange(

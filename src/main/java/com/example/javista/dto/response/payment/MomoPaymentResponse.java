@@ -10,13 +10,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class MomoPaymentResponse {
-    private String requestId;
+    String requestId;
 
-    private int errorCode; // This can remain as a primitive type since it can be 0
+    int errorCode; // This can remain as a primitive type since it can be 0
 
-    private String orderId;
+    String orderId;
 
-    private String message;
+    String message;
 
-    private String payUrl;
+    String payUrl;
 }

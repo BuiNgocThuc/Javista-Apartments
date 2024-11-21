@@ -1,11 +1,8 @@
 package com.example.javista.service;
 
+import com.example.javista.dto.request.user.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.example.javista.dto.request.user.UserCreationRequest;
-import com.example.javista.dto.request.user.UserPatchRequest;
-import com.example.javista.dto.request.user.UserQueryRequest;
-import com.example.javista.dto.request.user.UserUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 
@@ -25,5 +22,7 @@ public interface UserService {
 
     UserResponse getMyInfo();
 
-    PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role);
+    void changePassword(PasswordUpdateRequest request);
+
+    void createPasswordWhenFirstLogin(PasswordCreationRequest request);
 }

@@ -39,6 +39,12 @@ public class SecurityUtils {
         return passwordEncoder.encode(password);
     }
 
+    // check match password function
+    public boolean checkMatchPassword(String password, String encodedPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        return passwordEncoder.matches(password, encodedPassword);
+    }
+
     // generate token function
     public String generateToken(User user) {
         log.info("Signer key: {}", SIGNER_KEY);

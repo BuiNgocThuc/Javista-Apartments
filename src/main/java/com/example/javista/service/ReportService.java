@@ -1,5 +1,7 @@
 package com.example.javista.service;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import com.example.javista.dto.request.report.ReportCreationRequest;
 import com.example.javista.dto.request.report.ReportPatchRequest;
 import com.example.javista.dto.request.report.ReportQueryRequest;
@@ -12,6 +14,7 @@ public interface ReportService {
 
     ReportResponse getReportById(Integer id);
 
+    @PreAuthorize("hasRole('RESIDENT')")
     ReportResponse createReport(ReportCreationRequest request);
 
     ReportResponse updateReport(Integer id, ReportUpdateRequest request);

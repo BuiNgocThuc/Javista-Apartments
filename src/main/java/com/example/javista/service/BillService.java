@@ -1,9 +1,6 @@
 package com.example.javista.service;
 
-import com.example.javista.dto.request.bill.BillCreationRequest;
-import com.example.javista.dto.request.bill.BillPatchRequest;
-import com.example.javista.dto.request.bill.BillQueryRequest;
-import com.example.javista.dto.request.bill.BillUpdateRequest;
+import com.example.javista.dto.request.bill.*;
 import com.example.javista.dto.request.payment.MomoCallbackRequest;
 import com.example.javista.dto.request.payment.MomoPaymentCreationRequest;
 import com.example.javista.dto.response.PageResponse;
@@ -26,4 +23,6 @@ public interface BillService {
     BillResponse patchBill(Integer id, BillPatchRequest request);
 
     void deleteBill(Integer id);
+
+    void updateWaterReadings(WaterReadingsUpdateRequest request);
 }

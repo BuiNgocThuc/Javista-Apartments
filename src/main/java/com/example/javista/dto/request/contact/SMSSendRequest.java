@@ -1,6 +1,4 @@
-package com.example.javista.dto.request.mail;
-
-import java.util.Map;
+package com.example.javista.dto.request.contact;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class MailCreationRequest {
-    String to;
-    String subject;
-    String content;
-    Map<String, Object> props;
+public class SMSSendRequest {
+    String phoneNumber;
+    String message;
 }

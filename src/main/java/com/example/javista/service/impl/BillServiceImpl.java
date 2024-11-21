@@ -2,15 +2,12 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 
+import com.example.javista.dto.request.bill.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.javista.configuration.MomoConfig;
-import com.example.javista.dto.request.bill.BillCreationRequest;
-import com.example.javista.dto.request.bill.BillPatchRequest;
-import com.example.javista.dto.request.bill.BillQueryRequest;
-import com.example.javista.dto.request.bill.BillUpdateRequest;
 import com.example.javista.dto.request.payment.MomoCallbackRequest;
 import com.example.javista.dto.request.payment.MomoPaymentCreationRequest;
 import com.example.javista.dto.response.PageResponse;
@@ -155,5 +152,23 @@ public class BillServiceImpl implements BillService {
 
         bill.setDeletedAt(LocalDateTime.now());
         billRepository.save(bill);
+    }
+
+    @Override
+    public void updateWaterReadings(WaterReadingsUpdateRequest request) {
+        for (WaterReadingsUpdateRequest.WaterReadingUpdateRequest waterReading : request.getWaterReadings()) {
+            Bill bill = billRepository.findById(waterReading.getBillId())
+                    .orElseThrow(() -> new RuntimeException("Bill Not Found"));
+
+            bill.setNewWater(waterReading.getNewWaterIndex());
+            bill.setWaterReadingDate(waterReading.getReadingDate());
+
+            if (bill.getOldWater() != null) {
+//                bill.setWaterConsumption(bill.getNewWater() - bill.getOldWater());
+                // handling ....
+            }
+
+            billRepository.save(bill);
+        }
     }
 }

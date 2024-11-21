@@ -22,6 +22,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(1008, "Your password is incorrect", HttpStatus.UNAUTHORIZED),
     UNAUTHENTICATED(1009, "You need to login", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1010, "You don't have permission", HttpStatus.FORBIDDEN),
+    CONFIRM_PASSWORD_NOT_MATCH(1011, "Confirm password not match", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

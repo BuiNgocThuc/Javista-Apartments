@@ -1,4 +1,4 @@
-package com.example.javista.dto.request.mail;
+package com.example.javista.dto.request.contact;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class MailRequest {
+public class MailCreationRequest {
     String fullName;
     String email;
     String password;

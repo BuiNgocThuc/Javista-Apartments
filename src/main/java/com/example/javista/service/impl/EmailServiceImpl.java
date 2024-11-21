@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import com.example.javista.dto.request.mail.MailCreationRequest;
+import com.example.javista.dto.request.contact.MailSendRequest;
 import com.example.javista.service.media.EmailService;
 
 import lombok.AccessLevel;
@@ -33,12 +33,13 @@ public class EmailServiceImpl implements EmailService {
         props.put("fullName", fullName);
 
         try {
-
-            MailCreationRequest request = new MailCreationRequest();
-            request.setTo(email);
-            request.setSubject("Test Email");
-            request.setProps(props);
-            sendEmail(request, "ConfirmationEmail");
+            sendEmail(
+                MailSendRequest.builder()
+                    .to(email)
+                    .subject("Test Email")
+                    .props(props)
+                    .build()
+                , "ConfirmationEmail");
             return true;
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -47,7 +48,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmail(MailCreationRequest request, String templateName) throws MessagingException {
+    public void sendEmail(MailSendRequest request, String templateName) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");

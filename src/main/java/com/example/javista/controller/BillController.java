@@ -1,11 +1,9 @@
 package com.example.javista.controller;
 
+import com.example.javista.dto.request.bill.*;
+import com.example.javista.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.javista.dto.request.bill.BillCreationRequest;
-import com.example.javista.dto.request.bill.BillPatchRequest;
-import com.example.javista.dto.request.bill.BillQueryRequest;
-import com.example.javista.dto.request.bill.BillUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.bill.BillResponse;
 import com.example.javista.service.BillService;
@@ -55,5 +53,14 @@ public class BillController {
     @DeleteMapping("/{id}")
     void deleteBill(@PathVariable Integer id) {
         billService.deleteBill(id);
+    }
+
+    // update water-readings
+    @PutMapping("/update-water-readings")
+    ApiResponse<Void> updateWaterReadings(@RequestBody WaterReadingsUpdateRequest request) {
+        billService.updateWaterReadings(request);
+        return ApiResponse.<Void>builder()
+            .message("Water readings updated successfully")
+            .build();
     }
 }
