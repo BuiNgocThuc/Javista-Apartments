@@ -2,6 +2,7 @@ package com.example.javista.dto.request.report;
 
 import com.example.javista.enums.ReportStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,13 +13,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReportPatchRequest {
-        String content;
+    String content;
 
-        String title;
+    String title;
 
-        ReportStatus status;
+    ReportStatus status;
 
-        Integer relationshipId;
+    Integer relationshipId;
 
-        Integer rejectionReasonId;
+    Integer rejectionReasonId;
 }

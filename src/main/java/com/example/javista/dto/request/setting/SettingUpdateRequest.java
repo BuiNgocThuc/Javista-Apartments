@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.setting;
 
 import com.example.javista.enums.SystemStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,17 +11,17 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SettingUpdateRequest {
-        String currentMonthly;
+    String currentMonthly;
 
-        SystemStatus systemStatus;
+    SystemStatus systemStatus;
 
-        Float roomPricePerM2;
+    Float roomPricePerM2;
 
-        Float waterPricePerM3;
+    Float waterPricePerM3;
 
-        Float roomVat;
+    Float roomVat;
 
-        Integer waterVat;
+    Integer waterVat;
 
-        Integer envProtectionTax;
+    Integer envProtectionTax;
 }

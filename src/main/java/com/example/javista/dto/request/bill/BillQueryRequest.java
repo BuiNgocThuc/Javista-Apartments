@@ -12,19 +12,19 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillQueryRequest {
 
-        String id;
+    String id;
 
-        String monthly;
+    String monthly;
 
-        String totalPrice;
+    String totalPrice;
 
-        String oldWater;
+    String oldWater;
 
-        String newWater;
+    String newWater;
 
-        String waterReadingDate;
+    String waterReadingDate;
 
-        String status;
+    String status;
 
-        String relationshipId;
+    String relationshipId;
 }

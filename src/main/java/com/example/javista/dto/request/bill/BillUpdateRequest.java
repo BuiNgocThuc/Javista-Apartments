@@ -1,10 +1,11 @@
 package com.example.javista.dto.request.bill;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.BillStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -12,18 +13,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillUpdateRequest {
-        String monthly;
+    String monthly;
 
-        Float totalPrice;
+    Float totalPrice;
 
-        Integer oldWater;
+    Integer oldWater;
 
-        Integer newWater;
+    Integer newWater;
 
-        LocalDateTime waterReadingDate;
+    LocalDateTime waterReadingDate;
 
-        BillStatus status;
+    BillStatus status;
 
-        Integer relationshipId;
-
+    Integer relationshipId;
 }

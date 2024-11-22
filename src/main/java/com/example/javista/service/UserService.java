@@ -1,28 +1,28 @@
 package com.example.javista.service;
 
-import com.example.javista.dto.request.user.UserCreationRequest;
-import com.example.javista.dto.request.user.UserPatchRequest;
-import com.example.javista.dto.request.user.UserQueryRequest;
-import com.example.javista.dto.request.user.UserUpdateRequest;
-import com.example.javista.dto.response.PageResponse;
-import com.example.javista.dto.response.user.UserResponse;
+import com.example.javista.dto.request.user.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.example.javista.dto.response.PageResponse;
+import com.example.javista.dto.response.user.UserResponse;
+
 public interface UserService {
-        @PreAuthorize("hasRole('ADMIN')")
-        PageResponse<UserResponse> getUsers(UserQueryRequest query);
+    @PreAuthorize("hasRole('ADMIN')")
+    PageResponse<UserResponse> getUsers(UserQueryRequest query);
 
-        UserResponse getUserById(Integer id);
+    UserResponse getUserById(Integer id);
 
-        UserResponse createUser(UserCreationRequest request);
+    UserResponse createUser(UserCreationRequest request);
 
-        UserResponse updateUser(Integer id, UserUpdateRequest request);
+    UserResponse updateUser(Integer id, UserUpdateRequest request);
 
-        UserResponse patchUser(Integer id, UserPatchRequest request);
+    UserResponse patchUser(Integer id, UserPatchRequest request);
 
-        void deleteUser(Integer id);
+    void deleteUser(Integer id);
 
-        UserResponse getMyInfo();
+    UserResponse getMyInfo();
 
-        PageResponse<UserResponse> getUsersByRelationshipRole(UserQueryRequest query, String role);
+    void changePassword(PasswordUpdateRequest request);
+
+    void createPasswordWhenFirstLogin(PasswordCreationRequest request);
 }

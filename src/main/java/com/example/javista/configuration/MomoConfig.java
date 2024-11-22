@@ -1,12 +1,13 @@
 package com.example.javista.configuration;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
@@ -16,15 +17,15 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "momo")
 public class MomoConfig {
-        String momoApiUrl;
+    String momoApiUrl;
 
-        String secretKey;
+    String secretKey;
 
-        String accessKey;
+    String accessKey;
 
-        String returnUrl;
+    String returnUrl;
 
-        String notifyUrl;
+    String notifyUrl;
 
-        String partnerCode;
+    String partnerCode;
 }

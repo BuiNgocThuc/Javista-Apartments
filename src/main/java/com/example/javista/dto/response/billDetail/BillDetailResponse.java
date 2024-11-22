@@ -1,8 +1,9 @@
 package com.example.javista.dto.response.billDetail;
 
+import java.time.LocalDateTime;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -10,15 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillDetailResponse {
-        Integer id;
+    Integer id;
 
-        Float price;
+    Float price;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer billId;
+    Integer billId;
 
-        Integer serviceId;
+    Integer serviceId;
 }

@@ -1,5 +1,11 @@
 package com.example.javista.service.impl;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.example.javista.dto.request.question.QuestionCreationRequest;
 import com.example.javista.dto.request.question.QuestionPatchRequest;
 import com.example.javista.dto.request.question.QuestionQueryRequest;
@@ -15,91 +21,88 @@ import com.example.javista.repository.QuestionRepository;
 import com.example.javista.repository.SurveyRepository;
 import com.example.javista.service.QuestionService;
 import com.example.javista.utils.QueryUtils;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level =  AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class QuestionServiceImpl implements QuestionService {
-        QuestionMapper questionMapper;
-        QuestionRepository questionRepository;
+    QuestionMapper questionMapper;
+    QuestionRepository questionRepository;
 
-        SurveyRepository surveyRepository;
+    SurveyRepository surveyRepository;
 
-        FilterSpecification<Question> filterSpecification;
+    FilterSpecification<Question> filterSpecification;
 
-        @Override
-        public PageResponse<QuestionResponse> getQuestions(QuestionQueryRequest query) {
-                // Pagination and Sorting
-                Pageable pageable = QueryUtils.getPagination(query);
+    @Override
+    public PageResponse<QuestionResponse> getQuestions(QuestionQueryRequest query) {
+        // Pagination and Sorting
+        Pageable pageable = QueryUtils.getPagination(query);
 
-                //Filtering and searching by specification
-                Specification<Question> spec = filterSpecification.filteringBySpecification(
-                          QueryUtils.getFilterCriterion(query)
-                );
+        // Filtering and searching by specification
+        Specification<Question> spec =
+                filterSpecification.filteringBySpecification(QueryUtils.getFilterCriterion(query));
 
-                var pageData = questionRepository.findAll(spec, pageable);
+        var pageData = questionRepository.findAll(spec, pageable);
 
-                return QueryUtils.buildPageResponse(pageData, pageable, questionMapper::entityToResponse);
+        return QueryUtils.buildPageResponse(pageData, pageable, questionMapper::entityToResponse);
+    }
+
+    @Override
+    public QuestionResponse getQuestionById(Integer id) {
+        return questionMapper.entityToResponse(
+                questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question Not Found")));
+    }
+
+    @Override
+    public QuestionResponse createQuestion(QuestionCreationRequest request) {
+
+        // check existence of question's content
+        if (questionRepository.existsByContent(request.getContent())) {
+            ErrorCode.ENTITY_EXISTED.setMessage("Question's content already exists");
+            throw new AppException(ErrorCode.ENTITY_EXISTED);
         }
 
-        @Override
-        public QuestionResponse getQuestionById(Integer id) {
-                return questionMapper.entityToResponse(questionRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Question Not Found")));
-        }
+        Question question = questionMapper.creationRequestToEntity(request);
 
-        @Override
-        public QuestionResponse createQuestion(QuestionCreationRequest request) {
+        question.setSurvey(surveyRepository
+                .findById(request.getSurveyId())
+                .orElseThrow(() -> new RuntimeException("Survey Not Found")));
 
-                // check existence of question's content
-                if (questionRepository.existsByContent(request.getContent())) {
-                        ErrorCode.ENTITY_EXISTED.setMessage("Question's content already exists");
-                        throw new AppException(ErrorCode.ENTITY_EXISTED);
-                }
+        return questionMapper.entityToResponse(questionRepository.save(question));
+    }
 
-                Question question = questionMapper.creationRequestToEntity(request);
+    @Override
+    public QuestionResponse updateQuestion(Integer id, QuestionUpdateRequest request) {
+        Question question =
+                questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question Not Found"));
 
-                question.setSurvey(surveyRepository.findById(request.getSurveyId())
-                                .orElseThrow(() -> new RuntimeException("Survey Not Found")));
+        question.setSurvey(surveyRepository
+                .findById(request.getSurveyId())
+                .orElseThrow(() -> new RuntimeException("Survey Not Found")));
 
-                return questionMapper.entityToResponse(questionRepository.save(question));
-        }
+        questionMapper.updateRequestToEntity(question, request);
+        return questionMapper.entityToResponse(questionRepository.save(question));
+    }
 
-        @Override
-        public QuestionResponse updateQuestion(Integer id, QuestionUpdateRequest request) {
-                Question question = questionRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Question Not Found"));
+    @Override
+    public QuestionResponse patchQuestion(Integer id, QuestionPatchRequest request) {
+        Question question =
+                questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question Not Found"));
 
-                question.setSurvey(surveyRepository.findById(request.getSurveyId())
-                                .orElseThrow(() -> new RuntimeException("Survey Not Found")));
+        questionMapper.patchRequestToEntity(question, request);
+        return questionMapper.entityToResponse(questionRepository.save(question));
+    }
 
-                questionMapper.updateRequestToEntity(question, request);
-                return questionMapper.entityToResponse(questionRepository.save(question));
-        }
+    @Override
+    public void deleteQuestion(Integer id) {
+        Question question =
+                questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Question Not Found"));
 
-        @Override
-        public QuestionResponse patchQuestion(Integer id, QuestionPatchRequest request) {
-                Question question = questionRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Question Not Found"));
-
-                questionMapper.patchRequestToEntity(question, request);
-                return questionMapper.entityToResponse(questionRepository.save(question));
-        }
-
-        @Override
-        public void deleteQuestion(Integer id) {
-                Question question = questionRepository.findById(id)
-                                .orElseThrow(() -> new RuntimeException("Question Not Found"));
-
-                question.setDeletedAt(LocalDateTime.now());
-                questionRepository.save(question);
-        }
+        question.setDeletedAt(LocalDateTime.now());
+        questionRepository.save(question);
+    }
 }

@@ -8,15 +8,15 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.billDetail.BillDetailResponse;
 
 public interface BillDetailService {
-        PageResponse<BillDetailResponse> getBillDetails(BillDetailQueryRequest query);
+    PageResponse<BillDetailResponse> getBillDetails(BillDetailQueryRequest query);
 
-        BillDetailResponse getBillDetailById(Integer id);
+    BillDetailResponse getBillDetailById(Integer id);
 
-        BillDetailResponse createBillDetail(BillDetailCreationRequest request);
+    BillDetailResponse createBillDetail(BillDetailCreationRequest request);
 
-        BillDetailResponse updateBillDetail(Integer id, BillDetailUpdateRequest request);
+    BillDetailResponse updateBillDetail(Integer id, BillDetailUpdateRequest request);
 
-        BillDetailResponse patchBillDetail(Integer id, BillDetailPatchRequest request);
+    BillDetailResponse patchBillDetail(Integer id, BillDetailPatchRequest request);
 
-        void deleteBillDetail(Integer id);
+    void deleteBillDetail(Integer id);
 }

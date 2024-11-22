@@ -1,23 +1,23 @@
 package com.example.javista.dto.response.answer;
 
-import com.example.javista.entity.Question;
+import java.time.LocalDateTime;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnswerResponse {
-        Integer id;
+    Integer id;
 
-        String content;
+    String content;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer questionId;
+    Integer questionId;
 }

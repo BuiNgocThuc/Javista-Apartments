@@ -8,15 +8,15 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.rejectionReason.RejectionReasonResponse;
 
 public interface RejectionReasonService {
-        PageResponse<RejectionReasonResponse> getRejectionReasons(RejectionReasonQueryRequest query);
+    PageResponse<RejectionReasonResponse> getRejectionReasons(RejectionReasonQueryRequest query);
 
-        RejectionReasonResponse getRejectionReasonById(Integer id);
+    RejectionReasonResponse getRejectionReasonById(Integer id);
 
-        RejectionReasonResponse createRejectionReason(RejectionReasonCreationRequest request);
+    RejectionReasonResponse createRejectionReason(RejectionReasonCreationRequest request);
 
-        RejectionReasonResponse updateRejectionReason(Integer id, RejectionReasonUpdateRequest request);
+    RejectionReasonResponse updateRejectionReason(Integer id, RejectionReasonUpdateRequest request);
 
-        RejectionReasonResponse patchRejectionReason(Integer id, RejectionReasonPatchRequest request);
+    RejectionReasonResponse patchRejectionReason(Integer id, RejectionReasonPatchRequest request);
 
-        void deleteRejectionReason(Integer id);
+    void deleteRejectionReason(Integer id);
 }

@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,42 +12,42 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class MomoDataRequest {
-        @JsonProperty("partnerCode")
-        String partnerCode;
+    @JsonProperty("partnerCode")
+    String partnerCode;
 
-        @JsonProperty("requestId")
-        String requestId;
+    @JsonProperty("requestId")
+    String requestId;
 
-        @JsonProperty("amount")
-        float amount;
+    @JsonProperty("amount")
+    float amount;
 
-        @JsonProperty("orderId")
-        String orderId;
+    @JsonProperty("orderId")
+    String orderId;
 
-        @JsonProperty("orderInfo")
-        String orderInfo;
+    @JsonProperty("orderInfo")
+    String orderInfo;
 
-        @JsonProperty("redirectUrl")
-        String redirectUrl;
+    @JsonProperty("redirectUrl")
+    String redirectUrl;
 
-        @JsonProperty("ipnUrl")
-        String ipnUrl;
+    @JsonProperty("ipnUrl")
+    String ipnUrl;
 
-        @JsonProperty("lang")
-        String lang;
+    @JsonProperty("lang")
+    String lang;
 
-        @JsonProperty("orderExpireTime")
-        int orderExpireTime;
+    @JsonProperty("orderExpireTime")
+    int orderExpireTime;
 
-        @JsonProperty("extraData")
-        String extraData;
+    @JsonProperty("extraData")
+    String extraData;
 
-        @JsonProperty("requestType")
-        String requestType;
+    @JsonProperty("requestType")
+    String requestType;
 
-        @JsonProperty("signature")
-        String signature;
+    @JsonProperty("signature")
+    String signature;
 
-        @JsonProperty("autoCapture")
-        boolean autoCapture;
+    @JsonProperty("autoCapture")
+    boolean autoCapture;
 }

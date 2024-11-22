@@ -9,11 +9,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemUpdateRequest {
-        String image;
+    String image;
 
-        String description;
+    String description;
 
-        Boolean isReceive;
+    Boolean isReceive;
 
-        Integer userId;
+    Integer userId;
 }

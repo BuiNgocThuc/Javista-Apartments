@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAnswerUpdateRequest {
-        Integer userId;
+    Integer userId;
 
-        Integer answerId;
+    Integer answerId;
 }

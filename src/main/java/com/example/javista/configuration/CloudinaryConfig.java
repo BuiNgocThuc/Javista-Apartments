@@ -1,15 +1,17 @@
 package com.example.javista.configuration;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Data
 @NoArgsConstructor
@@ -19,21 +21,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "cloudinary")
 public class CloudinaryConfig {
-        String cloudName;
+    String cloudName;
 
-        String apiKey;
+    String apiKey;
 
-        String secretKey;
+    String secretKey;
 
-        Boolean secure;
+    Boolean secure;
 
-        @Bean
-        public Cloudinary cloudinary() {
-                return new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", cloudName,
-                        "api_key", apiKey,
-                        "api_secret", secretKey,
-                        "secure", secure
-                ));
-        }
+    @Bean
+    public Cloudinary cloudinary() {
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", secretKey,
+                "secure", secure));
+    }
 }

@@ -1,24 +1,22 @@
 package com.example.javista.controller;
 
-import com.example.javista.dto.request.user.UserCreationRequest;
-import com.example.javista.dto.request.user.UserPatchRequest;
-import com.example.javista.dto.request.user.UserQueryRequest;
-import com.example.javista.dto.request.user.UserUpdateRequest;
+import java.util.Map;
+
+import com.example.javista.dto.request.user.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.service.UserService;
 import com.example.javista.service.media.CloudinaryService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -26,75 +24,84 @@ import java.util.Map;
 @RequestMapping("/users")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-        UserService userService;
-        CloudinaryService cloudinaryService;
+    UserService userService;
+    CloudinaryService cloudinaryService;
 
-        // test postman Http: http://localhost:8080/javista/users
+    // test postman Http: http://localhost:8080/javista/users
 
-        // get my info
-        @GetMapping("/myInfo")
-        UserResponse getMyInfo() {
-                return userService.getMyInfo();
-        }
+    // change password when first login
 
-        // upload avatar
-        @PostMapping("/upload_avatar")
-        ApiResponse<Map> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
-                Map data = cloudinaryService.uploadFile(file);
-                return ApiResponse.<Map>builder()
-                        .message("Upload avatar Successfully")
-                        .result(data)
-                        .build();
-        }
+    // change password
+    @PostMapping("/me/update-password")
+    ApiResponse<Void> changePassword(@RequestBody PasswordUpdateRequest request) {
+        userService.changePassword(request);
+        return ApiResponse.<Void>builder()
+                .message("Change password Successfully")
+                .build();
+    }
 
-        // Query
-        @GetMapping
-        PageResponse<UserResponse> getUsers(@ModelAttribute
-                                                UserQueryRequest query) {
-                var auth = SecurityContextHolder.getContext().getAuthentication();
+    // get my info
+    @GetMapping("/me")
+    UserResponse getMyInfo() {
+        return userService.getMyInfo();
+    }
 
-                log.info("Username: {}", auth.getName());
-                auth.getAuthorities().forEach(authority -> log.info("Authority: {}", authority.getAuthority()));
+    // upload avatar
+    @PostMapping("/upload_avatar")
+    ApiResponse<Map> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
+        Map data = cloudinaryService.uploadFile(file);
+        return ApiResponse.<Map>builder()
+                .message("Upload avatar Successfully")
+                .result(data)
+                .build();
+    }
 
-                return userService.getUsers(query);
-        }
+    // Query
+    @GetMapping
+    PageResponse<UserResponse> getUsers(@ModelAttribute UserQueryRequest query) {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
 
-        // Filtering users by relationship_role [OWNER - USER]
-//        @GetMapping("/{role}")
-//        PageResponse<UserResponse> getUsersByRelationshipRole(
-//                        @ModelAttribute UserQueryRequest query,
-//                        @PathVariable String role) {
-//                return userService.getUsersByRelationshipRole(query, role);
-//        }
+        log.info("Username: {}", auth.getName());
+        auth.getAuthorities().forEach(authority -> log.info("Authority: {}", authority.getAuthority()));
 
-        // Query by id
-        @GetMapping("/{id}")
-        UserResponse getUserById(@PathVariable Integer id) {
-                return userService.getUserById(id);
-        }
+        return userService.getUsers(query);
+    }
 
-        // Create
-        @PostMapping
-        UserResponse createUser(@RequestBody UserCreationRequest request) {
-                return userService.createUser(request);
-        }
+    // Filtering users by relationship_role [OWNER - USER]
+    //        @GetMapping("/{role}")
+    //        PageResponse<UserResponse> getUsersByRelationshipRole(
+    //                        @ModelAttribute UserQueryRequest query,
+    //                        @PathVariable String role) {
+    //                return userService.getUsersByRelationshipRole(query, role);
+    //        }
 
-        // Update
-        @PutMapping("/{id}")
-        UserResponse updateUser(@PathVariable Integer id, @RequestBody UserUpdateRequest request) {
-                return userService.updateUser(id, request);
-        }
+    // Query by id
+    @GetMapping("/{id}")
+    UserResponse getUserById(@PathVariable Integer id) {
+        return userService.getUserById(id);
+    }
 
-        //Delete
-        @DeleteMapping("/{id}")
-        void deleteUser(@PathVariable Integer id) {
-                userService.deleteUser(id);
-        }
+    // Create
+    @PostMapping
+    UserResponse createUser(@RequestBody UserCreationRequest request) {
+        return userService.createUser(request);
+    }
 
-        // Patch
-        @PatchMapping("/{id}")
-        void patchUser(@PathVariable Integer id, @RequestBody UserPatchRequest request) {
-                userService.patchUser(id, request);
-        }
+    // Update
+    @PutMapping("/{id}")
+    UserResponse updateUser(@PathVariable Integer id, @RequestBody UserUpdateRequest request) {
+        return userService.updateUser(id, request);
+    }
 
+    // Delete
+    @DeleteMapping("/{id}")
+    void deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+    }
+
+    // Patch
+    @PatchMapping("/{id}")
+    void patchUser(@PathVariable Integer id, @RequestBody UserPatchRequest request) {
+        userService.patchUser(id, request);
+    }
 }

@@ -1,8 +1,9 @@
 package com.example.javista.dto.response.otherAnswer;
 
+import java.time.LocalDateTime;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -10,15 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OtherAnswerResponse {
-        Integer id;
+    Integer id;
 
-        String content;
+    String content;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer questionId;
+    Integer questionId;
 
-        Integer userId;
+    Integer userId;
 }

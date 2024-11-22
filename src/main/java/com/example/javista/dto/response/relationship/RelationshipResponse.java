@@ -1,9 +1,11 @@
 package com.example.javista.dto.response.relationship;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.RelationshipRole;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,15 +13,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RelationshipResponse {
-        Integer id;
+    Integer id;
 
-        RelationshipRole role;
+    RelationshipRole role;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer userId;
+    Integer userId;
 
-        Integer apartmentId;
+    Integer apartmentId;
 }

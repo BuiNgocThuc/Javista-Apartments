@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.apartment;
 
 import com.example.javista.enums.ApartmentStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,13 +11,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApartmentUpdateRequest {
-        Float area;
+    Float area;
 
-        String description;
+    String description;
 
-        Integer floorNumber;
+    Integer floorNumber;
 
-        Integer apartmentNumber;
+    Integer apartmentNumber;
 
-        ApartmentStatus status;
+    ApartmentStatus status;
 }
