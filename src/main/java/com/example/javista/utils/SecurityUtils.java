@@ -35,6 +35,7 @@ public class SecurityUtils {
 
     // encrypt password function
     public String encryptPassword(String password) {
+        log.info("Password: {}", password);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         return passwordEncoder.encode(password);
     }

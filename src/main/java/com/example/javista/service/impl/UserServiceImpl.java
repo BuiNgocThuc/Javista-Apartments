@@ -2,9 +2,13 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.example.javista.dto.request.contact.SMSSendRequest;
 import com.example.javista.dto.request.user.*;
+import com.example.javista.service.media.CloudinaryService;
+import com.example.javista.service.media.SMSService;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 
@@ -31,6 +35,7 @@ import com.example.javista.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +47,8 @@ public class UserServiceImpl implements UserService {
     FilterSpecification<User> filterSpecification;
 
     EmailService mailService;
+    CloudinaryService cloudinaryService;
+    SMSService smsService;
 
     SecurityUtils securityUtils;
 
@@ -153,6 +160,31 @@ public class UserServiceImpl implements UserService {
             user.setIsFirstLogin(false);
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public UserResponse uploadAvatar(MultipartFile avatar) {
+        Map data = cloudinaryService.uploadFile(avatar);
+        String secureUrl = (String) data.get("secure_url");
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setAvatar(secureUrl);
+        return userMapper.entityToResponse(userRepository.save(user));
+    }
+
+    @Override
+    public Void notifySmsNewItems(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        // send sms to user
+        smsService.sendSMS(
+            SMSSendRequest.builder()
+                .phoneNumber(user.getPhone())
+                .message("You have new items in your account")
+                .build()
+        );
+        return null;
     }
 
     @Override

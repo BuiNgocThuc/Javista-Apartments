@@ -5,9 +5,11 @@ import java.util.List;
 
 import jakarta.persistence.criteria.Predicate;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class FilterSpecification<T> {
     public Specification<T> filteringBySpecification(List<FilterCriteria> criterion) {
@@ -18,8 +20,16 @@ public class FilterSpecification<T> {
 
                 switch (criteria.getOperator()) {
                     case EQUAL_TO:
-                        Predicate equal = criteriaBuilder.equal(root.get(criteria.getColumn()), criteria.getValue());
-                        predicates.add(equal);
+                        if (criteria.getColumn().contains(".")) {
+                            String[] column = criteria.getColumn().split("\\.");
+                            Predicate equal = criteriaBuilder.equal(root.get(column[0]).get(column[1]), criteria.getValue());
+                            predicates.add(equal);
+                        } else {
+                            Predicate equal = criteriaBuilder.equal(root.get(criteria.getColumn()), criteria.getValue());
+                            predicates.add(equal);
+                        }
+//                        Predicate equal = criteriaBuilder.equal(root.get(criteria.getColumn()).get("id"), criteria.getValue());
+//                        predicates.add(equal);
                         break;
 
                     case NOT_EQUAL_TO:

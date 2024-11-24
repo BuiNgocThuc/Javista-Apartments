@@ -1,22 +1,23 @@
 package com.example.javista.controller;
 
-import java.util.Map;
-
 import com.example.javista.dto.request.user.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.service.UserService;
 import com.example.javista.service.media.CloudinaryService;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -29,8 +30,6 @@ public class UserController {
 
     // test postman Http: http://localhost:8080/javista/users
 
-    // change password when first login
-
     // change password
     @PostMapping("/me/update-password")
     ApiResponse<Void> changePassword(@RequestBody PasswordUpdateRequest request) {
@@ -40,6 +39,15 @@ public class UserController {
                 .build();
     }
 
+    // create password when first login
+    @PostMapping("/me/first-login")
+    ApiResponse<Void> createPasswordWhenFirstLogin(@RequestBody PasswordCreationRequest request) {
+        userService.createPasswordWhenFirstLogin(request);
+        return ApiResponse.<Void>builder()
+            .message("Create password when first login Successfully")
+            .build();
+    }
+
     // get my info
     @GetMapping("/me")
     UserResponse getMyInfo() {
@@ -47,12 +55,14 @@ public class UserController {
     }
 
     // upload avatar
-    @PostMapping("/upload_avatar")
-    ApiResponse<Map> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
-        Map data = cloudinaryService.uploadFile(file);
-        return ApiResponse.<Map>builder()
+    @PostMapping(value = "/me/upload_avatar")
+    ApiResponse<UserResponse> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty or not provided!");
+        }
+        return ApiResponse.<UserResponse>builder()
                 .message("Upload avatar Successfully")
-                .result(data)
+            .result(userService.uploadAvatar(file))
                 .build();
     }
 
@@ -103,5 +113,14 @@ public class UserController {
     @PatchMapping("/{id}")
     void patchUser(@PathVariable Integer id, @RequestBody UserPatchRequest request) {
         userService.patchUser(id, request);
+    }
+
+    // Notify SMS
+    @PostMapping("/{id}/notify-sms")
+    ApiResponse<Void> notifySmsNewItems(@PathVariable Integer id) {
+        userService.notifySmsNewItems(id);
+        return ApiResponse.<Void>builder()
+                .message("Notify SMS Successfully")
+                .build();
     }
 }

@@ -1,11 +1,9 @@
 package com.example.javista.controller;
 
+import com.example.javista.dto.request.survey.*;
+import com.example.javista.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.javista.dto.request.survey.SurveyCreationRequest;
-import com.example.javista.dto.request.survey.SurveyPatchRequest;
-import com.example.javista.dto.request.survey.SurveyQueryRequest;
-import com.example.javista.dto.request.survey.SurveyUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.survey.SurveyResponse;
 import com.example.javista.service.SurveyService;
@@ -57,5 +55,23 @@ public class SurveyController {
     @PatchMapping("/{id}")
     void patchSurvey(@PathVariable Integer id, @RequestBody SurveyPatchRequest request) {
         surveyService.patchSurvey(id, request);
+    }
+
+    // Create full survey
+    @PostMapping("/full-create")
+    ApiResponse<Void> createFullSurvey(@RequestBody FullSurveyCreationRequest request) {
+        return ApiResponse.<Void>builder()
+                .message("Survey created successfully")
+                .result(surveyService.createFullSurvey(request))
+                .build();
+    }
+
+    // Submit survey
+    @PostMapping("/submit")
+    ApiResponse<Void> submitSurvey(@RequestBody SurveySubmissionRequest request) {
+        return ApiResponse.<Void>builder()
+                .message("Survey submitted successfully")
+                .result(surveyService.submitSurvey(request))
+                .build();
     }
 }

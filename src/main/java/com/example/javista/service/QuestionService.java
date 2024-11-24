@@ -10,9 +10,10 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.question.QuestionResponse;
 
 public interface QuestionService {
-    @PreAuthorize("hasRole('RESIDENT')")
+    @PreAuthorize("hasRole('RESIDENT') || hasRole('ADMIN')")
     PageResponse<QuestionResponse> getQuestions(QuestionQueryRequest query);
 
+    @PreAuthorize("hasRole('RESIDENT') || hasRole('ADMIN')")
     QuestionResponse getQuestionById(Integer id);
 
     QuestionResponse createQuestion(QuestionCreationRequest request);

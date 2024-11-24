@@ -13,6 +13,7 @@ import com.example.javista.service.ItemService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,5 +58,11 @@ public class ItemController {
     @PatchMapping("/{id}")
     void patchItem(@PathVariable Integer id, @RequestBody ItemPatchRequest request) {
         itemService.patchItem(id, request);
+    }
+
+    // Upload Image
+    @PostMapping("/{id}/image")
+    ItemResponse uploadImage(@RequestParam("file") MultipartFile file, @PathVariable Integer id) {
+        return itemService.uploadImage(file, id);
     }
 }

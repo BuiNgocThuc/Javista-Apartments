@@ -2,6 +2,7 @@ package com.example.javista.dto.request.question;
 
 import com.example.javista.dto.request.PageRequest;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,13 +14,14 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuestionQueryRequest extends PageRequest {
+    @Pattern(regexp = "^(eq|lt|gt):\\d+$", message = "INVALID_REGEX_FORMAT")
     String id;
-
+    @Pattern(regexp = "^(eq|lt|gt):\\d+$", message = "INVALID_REGEX_FORMAT")
     String content;
 
     String createdAt;
 
     String updatedAt;
 
-    String surveyId;
+    String survey_Id;
 }

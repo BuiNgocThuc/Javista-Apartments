@@ -42,6 +42,10 @@ public class SecurityConfig {
     @NonFinal
     String signerKey;
 
+    @Value("${origin.allowedPort}")
+    @NonFinal
+    String allowedPort;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception, AppException {
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
@@ -81,7 +85,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin("http://localhost:5173");
+        corsConfiguration.addAllowedOrigin(allowedPort);
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
 

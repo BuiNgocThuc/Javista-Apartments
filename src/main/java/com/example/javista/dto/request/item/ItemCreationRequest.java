@@ -11,14 +11,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemCreationRequest {
-    @NotNull
-    String image;
 
     @NotNull
     String description;
-
-    @NotNull
-    Boolean isReceive;
 
     @NotNull
     Integer userId;

@@ -1,24 +1,22 @@
 package com.example.javista.dto.request.survey;
 
-import com.example.javista.dto.request.PageRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SurveyQueryRequest extends PageRequest {
-    String title;
+public  class QuestionRequest {
+    @NotNull
+    String content;
 
-    String startDate;
-
-    String endDate;
-
-    String createdDate;
-
-    String updatedDate;
+    @NotNull
+    List<AnswerRequest> answers;
 }

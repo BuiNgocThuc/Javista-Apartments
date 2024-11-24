@@ -1,10 +1,16 @@
 package com.example.javista.configuration;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import com.example.javista.entity.Relationship;
+import com.example.javista.enums.RelationshipRole;
+import com.example.javista.repository.RelationshipRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.javista.entity.User;
@@ -44,20 +50,22 @@ public class AppConfig {
     }
 
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository, Environment env, RelationshipRepository relationshipRepository) {
         return args -> {
+            String defaultAdminUsername = env.getProperty("app.default.admin.username");
+            String defaultAdminPassword = env.getProperty("app.default.admin.password");
+            String defaultUserPassword = env.getProperty("app.default.resident.password");
+
             // handling ...
             if (userRepository.findByUsername("admin").isEmpty()) {
                 // create admin account
-                var role = UserType.ADMIN;
-
                 User user = User.builder()
-                        .username("admin")
-                        .password(securityUtils.encryptPassword("admin"))
-                        .userType(role)
-                        .createdAt(LocalDateTime.now())
-                        .isFirstLogin(true)
-                        .build();
+                    .username(env.getProperty(defaultAdminUsername))
+                    .password(securityUtils.encryptPassword(defaultAdminPassword))
+                    .userType(UserType.ADMIN)
+                    .createdAt(LocalDateTime.now())
+                    .isFirstLogin(true)
+                    .build();
 
                 userRepository.save(user);
                 log.info("Admin account created with default password: admin, please change it immediately");

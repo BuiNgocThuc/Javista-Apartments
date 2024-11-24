@@ -1,7 +1,13 @@
 package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
+import com.example.javista.dto.request.contact.SMSSendRequest;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
+import com.example.javista.service.media.CloudinaryService;
+import com.example.javista.service.media.SMSService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,7 @@ import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +39,9 @@ public class ItemServiceImpl implements ItemService {
     ItemRepository itemRepository;
 
     UserRepository userRepository;
+
+    CloudinaryService cloudinaryService;
+    SMSService smsService;
 
     FilterSpecification<Item> filterSpecification;
 
@@ -89,5 +99,16 @@ public class ItemServiceImpl implements ItemService {
 
         item.setDeletedAt(LocalDateTime.now());
         itemRepository.save(item);
+    }
+
+    @Override
+    public ItemResponse uploadImage(MultipartFile file, Integer id) {
+        Item item = itemRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ITEM_NOT_FOUND));
+
+        Map data = cloudinaryService.uploadFile(file);
+        String secureUrl = (String) data.get("secure_url");
+
+        item.setImage(secureUrl);
+        return itemMapper.entityToResponse(itemRepository.save(item));
     }
 }

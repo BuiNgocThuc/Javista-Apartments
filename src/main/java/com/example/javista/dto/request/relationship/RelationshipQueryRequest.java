@@ -1,14 +1,14 @@
 package com.example.javista.dto.request.relationship;
 
+import com.example.javista.dto.request.PageRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RelationshipQueryRequest {
+public class RelationshipQueryRequest extends PageRequest {
     String id;
 
     String role;

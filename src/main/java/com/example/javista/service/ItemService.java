@@ -6,6 +6,7 @@ import com.example.javista.dto.request.item.ItemQueryRequest;
 import com.example.javista.dto.request.item.ItemUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.item.ItemResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ItemService {
     PageResponse<ItemResponse> getItems(ItemQueryRequest query);
@@ -19,4 +20,6 @@ public interface ItemService {
     ItemResponse patchItem(Integer id, ItemPatchRequest request);
 
     void deleteItem(Integer id);
+
+    ItemResponse uploadImage(MultipartFile file, Integer id);
 }

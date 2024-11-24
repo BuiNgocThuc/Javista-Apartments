@@ -25,6 +25,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiResponse> handlingUncategorizedException(Exception e) {
         log.error("exception: {}", e.getClass().getCanonicalName());
+        // log location of exception
+        log.error("exception: ", e);
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED_EXCEPTION;
 
         return ResponseEntity.status(errorCode.getHttpStatusCode())

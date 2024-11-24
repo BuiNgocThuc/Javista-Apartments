@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     @PreAuthorize("hasRole('ADMIN')")
@@ -25,4 +26,9 @@ public interface UserService {
     void changePassword(PasswordUpdateRequest request);
 
     void createPasswordWhenFirstLogin(PasswordCreationRequest request);
+
+    UserResponse uploadAvatar(MultipartFile avatar);
+
+    Void notifySmsNewItems(Integer id);
+
 }

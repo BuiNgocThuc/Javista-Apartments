@@ -30,11 +30,11 @@ public class QueryUtils {
                 if (fieldVal != null) {
                     String operatorParam = StringManipulation.definingOperatorInParameters(fieldVal, ':');
                     String value = StringManipulation.definingValueInParameters(fieldVal, ':');
-                    log.info("Field: {}, Value: {}, Operator: {}", field.getName(), value, operatorParam);
                     FilteringAndSearchingOperator operator =
                             FilteringAndSearchingOperator.convertParametersToOperators(operatorParam);
+                    log.info("Field: {}, Value: {}, Operator: {}", field.getName(), value, operator);
 
-                    filterSpecifications.add(new FilterCriteria(field.getName(), value, operator));
+                    filterSpecifications.add(new FilterCriteria(field.getName().replace('_','.'), value, operator));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Unable to access field: " + field.getName(), e);

@@ -3,6 +3,8 @@ package com.example.javista.service.impl;
 import java.time.LocalDateTime;
 
 import com.example.javista.dto.request.bill.*;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -156,9 +158,9 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateWaterReadings(WaterReadingsUpdateRequest request) {
-        for (WaterReadingsUpdateRequest.WaterReadingUpdateRequest waterReading : request.getWaterReadings()) {
+        for (WaterReadingUpdateRequest waterReading : request.getWaterReadings()) {
             Bill bill = billRepository.findById(waterReading.getBillId())
-                    .orElseThrow(() -> new RuntimeException("Bill Not Found"));
+                    .orElseThrow(() -> new AppException(ErrorCode.BILL_NOT_FOUND));
 
             bill.setNewWater(waterReading.getNewWaterIndex());
             bill.setWaterReadingDate(waterReading.getReadingDate());

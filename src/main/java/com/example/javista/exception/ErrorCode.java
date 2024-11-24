@@ -23,6 +23,11 @@ public enum ErrorCode {
     UNAUTHENTICATED(1009, "You need to login", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1010, "You don't have permission", HttpStatus.FORBIDDEN),
     CONFIRM_PASSWORD_NOT_MATCH(1011, "Confirm password not match", HttpStatus.BAD_REQUEST),
+    QUESTION_NOT_FOUND(1012, "Question not found", HttpStatus.NOT_FOUND),
+    ANSWER_NOT_FOUND(1013, "Answer not found", HttpStatus.NOT_FOUND),
+    INVALID_REGEX_FORMAT(1014, "Invalid regex format", HttpStatus.BAD_REQUEST),
+    ITEM_NOT_FOUND(1015, "Item not found", HttpStatus.NOT_FOUND),
+    BILL_NOT_FOUND(1016, "Bill not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

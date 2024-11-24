@@ -2,6 +2,8 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -62,7 +64,7 @@ public class UserAnswerServiceImpl implements UserAnswerService {
         UserAnswer userAnswer = userAnswerMapper.creationRequestToEntity(request);
 
         userAnswer.setUser(
-                userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
+                userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
 
         userAnswer.setAnswer(answerRepository
                 .findById(request.getAnswerId())

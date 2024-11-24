@@ -1,15 +1,17 @@
 package com.example.javista.mapper;
 
+import com.example.javista.dto.request.otherAnswer.OtherAnswerCreationRequest;
+import com.example.javista.dto.request.survey.*;
+import com.example.javista.dto.request.userAnswer.UserAnswerCreationRequest;
+import com.example.javista.entity.*;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.example.javista.dto.request.survey.SurveyCreationRequest;
-import com.example.javista.dto.request.survey.SurveyPatchRequest;
-import com.example.javista.dto.request.survey.SurveyUpdateRequest;
 import com.example.javista.dto.response.survey.SurveyResponse;
-import com.example.javista.entity.Survey;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SurveyMapper {
@@ -28,4 +30,24 @@ public interface SurveyMapper {
     // mapping entity to dto response
     @Mapping(source = "user.id", target = "userId")
     SurveyResponse entityToResponse(Survey survey);
+
+    // Mapping FullSurveyCreationRequest to Survey entity
+    @Mapping(target = "user", ignore = true) // Assuming User is managed separately
+    @Mapping(target = "questions", source = "questions")
+    Survey fullCreationRequestToEntity(FullSurveyCreationRequest request);
+
+    // Mapping nested Question DTO to Question entity
+    @Mapping(target = "survey", ignore = true) // Assuming survey is set elsewhere
+    @Mapping(target = "answers", source = "answers")
+    Question questionDtoToEntity(QuestionRequest question);
+
+    // Mapping nested Answer DTO to Answer entity
+    @Mapping(target = "question", ignore = true) // Assuming question is set elsewhere
+    Answer answerDtoToEntity(AnswerRequest answer);
+
+    // Helper method to map a list of Questions
+    List<Question> mapQuestions(List<QuestionRequest> questions);
+
+    // Helper method to map a list of Answers
+    List<Answer> mapAnswers(List<AnswerRequest> answers);
 }

@@ -31,7 +31,8 @@ public class SMSServiceImpl implements SMSService {
 
         SMSCreationRequest smsCreationRequest = SMSCreationRequest.builder()
             .phone(request.getPhoneNumber())
-            .content(request.getMessage())
+//            .content(request.getMessage())
+            .content(esmsConfig.getContent())
             .apiKey(esmsConfig.getApiKey())
             .secretKey(esmsConfig.getSecretKey())
             .brandName(esmsConfig.getBrandName())

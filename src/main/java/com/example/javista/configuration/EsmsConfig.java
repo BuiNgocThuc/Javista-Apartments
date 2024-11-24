@@ -23,6 +23,8 @@ public class EsmsConfig {
 
     String brandName;
 
+    String content;
+
     String smsType;
 
     String url;

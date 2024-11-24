@@ -23,5 +23,5 @@ public class RelationshipResponse {
 
     Integer userId;
 
-    Integer apartmentId;
+    String apartmentId;
 }
