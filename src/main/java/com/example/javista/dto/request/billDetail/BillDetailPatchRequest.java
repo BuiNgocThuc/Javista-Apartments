@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.billDetail;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,9 +12,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BillDetailPatchRequest {
-        Float price;
+    Float price;
 
-        Integer billId;
+    Integer billId;
 
-        Integer serviceId;
+    Integer serviceId;
 }

@@ -1,14 +1,16 @@
 package com.example.javista.entity;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -19,31 +21,31 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "services")
 public class Service {
-        @Id
-        @Column(name = "id")
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        Integer id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
 
-        @Column(name = "name")
-        String name;
+    @Column(name = "name")
+    String name;
 
-        @Column(name = "description")
-        String description;
+    @Column(name = "description")
+    String description;
 
-        @Column(name = "price")
-        Float price;
+    @Column(name = "price")
+    Float price;
 
-        @CreatedDate
-        @Column(name = "created_at")
-        LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
 
-        @LastModifiedDate
-        @Column(name = "updated_at")
-        LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    LocalDateTime updatedAt;
 
-        @Column(name = "deleted_at")
-        LocalDateTime deletedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
-        @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
-        Set<BillDetail> billDetails;
+    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+    Set<BillDetail> billDetails;
 }

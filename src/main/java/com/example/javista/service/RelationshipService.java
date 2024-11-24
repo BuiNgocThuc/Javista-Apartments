@@ -8,15 +8,15 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.relationship.RelationshipResponse;
 
 public interface RelationshipService {
-        PageResponse<RelationshipResponse> getRelationships(RelationshipQueryRequest query);
+    PageResponse<RelationshipResponse> getRelationships(RelationshipQueryRequest query);
 
-        RelationshipResponse getRelationshipById(Integer id);
+    RelationshipResponse getRelationshipById(Integer id);
 
-        RelationshipResponse createRelationship(RelationshipCreationRequest request);
+    RelationshipResponse createRelationship(RelationshipCreationRequest request);
 
-        RelationshipResponse updateRelationship(Integer id, RelationshipUpdateRequest request);
+    RelationshipResponse updateRelationship(Integer id, RelationshipUpdateRequest request);
 
-        RelationshipResponse patchRelationship(Integer id, RelationshipPatchRequest request);
+    RelationshipResponse patchRelationship(Integer id, RelationshipPatchRequest request);
 
-        void deleteRelationship(Integer id);
+    void deleteRelationship(Integer id);
 }

@@ -2,6 +2,7 @@ package com.example.javista.dto.request.setting;
 
 import com.example.javista.enums.SystemStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,17 +13,17 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SettingPatchRequest {
-        String currentMonthly;
+    String currentMonthly;
 
-        SystemStatus systemStatus;
+    SystemStatus systemStatus;
 
-        Float roomPricePerM2;
+    Float roomPricePerM2;
 
-        Float waterPricePerM3;
+    Float waterPricePerM3;
 
-        Float roomVat;
+    Float roomVat;
 
-        Integer waterVat;
+    Integer waterVat;
 
-        Integer envProtectionTax;
+    Integer envProtectionTax;
 }

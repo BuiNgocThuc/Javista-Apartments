@@ -41,4 +41,12 @@ cloudinary:
 jwt:
         signerKey: "gKzxk9xGfL9xFiyxQ7ng+CLmK2POHD8Z3LkgqMDlx3AQcjZ6a3CcdGeLRSF2HJak"
         valid-duration: 7 # 7 days
-        refresh-duration: 120 # 1 minute
+
+esms:
+        api-key: 072737DC8135CA37E90714B870974B
+        secret-key: 4DE53EF785A0071024C284BF07AA5F
+        brand-name: "Baotrixemay"
+        sms-type: 2
+        url: "https://rest.esms.vn/MainService.svc/json/SendMultipleMessage_V4_post_json/"
+        isUnicode: 0
+

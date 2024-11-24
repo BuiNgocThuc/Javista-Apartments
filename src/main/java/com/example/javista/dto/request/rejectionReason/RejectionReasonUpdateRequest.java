@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RejectionReasonUpdateRequest {
-        String content;
+    String content;
 
-        Integer reportId;
+    Integer reportId;
 }

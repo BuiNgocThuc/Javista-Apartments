@@ -1,8 +1,8 @@
 package com.example.javista.enums;
 
 public enum SystemStatus {
-        PREPAYMENT,
-        PAYMENT,
-        OVERDUE,
-        DELINQUENT
+    PREPAYMENT,
+    PAYMENT,
+    OVERDUE,
+    DELINQUENT
 }

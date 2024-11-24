@@ -9,15 +9,15 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RelationshipQueryRequest {
-        String id;
+    String id;
 
-        String role;
+    String role;
 
-        String apartmentId;
+    String apartmentId;
 
-        String userId;
+    String userId;
 
-        String createdAt;
+    String createdAt;
 
-        String updatedAt;
+    String updatedAt;
 }

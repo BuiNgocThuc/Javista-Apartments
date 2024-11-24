@@ -1,10 +1,12 @@
 package com.example.javista.dto.response.user;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.UserGender;
 import com.example.javista.enums.UserType;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -12,33 +14,33 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-        Integer id;
+    Integer id;
 
-        String username;
+    String username;
 
-        String avatar;
+    String avatar;
 
-        Boolean isFirstLogin;
+    Boolean isFirstLogin;
 
-        String password;
+    String password;
 
-        String email;
+    String email;
 
-        String phone;
+    String phone;
 
-        UserGender gender;
+    UserGender gender;
 
-        String fullName;
+    String fullName;
 
-        String nationId;
+    String nationId;
 
-        UserType userType;
+    UserType userType;
 
-        LocalDateTime dateOfBirth;
+    LocalDateTime dateOfBirth;
 
-        Boolean isStaying;
+    Boolean isStaying;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 }

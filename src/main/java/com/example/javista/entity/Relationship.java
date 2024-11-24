@@ -1,15 +1,18 @@
 package com.example.javista.entity;
 
-import com.example.javista.enums.RelationshipRole;
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import com.example.javista.enums.RelationshipRole;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
@@ -20,39 +23,41 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "relationships")
 public class Relationship {
-        @Id
-        @Column(name = "id")
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        Integer id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Integer id;
 
-        @Enumerated(EnumType.STRING)
-        @Column(name = "role")
-        RelationshipRole role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    RelationshipRole role;
 
-        @CreatedDate
-        @Column(name = "created_at")
-        LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
 
-        @LastModifiedDate
-        @Column(name = "updated_at")
-        LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    LocalDateTime updatedAt;
 
-        @Column(name = "deleted_at")
-        LocalDateTime deletedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
-        @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
-        Set<Report> reports;
+    @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
+    Set<Report> reports;
 
-        @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
-        Set<Bill> bills;
+    @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
+    Set<Bill> bills;
 
-        @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                        CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-        @JoinColumn(name = "apartment_id")
-        Apartment apartment;
+    @ManyToOne(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id")
+    Apartment apartment;
 
-        @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                        CascadeType.DETACH, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id")
-        User user;
+    @ManyToOne(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    User user;
 }

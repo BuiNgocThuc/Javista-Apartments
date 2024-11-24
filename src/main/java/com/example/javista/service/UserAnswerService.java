@@ -8,15 +8,15 @@ import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.userAnswer.UserAnswerResponse;
 
 public interface UserAnswerService {
-        PageResponse<UserAnswerResponse> getUserAnswers(UserAnswerQueryRequest query);
+    PageResponse<UserAnswerResponse> getUserAnswers(UserAnswerQueryRequest query);
 
-        UserAnswerResponse getUserAnswerById(Integer id);
+    UserAnswerResponse getUserAnswerById(Integer id);
 
-        UserAnswerResponse createUserAnswer(UserAnswerCreationRequest request);
+    UserAnswerResponse createUserAnswer(UserAnswerCreationRequest request);
 
-        UserAnswerResponse updateUserAnswer(Integer id, UserAnswerUpdateRequest request);
+    UserAnswerResponse updateUserAnswer(Integer id, UserAnswerUpdateRequest request);
 
-        UserAnswerResponse patchUserAnswer(Integer id, UserAnswerPatchRequest request);
+    UserAnswerResponse patchUserAnswer(Integer id, UserAnswerPatchRequest request);
 
-        void deleteUserAnswer(Integer id);
+    void deleteUserAnswer(Integer id);
 }

@@ -1,11 +1,12 @@
 package com.example.javista.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Data
 @Builder
@@ -14,7 +15,8 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class InvalidatedToken {
-        @Id
-        String id;
-        Date expiryTime;
+    @Id
+    String id;
+
+    Date expiryTime;
 }

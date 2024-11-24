@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.report;
 
 import com.example.javista.enums.ReportStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,13 +11,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportUpdateRequest {
-        String content;
+    String content;
 
-        String title;
+    String title;
 
-        ReportStatus status;
+    ReportStatus status;
 
-        Integer relationshipId;
+    Integer relationshipId;
 
-        Integer rejectionReasonId;
+    Integer rejectionReasonId;
 }

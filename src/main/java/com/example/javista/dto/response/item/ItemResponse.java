@@ -1,8 +1,9 @@
 package com.example.javista.dto.response.item;
 
+import java.time.LocalDateTime;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -10,17 +11,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemResponse {
-        Integer id;
+    Integer id;
 
-        String image;
+    String image;
 
-        String description;
+    String description;
 
-        Boolean isReceive;
+    Boolean isReceive;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer userId;
+    Integer userId;
 }

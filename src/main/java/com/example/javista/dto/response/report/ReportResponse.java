@@ -1,9 +1,11 @@
 package com.example.javista.dto.response.report;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.ReportStatus;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -11,19 +13,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportResponse {
-        Integer id;
+    Integer id;
 
-        String content;
+    String content;
 
-        String title;
+    String title;
 
-        ReportStatus status;
+    ReportStatus status;
 
-        LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
-        LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
-        Integer relationshipId;
+    Integer relationshipId;
 
-        Integer rejectionReasonId;
+    Integer rejectionReasonId;
 }

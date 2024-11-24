@@ -1,11 +1,12 @@
 package com.example.javista.dto.request.bill;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.BillStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,18 +15,17 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BillPatchRequest {
-        String monthly;
+    String monthly;
 
-        Float totalPrice;
+    Float totalPrice;
 
-        Integer oldWater;
+    Integer oldWater;
 
-        Integer newWater;
+    Integer newWater;
 
-        LocalDateTime waterReadingDate;
+    LocalDateTime waterReadingDate;
 
-        BillStatus status;
+    BillStatus status;
 
-        String relationshipId;
-
+    String relationshipId;
 }

@@ -1,11 +1,12 @@
 package com.example.javista.dto.request.user;
 
+import java.time.LocalDateTime;
+
 import com.example.javista.enums.UserGender;
 import com.example.javista.enums.UserType;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,27 +14,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
-        String username;
+    String username;
 
-        String password;
+    String password;
 
-        String avatar;
+    String avatar;
 
-        Boolean isFirstLogin;
+    Boolean isFirstLogin;
 
-        String email;
+    String email;
 
-        String phone;
+    String phone;
 
-        UserGender gender;
+    UserGender gender;
 
-        String fullName;
+    String fullName;
 
-        String nationId;
+    String nationId;
 
-        UserType userType;
+    UserType userType;
 
-        LocalDateTime dateOfBirth;
+    LocalDateTime dateOfBirth;
 
-        Boolean isStaying;
+    Boolean isStaying;
 }
