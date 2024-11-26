@@ -41,5 +41,7 @@ public class RejectionReason {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Report report;
 }

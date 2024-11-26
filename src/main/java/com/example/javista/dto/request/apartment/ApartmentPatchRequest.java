@@ -22,4 +22,6 @@ public class ApartmentPatchRequest {
     Integer apartmentNumber;
 
     ApartmentStatus status;
+
+    Integer currentWaterNumber;
 }

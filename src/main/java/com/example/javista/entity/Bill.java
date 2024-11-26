@@ -62,8 +62,12 @@ public class Bill {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "relationship_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Relationship relationship;
 
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<BillDetail> billDetails;
 }

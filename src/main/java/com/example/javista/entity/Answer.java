@@ -45,8 +45,12 @@ public class Answer implements Serializable {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Question question;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<UserAnswer> userAnswers;
 }

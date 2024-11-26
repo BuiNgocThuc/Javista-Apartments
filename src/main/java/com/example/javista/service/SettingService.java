@@ -10,4 +10,12 @@ public interface SettingService {
     SettingResponse updateSetting(Integer id, SettingUpdateRequest request);
 
     SettingResponse patchSetting(Integer id, SettingPatchRequest request);
+
+    SettingResponse updateStatusPrepayment();
+
+    SettingResponse updateStatusPayment();
+
+    SettingResponse updateStatusOverdue();
+
+    SettingResponse updateStatusDelinquent();
 }

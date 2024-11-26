@@ -43,6 +43,9 @@ public class Apartment {
     @Column(name = "status")
     ApartmentStatus status;
 
+    @Column(name = "current_water_number")
+    Integer currentWaterNumber;
+
     @CreatedDate
     @Column(name = "created_at")
     LocalDateTime createdAt;
@@ -57,5 +60,7 @@ public class Apartment {
     @OneToMany(
             mappedBy = "apartment",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Relationship> relationships;
 }

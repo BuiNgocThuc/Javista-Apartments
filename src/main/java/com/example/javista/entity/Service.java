@@ -1,16 +1,14 @@
 package com.example.javista.entity;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import jakarta.persistence.*;
-
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -47,5 +45,7 @@ public class Service {
     LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<BillDetail> billDetails;
 }

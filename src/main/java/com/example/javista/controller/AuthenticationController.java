@@ -38,15 +38,15 @@ public class AuthenticationController {
                 .build();
     }
 
-    @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
-            throws ParseException, JOSEException {
-        var response = authenticationService.introspect(request);
-        return ApiResponse.<IntrospectResponse>builder()
-                .message("Introspect Successfully")
-                .result(response)
-                .build();
-    }
+//    @PostMapping("/introspect")
+//    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
+//            throws ParseException, JOSEException {
+//        var response = authenticationService.introspect(request);
+//        return ApiResponse.<IntrospectResponse>builder()
+//                .message("Introspect Successfully")
+//                .result(response)
+//                .build();
+//    }
 
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {

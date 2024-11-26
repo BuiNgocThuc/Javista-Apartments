@@ -50,11 +50,15 @@ public class Survey {
     LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Question> questions;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_create_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     User user;
 }

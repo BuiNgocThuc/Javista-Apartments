@@ -43,11 +43,15 @@ public class BillDetail {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "bill_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Bill bill;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Service service;
 }

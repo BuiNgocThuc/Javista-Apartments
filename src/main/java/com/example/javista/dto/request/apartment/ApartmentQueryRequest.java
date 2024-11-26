@@ -22,6 +22,8 @@ public class ApartmentQueryRequest extends PageRequest {
 
     String status;
 
+    Integer currentWaterNumber;
+
     String createdAt;
 
     String updatedAt;

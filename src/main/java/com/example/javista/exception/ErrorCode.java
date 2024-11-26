@@ -28,6 +28,9 @@ public enum ErrorCode {
     INVALID_REGEX_FORMAT(1014, "Invalid regex format", HttpStatus.BAD_REQUEST),
     ITEM_NOT_FOUND(1015, "Item not found", HttpStatus.NOT_FOUND),
     BILL_NOT_FOUND(1016, "Bill not found", HttpStatus.NOT_FOUND),
+    SYSTEM_NOT_READY(1017, "System is not ready", HttpStatus.SERVICE_UNAVAILABLE),
+    WATER_NOT_RECORDED(1018, "There are still bills that not have been recorded water", HttpStatus.BAD_REQUEST),
+    BILL_IS_OVERDUE(1019, "Bill is overdue", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

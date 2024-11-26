@@ -44,20 +44,28 @@ public class Relationship {
     LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Report> reports;
 
     @OneToMany(mappedBy = "relationship", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Bill> bills;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "apartment_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Apartment apartment;
 
     @ManyToOne(
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     User user;
 }

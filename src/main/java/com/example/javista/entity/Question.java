@@ -44,11 +44,17 @@ public class Question {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Survey survey;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Answer> answers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<OtherAnswer> otherAnswers;
 }

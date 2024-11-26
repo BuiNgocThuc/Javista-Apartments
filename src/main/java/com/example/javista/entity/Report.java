@@ -53,9 +53,13 @@ public class Report {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH},
             fetch = FetchType.LAZY)
     @JoinColumn(name = "relationship_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Relationship relationship;
 
     // relationship one to one mapped by rejection reason
     @OneToOne(mappedBy = "report", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     RejectionReason rejectionReason;
 }

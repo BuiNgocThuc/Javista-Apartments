@@ -81,21 +81,31 @@ public class User {
     @OneToMany(
             mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<UserAnswer> userAnswers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Relationship> relationships;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Item> items;
 
     @OneToMany(
             mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<Survey> surveys;
 
     @OneToMany(
             mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Set<OtherAnswer> otherAnswers;
 }

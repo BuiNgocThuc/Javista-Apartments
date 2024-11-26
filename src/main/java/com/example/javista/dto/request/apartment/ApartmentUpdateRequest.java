@@ -20,4 +20,6 @@ public class ApartmentUpdateRequest {
     Integer apartmentNumber;
 
     ApartmentStatus status;
+
+    Integer currentWaterNumber;
 }

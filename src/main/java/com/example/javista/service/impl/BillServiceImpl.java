@@ -3,8 +3,12 @@ package com.example.javista.service.impl;
 import java.time.LocalDateTime;
 
 import com.example.javista.dto.request.bill.*;
+import com.example.javista.entity.Setting;
+import com.example.javista.enums.SystemStatus;
 import com.example.javista.exception.AppException;
 import com.example.javista.exception.ErrorCode;
+import com.example.javista.repository.ApartmentRepository;
+import com.example.javista.repository.SettingRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,8 @@ import lombok.experimental.FieldDefaults;
 public class BillServiceImpl implements BillService {
     BillMapper billMapper;
     BillRepository billRepository;
+    SettingRepository settingRepository;
+    ApartmentRepository apartmentRepository;
 
     RelationshipRepository relationshipRepository;
     FilterSpecification<Bill> filterSpecification;
@@ -66,7 +72,7 @@ public class BillServiceImpl implements BillService {
                 callbackDto.getTransId());
 
         // Create the expected signature from the rawData
-        String expectedSignature = null;
+        String expectedSignature;
         try {
             expectedSignature = createSignature.computeHmacSha256(rawData, momoConfig.getSecretKey());
         } catch (Exception e) {
@@ -89,6 +95,14 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public MomoPaymentResponse createMomoPayment(Integer billId, MomoPaymentCreationRequest request) {
+        // check system status
+        Setting setting = settingRepository.findAll().getFirst();
+        if (setting.getSystemStatus() == SystemStatus.PREPAYMENT) {
+            throw new AppException(ErrorCode.SYSTEM_NOT_READY);
+        } else if (setting.getSystemStatus() == SystemStatus.OVERDUE) {
+            throw new AppException(ErrorCode.BILL_IS_OVERDUE);
+        }
+
         Bill bill = billRepository.findById(billId).orElseThrow(() -> new RuntimeException("Bill not found"));
         System.out.println(bill.toString());
         try {
@@ -114,7 +128,7 @@ public class BillServiceImpl implements BillService {
     @Override
     public BillResponse getBillById(Integer id) {
         return billMapper.entityToResponse(
-                billRepository.findById(id).orElseThrow(() -> new RuntimeException("Bill Not Found")));
+                billRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BILL_NOT_FOUND)));
     }
 
     @Override
@@ -158,17 +172,27 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateWaterReadings(WaterReadingsUpdateRequest request) {
+        Setting setting = settingRepository.findAll().getFirst();
         for (WaterReadingUpdateRequest waterReading : request.getWaterReadings()) {
-            Bill bill = billRepository.findById(waterReading.getBillId())
-                    .orElseThrow(() -> new AppException(ErrorCode.BILL_NOT_FOUND));
+            Bill bill = billRepository.findByIdAndJoinApartment(waterReading.getBillId());
+
+            if (bill == null) {
+                throw new AppException(ErrorCode.BILL_NOT_FOUND);
+            }
 
             bill.setNewWater(waterReading.getNewWaterIndex());
             bill.setWaterReadingDate(waterReading.getReadingDate());
 
-            if (bill.getOldWater() != null) {
-//                bill.setWaterConsumption(bill.getNewWater() - bill.getOldWater());
-                // handling ....
-            }
+            // used water
+            int usedWater = bill.getNewWater() - bill.getOldWater();
+            Float waterPrice =
+                setting.getWaterPricePerM3() * usedWater * (100 + setting.getWaterVat() + setting.getEnvProtectionTax()) / 100;
+
+            Float totalPrice = bill.getTotalPrice() + waterPrice;
+            bill.setTotalPrice(totalPrice);
+
+            bill.getRelationship().getApartment().setCurrentWaterNumber(bill.getNewWater());
+            apartmentRepository.save(bill.getRelationship().getApartment());
 
             billRepository.save(bill);
         }

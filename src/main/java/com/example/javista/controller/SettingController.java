@@ -1,5 +1,6 @@
 package com.example.javista.controller;
 
+import com.example.javista.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.javista.dto.request.setting.SettingPatchRequest;
@@ -31,4 +32,41 @@ public class SettingController {
     void patchSetting(@PathVariable Integer id, @RequestBody SettingPatchRequest request) {
         settingService.patchSetting(id, request);
     }
+
+    // change status to Prepayment
+    @PostMapping("/transition/prepayment")
+    ApiResponse<SettingResponse> updateStatusPrepayment() {
+        return ApiResponse.<SettingResponse>builder()
+            .message("update status prepayment successfully!")
+            .result(settingService.updateStatusPrepayment())
+            .build();
+    }
+
+    // change status to Payment
+    @PostMapping("/transition/payment")
+    ApiResponse<SettingResponse> updateStatusPayment() {
+        return ApiResponse.<SettingResponse>builder()
+            .message("update status payment successfully!")
+            .result(settingService.updateStatusPayment())
+            .build();
+    }
+
+    // change status to Overdue
+    @PostMapping("/transition/overdue")
+    ApiResponse<SettingResponse> updateStatusOverdue() {
+        return ApiResponse.<SettingResponse>builder()
+            .message("update status overdue successfully!")
+            .result(settingService.updateStatusOverdue())
+            .build();
+    }
+
+    // change status to Delinquent
+    @PostMapping("/transition/delinquent")
+    ApiResponse<SettingResponse> updateStatusDelinquent() {
+        return ApiResponse.<SettingResponse>builder()
+            .message("update status delinquent successfully!")
+            .result(settingService.updateStatusDelinquent())
+            .build();
+    }
+
 }
