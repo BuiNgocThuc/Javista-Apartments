@@ -46,7 +46,7 @@ public class QueryUtils {
     public static <T> Pageable getPagination(T queryDto) {
         try {
             // Get the `getCurrentPage` method and invoke it
-            Method getCurrentPageMethod = queryDto.getClass().getMethod("getCurrentPage");
+            Method getCurrentPageMethod = queryDto.getClass().getMethod("getPage");
             int page = (int) getCurrentPageMethod.invoke(queryDto);
 
             // Get the `getSize` method and invoke it
@@ -90,7 +90,7 @@ public class QueryUtils {
 
     public static <T, R> PageResponse<R> buildPageResponse(Page<T> pageData, Pageable pageable, Function<T, R> mapper) {
         return PageResponse.<R>builder()
-                .currentPage(pageable.getPageNumber() + 1) // Convert zero-based index to one-based
+                .page(pageable.getPageNumber() + 1) // Convert zero-based index to one-based
                 .pageSize(pageData.getSize())
                 .totalPages(pageData.getTotalPages())
                 .totalElements(pageData.getTotalElements())

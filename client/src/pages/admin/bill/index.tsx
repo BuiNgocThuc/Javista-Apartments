@@ -104,7 +104,7 @@ const Index = () => {
                 className="w-full whitespace-nowrap"
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItems={bills?.totalItems}
+                totalElements={bills?.totalElements}
                 loading={isLoading || isFetching}
               />
             </div>

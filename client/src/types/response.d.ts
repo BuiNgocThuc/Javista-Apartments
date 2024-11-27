@@ -2,7 +2,7 @@ interface ResponseDataType<T> {
   data: T[]
   page: number
   pageSize: number
-  totalItems: number
+  totalElements: number
   totalPages: number
 }
 
