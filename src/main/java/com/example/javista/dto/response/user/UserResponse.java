@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.javista.enums.UserGender;
 import com.example.javista.enums.UserType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -36,11 +37,14 @@ public class UserResponse {
 
     UserType userType;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime dateOfBirth;
 
     Boolean isStaying;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime updatedAt;
 }

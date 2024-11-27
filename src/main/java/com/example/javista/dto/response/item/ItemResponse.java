@@ -2,6 +2,8 @@ package com.example.javista.dto.response.item;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,8 +21,10 @@ public class ItemResponse {
 
     Boolean isReceive;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime updatedAt;
 
     Integer userId;
