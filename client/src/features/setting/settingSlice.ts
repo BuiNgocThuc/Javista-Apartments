@@ -9,7 +9,7 @@ const settingApiSlice = apiSlice.injectEndpoints({
     }),
     patchSetting: builder.mutation<ISetting, Partial<ISetting>>({
       query: (data) => ({
-        url: 'settings',
+        url: 'settings/1',
         method: 'PATCH',
         body: data,
       }),

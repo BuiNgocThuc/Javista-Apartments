@@ -33,6 +33,7 @@ import { Label } from '@/components/ui/label'
 import { useGetApartmentsQuery } from '@/features/apartment/apartmentSlice'
 import { RelationshipsTypeSchema } from '@/schema/relationship.validate'
 import { useLazyGetRelationshipsQuery } from '@/features/relationships/relationshipsSlice'
+import { useLazyGetUserByIdQuery } from '@/features/user/userSlice'
 
 interface PackageFormProps {
   packagee?: IPackage
@@ -51,6 +52,7 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
     isLoading: isLoadingApartment,
     isFetching: isFetchingApartment,
   } = useGetApartmentsQuery({ page: 1, pageSize: 60 })
+  const [getUser, { data: user }] = useLazyGetUserByIdQuery()
   const [getRelationships] = useLazyGetRelationshipsQuery()
   const [apartmentSelected, setApartmentSelected] = useState<string | undefined>(undefined)
   const [relationships, setRelationships] = useState<RelationshipsTypeSchema[]>([])
@@ -140,7 +142,7 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
   }
 
   const handleGetRelationships = async (apartmentId: string) => {
-    await getRelationships({ page: 1, apartmentId: apartmentId, includes: ['user'] })
+    await getRelationships({ page: 1, apartmentId: apartmentId })
       .unwrap()
       .then((payload) => {
         const uniqueUsers = Array.from(
@@ -154,6 +156,10 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
   useEffect(() => {
     if (packagee) {
       form.reset(packagee)
+      const handleGetUser = async () => {
+        await getUser(packagee.userId).unwrap()
+      }
+      handleGetUser()
     }
   }, [])
 
@@ -219,7 +225,7 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
               <div className="flex flex-col space-y-3">
                 <Label>Receiver</Label>
                 <Input
-                  value={packagee.user?.fullName || 'N/A'}
+                  value={user?.fullName || 'N/A'}
                   readOnly
                   className="read-only:bg-gray-50 cursor-not-allowed"
                 />

@@ -5,7 +5,7 @@ import com.example.javista.dto.request.setting.SettingUpdateRequest;
 import com.example.javista.dto.response.setting.SettingResponse;
 
 public interface SettingService {
-    SettingResponse getSettings();
+    SettingResponse getCurrentSetting();
 
     SettingResponse updateSetting(Integer id, SettingUpdateRequest request);
 

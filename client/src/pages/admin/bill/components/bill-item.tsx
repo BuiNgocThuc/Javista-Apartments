@@ -12,9 +12,6 @@ const BillItem = ({ bill, setShowDetail }: BillItemProps) => {
   return (
     <TableRow onClick={() => setShowDetail(bill.id)} className="font-medium cursor-pointer">
       <TableCell className="py-3">{bill.id}</TableCell>
-      <TableCell className="">
-        <Badge variant={'info'}>{bill.relationship?.apartmentId}</Badge>
-      </TableCell>
       <TableCell>{bill.monthly}</TableCell>
       <TableCell>{bill.totalPrice.toLocaleString()}</TableCell>
       <TableCell>{bill.oldWater}</TableCell>

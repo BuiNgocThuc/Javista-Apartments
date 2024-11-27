@@ -121,7 +121,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         userMapper.patchRequestToEntity(user, request);
-        user.setPassword(securityUtils.encryptPassword(request.getPassword()));
         return userMapper.entityToResponse(userRepository.save(user));
     }
 

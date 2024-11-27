@@ -18,8 +18,6 @@ import lombok.experimental.FieldDefaults;
 public class UserPatchRequest {
     String username;
 
-    String password;
-
     String avatar;
 
     Boolean isFirstLogin;

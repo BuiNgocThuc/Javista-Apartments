@@ -30,7 +30,6 @@ const Index = () => {
   } = useGetBillsQuery({
     page: currentPage,
     pageSize: pageSize,
-    includes: ['Relationship'],
     ...(filters.id !== null ? { id: filters.id } : {}),
     ...(filters.monthly ? { monthly: filters.monthly } : {}),
     ...(filters.status ? { status: filters.status } : {}),
