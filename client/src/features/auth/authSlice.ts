@@ -5,12 +5,10 @@ import { UserFormSchema } from '@/schema/user.validate'
 interface AuthState {
   user?: UserFormSchema
   token: string
-  refreshToken: string
 }
 
 const initialState: AuthState = {
   token: '',
-  refreshToken: '',
 }
 
 const authSlice = createSlice({
@@ -19,7 +17,6 @@ const authSlice = createSlice({
   reducers: {
     userLoggedIn(state, action: PayloadAction<AuthState>) {
       state.token = action.payload.token
-      state.refreshToken = action.payload.refreshToken
     },
     userLoggedOut(state) {
       state.user = initialState.user
@@ -29,10 +26,7 @@ const authSlice = createSlice({
 })
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<
-      Pick<AuthState, 'token' | 'refreshToken'>,
-      { body: { username: string; password: string } }
-    >({
+    login: builder.mutation<any, { body: { username: string; password: string } }>({
       query: (data) => ({
         url: 'auth/login',
         method: 'POST',

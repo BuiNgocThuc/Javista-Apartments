@@ -22,7 +22,7 @@ export const serviceApiSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Service' as const,
                 id,
               })),

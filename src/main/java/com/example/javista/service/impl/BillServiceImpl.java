@@ -2,29 +2,29 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 
-import com.example.javista.dto.request.bill.*;
-import com.example.javista.entity.Setting;
-import com.example.javista.enums.SystemStatus;
-import com.example.javista.exception.AppException;
-import com.example.javista.exception.ErrorCode;
-import com.example.javista.repository.ApartmentRepository;
-import com.example.javista.repository.SettingRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.example.javista.configuration.MomoConfig;
+import com.example.javista.dto.request.bill.*;
 import com.example.javista.dto.request.payment.MomoCallbackRequest;
 import com.example.javista.dto.request.payment.MomoPaymentCreationRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.bill.BillResponse;
 import com.example.javista.dto.response.payment.MomoPaymentResponse;
 import com.example.javista.entity.Bill;
+import com.example.javista.entity.Setting;
 import com.example.javista.enums.BillStatus;
+import com.example.javista.enums.SystemStatus;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.BillMapper;
+import com.example.javista.repository.ApartmentRepository;
 import com.example.javista.repository.BillRepository;
 import com.example.javista.repository.RelationshipRepository;
+import com.example.javista.repository.SettingRepository;
 import com.example.javista.service.BillService;
 import com.example.javista.service.payment.MomoService;
 import com.example.javista.utils.CreateSignature;
@@ -185,8 +185,10 @@ public class BillServiceImpl implements BillService {
 
             // used water
             int usedWater = bill.getNewWater() - bill.getOldWater();
-            Float waterPrice =
-                setting.getWaterPricePerM3() * usedWater * (100 + setting.getWaterVat() + setting.getEnvProtectionTax()) / 100;
+            Float waterPrice = setting.getWaterPricePerM3()
+                    * usedWater
+                    * (100 + setting.getWaterVat() + setting.getEnvProtectionTax())
+                    / 100;
 
             Float totalPrice = bill.getTotalPrice() + waterPrice;
             bill.setTotalPrice(totalPrice);

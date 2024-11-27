@@ -1,24 +1,23 @@
 import { apiSlice } from '../api/apiSlice'
-import { IApartment } from '@/schema/apartment.validate'
+import { ApartmentFormSchema } from '@/schema/apartment.validate'
 
 export const apartmentSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getApartments: builder.query<
-      ResponseDataType<IApartment>,
+      ResponseDataType<ApartmentFormSchema>,
       {
         page?: number
         pageSize?: number
-        id?: number
         includes?: string[]
-      }
+      } & Partial<ApartmentFormSchema>
     >({
-      query: (params = {}) => {
+      query: (params) => {
         let url = `apartments?page=${params.page}`
         if (params.pageSize) {
           url += `&PageSize=${params.pageSize}`
         }
         if (params.id) {
-          url += `$id=eq:${params.id}`
+          url += `&id=like:${params.id}`
         }
         if (params.includes && params.includes?.length > 0) {
           url += `&includes=${params.includes.join(',')}`
@@ -30,7 +29,7 @@ export const apartmentSlice = apiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.contents.map(({ id }) => ({
+              ...result.data.map(({ id }) => ({
                 type: 'Apartments' as const,
                 id,
               })),
@@ -38,26 +37,43 @@ export const apartmentSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Apartments', id: 'LIST' }],
     }),
-    getApartment: builder.query<IApartment, string | undefined>({
-      query: (id: string) => ({
-        url: `apartments/${id}`,
-        method: 'GET',
+    getApartment: builder.query<ApartmentFormSchema, { id?: string; includes?: string }>({
+      query: (params) => {
+        let url = `apartments/${params.id}`
+        if (params.includes) {
+          url += `?includes=${params.includes}`
+        }
+        return {
+          url: url,
+        }
+      },
+      providesTags: (result, error, { id }) => (result ? [{ type: 'Apartments', id }] : []),
+    }),
+    createApartment: builder.mutation<ApartmentFormSchema, Partial<ApartmentFormSchema>>({
+      query: (body) => ({
+        url: 'apartments',
+        method: 'POST',
+        body: body,
       }),
-      providesTags: (result, error, id) =>
-        result ? [{ type: 'Apartments', id }] : [],
+      invalidatesTags: [{ type: 'Apartments', id: 'LIST' }],
     }),
     updateApartment: builder.mutation<
       void,
-      { id: string; body: Partial<IApartment> }
+      {
+        id: string
+        body: Partial<ApartmentFormSchema> &
+          Pick<
+            ApartmentFormSchema,
+            'area' | 'description' | 'floorNumber' | 'apartmentNumber' | 'status'
+          >
+      }
     >({
       query: (data) => ({
         url: `apartments/${data.id}`,
         method: 'PUT',
         body: data.body,
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: 'Apartments', id: arg.id },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: 'Apartments', id: arg.id }],
     }),
     deleteApartment: builder.mutation<void, string | undefined>({
       query: (id: string) => ({
@@ -72,6 +88,7 @@ export const apartmentSlice = apiSlice.injectEndpoints({
 export const {
   useGetApartmentsQuery,
   useGetApartmentQuery,
+  useCreateApartmentMutation,
   useUpdateApartmentMutation,
   useDeleteApartmentMutation,
   useLazyGetApartmentQuery,

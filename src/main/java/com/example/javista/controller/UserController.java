@@ -1,23 +1,20 @@
 package com.example.javista.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.javista.dto.request.user.*;
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.service.UserService;
 import com.example.javista.service.media.CloudinaryService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -44,8 +41,8 @@ public class UserController {
     ApiResponse<Void> createPasswordWhenFirstLogin(@RequestBody PasswordCreationRequest request) {
         userService.createPasswordWhenFirstLogin(request);
         return ApiResponse.<Void>builder()
-            .message("Create password when first login Successfully")
-            .build();
+                .message("Create password when first login Successfully")
+                .build();
     }
 
     // get my info
@@ -62,7 +59,7 @@ public class UserController {
         }
         return ApiResponse.<UserResponse>builder()
                 .message("Upload avatar Successfully")
-            .result(userService.uploadAvatar(file))
+                .result(userService.uploadAvatar(file))
                 .build();
     }
 
@@ -119,8 +116,6 @@ public class UserController {
     @PostMapping("/{id}/notify-sms")
     ApiResponse<Void> notifySmsNewItems(@PathVariable Integer id) {
         userService.notifySmsNewItems(id);
-        return ApiResponse.<Void>builder()
-                .message("Notify SMS Successfully")
-                .build();
+        return ApiResponse.<Void>builder().message("Notify SMS Successfully").build();
     }
 }

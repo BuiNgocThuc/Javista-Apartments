@@ -1,10 +1,7 @@
 package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.example.javista.enums.RelationshipRole;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,7 @@ import com.example.javista.utils.QueryUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

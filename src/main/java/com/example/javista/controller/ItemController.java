@@ -1,6 +1,7 @@
 package com.example.javista.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.javista.dto.request.item.ItemCreationRequest;
 import com.example.javista.dto.request.item.ItemPatchRequest;
@@ -13,7 +14,6 @@ import com.example.javista.service.ItemService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor

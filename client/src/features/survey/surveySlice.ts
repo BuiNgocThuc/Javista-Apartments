@@ -51,7 +51,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Surveys' as const,
                 id,
               })),
@@ -70,7 +70,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
           `/questions?SurveyId=eq:${survey.id}&includes=Answers`,
         )
         if (questionsResult.error) return { error: questionsResult.error as FetchBaseQueryError }
-        const questions = (questionsResult.data as ResponseDataType<IQuestion>).contents
+        const questions = (questionsResult.data as ResponseDataType<IQuestion>).data
         // Combine survey data with questions and return the combined result
         return {
           data: {

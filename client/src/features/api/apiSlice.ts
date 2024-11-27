@@ -30,36 +30,46 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 ) => {
   let result = await baseQuery(args, api, extraOptions)
   if (result.error && result.error.status === 401) {
-    // try to get a new token
-    const refreshToken =
-      (api.getState() as RootState).authReducer.refreshToken || cookies.get('refreshToken')
+    // Get the error message from the response
+    const errorMessage = (result.error.data as { message: string })?.message
+    // Check if this is a login attempt failure
+    if (typeof args !== 'string' && args.url === 'auth/login') {
+      // Don't attempt token refresh for login failures
+      return result
+    }
+
+    // For other 401 errors, attempt token refresh
+    const token =
+      (api.getState() as RootState).authReducer.token || cookies.get('accessToken')
+
     const refreshResult = await baseQuery(
       {
         url: 'auth/refresh',
         method: 'POST',
-        body: { token: refreshToken },
+        body: { token: token },
       },
       api,
       extraOptions,
     )
+
     if (refreshResult.data) {
       const tokens = refreshResult.data as {
         token: string
-        refreshToken: string
       }
-      // store the new token
+
+      // Store the new tokens
       api.dispatch(
         userLoggedIn({
           token: tokens.token,
-          refreshToken: tokens.refreshToken,
         }),
       )
+
       cookies.set('accessToken', tokens.token, { path: '/' })
-      cookies.set('refreshToken', tokens.refreshToken, { path: '/' })
-      // retry the initial query
+
+      // Retry the initial query
       result = await baseQuery(args, api, extraOptions)
     } else {
-      if ((result.error.data as { message: string }).message === 'Unauthorized') {
+      if (errorMessage === 'Unauthorized') {
         toast.error('Your session has expired. Please log in again.', {
           action: {
             label: 'Log in',
@@ -91,6 +101,7 @@ export const apiSlice = createApi({
     'Users',
     'Settings',
     'Packages',
+    'Relationships',
   ],
   endpoints: () => ({}),
 })

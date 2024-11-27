@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.billDetail;
 
 import com.example.javista.dto.request.PageRequest;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,15 +14,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillDetailQueryRequest extends PageRequest {
 
-        String id;
+    String id;
 
-        String billId;
+    String billId;
 
-        String price;
+    String price;
 
-        String quantity;
+    String quantity;
 
-        String createdAt;
+    String createdAt;
 
-        String updatedAt;
+    String updatedAt;
 }

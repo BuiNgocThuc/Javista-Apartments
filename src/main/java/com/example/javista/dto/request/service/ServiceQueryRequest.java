@@ -1,3 +1,5 @@
 package com.example.javista.dto.request.service;
 
-public class ServiceQueryRequest {}
+import com.example.javista.dto.request.PageRequest;
+
+public class ServiceQueryRequest extends PageRequest {}

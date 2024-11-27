@@ -2,13 +2,8 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.example.javista.dto.request.contact.SMSSendRequest;
-import com.example.javista.dto.request.user.*;
-import com.example.javista.service.media.CloudinaryService;
-import com.example.javista.service.media.SMSService;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 
@@ -16,8 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.javista.dto.request.contact.MailSendRequest;
+import com.example.javista.dto.request.contact.SMSSendRequest;
+import com.example.javista.dto.request.user.*;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.entity.Relationship;
@@ -28,14 +26,15 @@ import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserMapper;
 import com.example.javista.repository.UserRepository;
 import com.example.javista.service.UserService;
+import com.example.javista.service.media.CloudinaryService;
 import com.example.javista.service.media.EmailService;
+import com.example.javista.service.media.SMSService;
 import com.example.javista.utils.QueryUtils;
 import com.example.javista.utils.SecurityUtils;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -152,8 +151,7 @@ public class UserServiceImpl implements UserService {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name)
-            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (user.getIsFirstLogin()) {
             user.setPassword(securityUtils.encryptPassword(request.getPassword()));
@@ -178,12 +176,10 @@ public class UserServiceImpl implements UserService {
     public Void notifySmsNewItems(Integer id) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         // send sms to user
-        smsService.sendSMS(
-            SMSSendRequest.builder()
+        smsService.sendSMS(SMSSendRequest.builder()
                 .phoneNumber(user.getPhone())
                 .message("You have new items in your account")
-                .build()
-        );
+                .build());
         return null;
     }
 

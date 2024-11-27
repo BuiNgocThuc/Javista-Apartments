@@ -1,6 +1,6 @@
 import FunctionBox, {
   FunctionBoxProps,
-} from '@/pages/user/home/components/FunctionBox'
+} from '@/pages/user/home/components/function-box-item'
 import RecentReports from './components/recent-reports'
 import { useAppSelector } from '@/store'
 import {
@@ -14,8 +14,11 @@ import {
 	UserCog2,
 } from 'lucide-react'
 import { ROUTES } from '@/configs/endpoint'
+import { useDocumentTitle } from 'usehooks-ts'
 
 const Home = () => {
+	useDocumentTitle('Admin Home')
+
   const functionLists: FunctionBoxProps[] = [
     {
       icon: <Package size={50} className="text-primary" />,

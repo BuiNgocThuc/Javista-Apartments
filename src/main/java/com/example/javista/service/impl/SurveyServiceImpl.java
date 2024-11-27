@@ -1,5 +1,13 @@
 package com.example.javista.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import com.example.javista.dto.request.survey.*;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.survey.SurveyResponse;
@@ -13,17 +21,11 @@ import com.example.javista.mapper.UserAnswerMapper;
 import com.example.javista.repository.*;
 import com.example.javista.service.SurveyService;
 import com.example.javista.utils.QueryUtils;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -102,8 +104,9 @@ public class SurveyServiceImpl implements SurveyService {
     public Void createFullSurvey(FullSurveyCreationRequest request) {
         // add survey first
         Survey survey = surveyMapper.fullCreationRequestToEntity(request);
-        survey.setUser(
-            userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+        survey.setUser(userRepository
+                .findById(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
 
         surveyRepository.save(survey);
 
@@ -116,7 +119,8 @@ public class SurveyServiceImpl implements SurveyService {
             questionRepository.save(question);
 
             // add answers
-            List<Answer> answers = surveyMapper.mapAnswers(request.getQuestions().get(idx.getAndIncrement()).getAnswers());
+            List<Answer> answers = surveyMapper.mapAnswers(
+                    request.getQuestions().get(idx.getAndIncrement()).getAnswers());
             answers.forEach(answer -> {
                 answer.setQuestion(question);
                 // save answer
@@ -132,10 +136,12 @@ public class SurveyServiceImpl implements SurveyService {
         request.getOtherAnswers().forEach(otherAnswer -> {
             // find user by id
             OtherAnswer otherAnswerEntity = otherAnswerMapper.creationRequestToEntity(otherAnswer);
-            otherAnswerEntity.setUser(userRepository.findById(otherAnswer.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-            otherAnswerEntity.setQuestion(questionRepository.findById(otherAnswer.getQuestionId())
-                .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND)));
+            otherAnswerEntity.setUser(userRepository
+                    .findById(otherAnswer.getUserId())
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+            otherAnswerEntity.setQuestion(questionRepository
+                    .findById(otherAnswer.getQuestionId())
+                    .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND)));
 
             otherAnswerRepository.save(otherAnswerEntity);
         });
@@ -143,10 +149,12 @@ public class SurveyServiceImpl implements SurveyService {
         request.getUserAnswers().forEach(userAnswer -> {
             // find user by id
             UserAnswer userAnswerEntity = userAnswerMapper.creationRequestToEntity(userAnswer);
-            userAnswerEntity.setUser(userRepository.findById(userAnswer.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
-            userAnswerEntity.setAnswer(answerRepository.findById(userAnswer.getAnswerId())
-                .orElseThrow(() -> new AppException(ErrorCode.ANSWER_NOT_FOUND)));
+            userAnswerEntity.setUser(userRepository
+                    .findById(userAnswer.getUserId())
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+            userAnswerEntity.setAnswer(answerRepository
+                    .findById(userAnswer.getAnswerId())
+                    .orElseThrow(() -> new AppException(ErrorCode.ANSWER_NOT_FOUND)));
 
             userAnswerRepository.save(userAnswerEntity);
         });

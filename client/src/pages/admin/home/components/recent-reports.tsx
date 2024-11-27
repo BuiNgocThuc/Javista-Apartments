@@ -23,7 +23,7 @@ const RecentReports = () => {
               className="p-4 min-w-[300px] min-h-[300px] bg-zinc-100 rounded-md flex flex-col gap-4 border"
             />
           ))}
-        {reports?.contents.map((report, index) => (
+        {reports?.data.map((report, index) => (
           <div
             key={index}
             className="p-4 min-w-[300px] min-h-[200px] max-h-[250px] bg-white rounded-md flex flex-col gap-4 border">

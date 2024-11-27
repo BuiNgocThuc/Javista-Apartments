@@ -34,7 +34,7 @@ public class QueryUtils {
                             FilteringAndSearchingOperator.convertParametersToOperators(operatorParam);
                     log.info("Field: {}, Value: {}, Operator: {}", field.getName(), value, operator);
 
-                    filterSpecifications.add(new FilterCriteria(field.getName().replace('_','.'), value, operator));
+                    filterSpecifications.add(new FilterCriteria(field.getName().replace('_', '.'), value, operator));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException("Unable to access field: " + field.getName(), e);

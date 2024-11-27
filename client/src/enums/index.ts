@@ -9,7 +9,7 @@ export const GenderSchema = z.enum(['MALE', 'FEMALE'])
 export type Gender = z.infer<typeof GenderSchema>
 
 // Convert ApartmentUserRole enum to Zod schema
-export const ApartmentUserRoleSchema = z.enum(['OWNER', 'USER'])
+export const ApartmentUserRoleSchema = z.enum(['OWNER', 'TENANT'])
 export type ApartmentUserRole = z.infer<typeof ApartmentUserRoleSchema>
 
 // Convert ReportStatus enum to Zod schema

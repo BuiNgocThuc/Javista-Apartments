@@ -30,7 +30,7 @@ const Index = () => {
           ) : (
             <>
               <SurveyListUser
-                surveys={surveys?.contents}
+                surveys={surveys?.data}
                 isFetching={isFetching}
                 isLoading={isLoading}
               />

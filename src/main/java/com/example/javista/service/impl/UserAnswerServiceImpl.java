@@ -2,8 +2,6 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 
-import com.example.javista.exception.AppException;
-import com.example.javista.exception.ErrorCode;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,8 @@ import com.example.javista.dto.request.userAnswer.UserAnswerUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.userAnswer.UserAnswerResponse;
 import com.example.javista.entity.UserAnswer;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.UserAnswerMapper;
 import com.example.javista.repository.AnswerRepository;
@@ -63,8 +63,9 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     public UserAnswerResponse createUserAnswer(UserAnswerCreationRequest request) {
         UserAnswer userAnswer = userAnswerMapper.creationRequestToEntity(request);
 
-        userAnswer.setUser(
-                userRepository.findById(request.getUserId()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+        userAnswer.setUser(userRepository
+                .findById(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
 
         userAnswer.setAnswer(answerRepository
                 .findById(request.getAnswerId())

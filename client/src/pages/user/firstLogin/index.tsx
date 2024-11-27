@@ -27,7 +27,7 @@ const Index = () => {
   const { refetch: refetchCurrentUser } = useGetCurrentUserQuery()
   const form = useForm<z.infer<typeof FirstLoginSchema>>({
     defaultValues: {
-      newPassword: '',
+      password: '',
       confirmPassword: '',
     },
     resolver: zodResolver(FirstLoginSchema),
@@ -67,7 +67,7 @@ const Index = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="newPassword"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>New Password</FormLabel>

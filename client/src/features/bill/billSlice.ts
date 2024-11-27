@@ -1,5 +1,6 @@
-import { IBill } from '@/schema/bill.validate'
+import { IBill, IUpdateWaterReading } from '@/schema/bill.validate'
 import { apiSlice } from '../api/apiSlice'
+import { Statistic } from '@/schema/statistic.validate'
 
 export const billSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,21 +9,29 @@ export const billSlice = apiSlice.injectEndpoints({
       {
         page?: number
         pageSize?: number
-        id?: number
         includes?: string[]
-        relationshipId?: number
-      }
+        Relationship_UserId?: number
+      } & Partial<IBill>
     >({
       query: (params = { page: 1 }) => {
         let url = `bills?page=${params.page}`
         if (params.pageSize) {
           url += `&PageSize=${params.pageSize}`
         }
+        if (params.Relationship_UserId) {
+          url += `&Relationship_UserId=eq:${params.Relationship_UserId}`
+        }
+        if (params.monthly) {
+          url += `&Monthly=eq:${params.monthly}`
+        }
         if (params.relationshipId) {
           url += `&relationshipId=eq:${params.relationshipId}`
         }
+        if (params.status) {
+          url += `&status=eq:${params.status}`
+        }
         if (params.id) {
-          url += `&id=eq:${params.id}`
+          url += `&id=like:${params.id}`
         }
         if (params.includes && params.includes.length > 0) {
           url += `&includes=${params.includes.join(',')}`
@@ -34,7 +43,7 @@ export const billSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Bills' as const,
                 id,
               })),
@@ -82,6 +91,21 @@ export const billSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    updateWaterReadings: builder.mutation<void, { body: { waterReadings: IUpdateWaterReading[] } }>(
+      {
+        query: (data) => ({
+          url: `bills/update-water-readings`,
+          method: 'PATCH',
+          body: data.body,
+        }),
+        invalidatesTags: (result, error) => [{ type: 'Bills' }],
+      },
+    ),
+    statisticsRevenue: builder.query<Statistic[], { startDate: string; endDate: string }>({
+      query: (params) => ({
+        url: `bills/statistics-revenue?startDate=${params.startDate}&endDate=${params.endDate}`,
+      }),
+    }),
   }),
 })
 
@@ -89,7 +113,10 @@ export const {
   usePaidByMomoMutation,
   usePaidByVnpayMutation,
   useGetBillsQuery,
+  useLazyGetBillsQuery,
   useGetBillQuery,
   useUpdateBillMutation,
   useDeleteBillMutation,
+  useUpdateWaterReadingsMutation,
+	useStatisticsRevenueQuery,
 } = billSlice

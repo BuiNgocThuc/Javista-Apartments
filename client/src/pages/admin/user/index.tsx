@@ -85,7 +85,7 @@ const Index = () => {
           </div>
           <div className="size-full overflow-y-auto">
             <UserList
-              users={users?.contents}
+              users={users?.data}
               isFetching={isFetching}
               isLoading={isLoading}
             />

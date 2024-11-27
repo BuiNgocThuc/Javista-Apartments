@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.relationship;
 
 import com.example.javista.dto.request.PageRequest;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,7 +16,7 @@ public class RelationshipQueryRequest extends PageRequest {
 
     String apartmentId;
 
-    String userId;
+    String user_Id;
 
     String createdAt;
 

@@ -1,9 +1,9 @@
-import { IRejectionReason } from '@/schema/report.validate'
+import { ReportType } from '@/schema/report.validate'
 import { apiSlice } from '../api/apiSlice'
 
 export const rejectedReasonsSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getRejectionReasons: builder.query<ResponseDataType<IRejectionReason>, number | void>({
+    getRejectionReasons: builder.query<ResponseDataType<ReportType>, number | void>({
       query: (page = 1) => {
         return {
           url: `rejectionReasons?page=${page}`,
@@ -12,7 +12,7 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.contents.map(({ id }) => ({
+              ...result.data.map(({ id }) => ({
                 type: 'RejectionReasons' as const,
                 id,
               })),
@@ -20,7 +20,7 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'RejectionReasons', id: 'LIST' }],
     }),
-    getRejectionReason: builder.query<IRejectionReason, string | number>({
+    getRejectionReason: builder.query<ReportType, string | number>({
       query: (id: string) => ({
         url: `rejected-reasons/${id}`,
         method: 'GET',
@@ -28,8 +28,8 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, id) => (result ? [{ type: 'RejectionReasons', id }] : []),
     }),
     createRejectionReason: builder.mutation<
-      IRejectionReason,
-      Partial<IRejectionReason> & Omit<IRejectionReason, 'id'>
+      ReportType,
+      Partial<ReportType> & Omit<ReportType, 'id'>
     >({
       query: (data) => ({
         url: 'rejectionReasons',
@@ -40,7 +40,7 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
     }),
     updateRejectionReason: builder.mutation<
       void,
-      { id: string | number | undefined; body: Partial<IRejectionReason> }
+      { id: string | number | undefined; body: Partial<ReportType> }
     >({
       query: (data) => ({
         url: `rejectionReasons/${data.id}`,

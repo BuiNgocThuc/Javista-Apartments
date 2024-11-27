@@ -52,7 +52,7 @@ const ChatList = () => {
           <Loader2 className='animate-spin text-primary' />
         </div>
       ) : (
-        data?.contents.map((user, index) => (
+        data?.data.map((user, index) => (
           <div
             key={index}
             onClick={() => navigate(`/admin/chat/${user.id}`)}

@@ -1,11 +1,10 @@
 package com.example.javista.dto.response.contact;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +19,3 @@ public class SMSResponse {
     @JsonProperty("SMSID")
     private String smsId;
 }
-

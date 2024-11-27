@@ -58,7 +58,7 @@ const Index = () => {
             </div>
             <div className="size-full overflow-y-auto">
               <PackageList
-                packages={packages?.contents}
+                packages={packages?.data}
                 isFetching={isFetching}
                 isLoading={isLoading}
               />
@@ -68,6 +68,7 @@ const Index = () => {
                 className="w-full"
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
+								setCurrentPage={setCurrentPage}
               />
               <div className="w-full">
                 <PaginationCustom

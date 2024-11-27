@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.contact;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

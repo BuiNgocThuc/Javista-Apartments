@@ -1,5 +1,5 @@
 interface ResponseDataType<T> {
-  contents: T[]
+  data: T[]
   page: number
   pageSize: number
   totalItems: number

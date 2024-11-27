@@ -1,12 +1,14 @@
 package com.example.javista.dto.request.survey;
 
+import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
+
 import com.example.javista.dto.request.otherAnswer.OtherAnswerCreationRequest;
 import com.example.javista.dto.request.userAnswer.UserAnswerCreationRequest;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -19,5 +21,4 @@ public class SurveySubmissionRequest {
 
     @NotNull
     List<UserAnswerCreationRequest> userAnswers;
-
 }
