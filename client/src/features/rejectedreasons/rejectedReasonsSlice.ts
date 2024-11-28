@@ -1,9 +1,9 @@
-import { ReportType } from '@/schema/report.validate'
+import { RejectionReasonType } from '@/schema/report.validate'
 import { apiSlice } from '../api/apiSlice'
 
 export const rejectedReasonsSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getRejectionReasons: builder.query<ResponseDataType<ReportType>, number | void>({
+    getRejectionReasons: builder.query<ResponseDataType<RejectionReasonType>, number | void>({
       query: (page = 1) => {
         return {
           url: `rejectionReasons?page=${page}`,
@@ -20,27 +20,26 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'RejectionReasons', id: 'LIST' }],
     }),
-    getRejectionReason: builder.query<ReportType, string | number>({
-      query: (id: string) => ({
-        url: `rejected-reasons/${id}`,
-        method: 'GET',
+    getRejectionReason: builder.query<RejectionReasonType, undefined | number>({
+      query: (id) => ({
+        url: `rejectionReasons/${id}`,
       }),
-      providesTags: (result, error, id) => (result ? [{ type: 'RejectionReasons', id }] : []),
+      providesTags: (result, error, id) => [{ type: 'RejectionReasons', id }],
     }),
     createRejectionReason: builder.mutation<
-      ReportType,
-      Partial<ReportType> & Omit<ReportType, 'id'>
+      RejectionReasonType,
+      Partial<RejectionReasonType> & Omit<RejectionReasonType, 'id'>
     >({
       query: (data) => ({
         url: 'rejectionReasons',
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'RejectionReasons', id: 'LIST' }],
+      invalidatesTags: (result, error, arg) => [{ type: 'Reports', id: arg.reportId ?? undefined }],
     }),
     updateRejectionReason: builder.mutation<
       void,
-      { id: string | number | undefined; body: Partial<ReportType> }
+      { id: string | number | undefined; body: Partial<RejectionReasonType> }
     >({
       query: (data) => ({
         url: `rejectionReasons/${data.id}`,
@@ -59,4 +58,5 @@ export const rejectedReasonsSlice = apiSlice.injectEndpoints({
   }),
 })
 
-export const { useCreateRejectionReasonMutation } = rejectedReasonsSlice
+export const { useCreateRejectionReasonMutation, useLazyGetRejectionReasonQuery } =
+  rejectedReasonsSlice

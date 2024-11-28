@@ -1,10 +1,11 @@
 import { Separator } from '@/components/ui/separator'
 import { Loader, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGetPackageQuery } from '@/features/package/packageSlice'
 import PackageForm from './package-form'
 import Overlay from '@/components/overlay/Overlay'
 import { Button } from '@/components/ui/button'
+import { useGetUserByIdQuery, useLazyGetUserByIdQuery } from '@/features/user/userSlice'
 
 interface PackageDetailProps {
   id?: number
@@ -14,12 +15,13 @@ interface PackageDetailProps {
 
 const PackageDetail = ({ id, mode, setShowDetail }: PackageDetailProps) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [getUser, { data }] = useLazyGetUserByIdQuery()
   const {
     data: packagee,
     isLoading,
     isFetching,
   } = useGetPackageQuery(
-    { id: id, includes: ['user'] },
+    { id: id },
     {
       skip: mode === 'create' || !id,
     },

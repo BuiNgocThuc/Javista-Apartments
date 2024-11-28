@@ -132,7 +132,7 @@ const userApiSlice = apiSlice.injectEndpoints({
     >({
       query: (data) => ({
         url: `users/${data.id}`,
-        method: 'PUT',
+        method: 'PATCH',
         body: data.body,
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }],

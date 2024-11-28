@@ -1,3 +1,5 @@
 package com.example.javista.dto.request.report;
 
-public class ReportQueryRequest {}
+import com.example.javista.dto.request.PageRequest;
+
+public class ReportQueryRequest extends PageRequest {}

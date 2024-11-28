@@ -30,7 +30,6 @@ const Index = () => {
   } = useGetBillsQuery({
     page: currentPage,
     pageSize: pageSize,
-    includes: ['Relationship'],
     ...(filters.id !== null ? { id: filters.id } : {}),
     ...(filters.monthly ? { monthly: filters.monthly } : {}),
     ...(filters.status ? { status: filters.status } : {}),
@@ -104,7 +103,7 @@ const Index = () => {
                 className="w-full whitespace-nowrap"
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItems={bills?.totalItems}
+                totalElements={bills?.totalElements}
                 loading={isLoading || isFetching}
               />
             </div>

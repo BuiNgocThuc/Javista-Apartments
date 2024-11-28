@@ -20,8 +20,11 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useDeleteReportMutation, useUpdateReportMutation } from '@/features/reports/reportSlice'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
-import { useCreateRejectionReasonMutation } from '@/features/rejectedreasons/rejectedReasonsSlice'
-import { useState } from 'react'
+import {
+  useCreateRejectionReasonMutation,
+  useLazyGetRejectionReasonQuery,
+} from '@/features/rejectedreasons/rejectedReasonsSlice'
+import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 
 interface ReportFormDetailProps {
@@ -35,6 +38,8 @@ const ReportFormDetail = ({ report, setShowDetail }: ReportFormDetailProps) => {
     setRejectionReason(rejectionReason)
   }, 500)
   const [updateReport, { isLoading }] = useUpdateReportMutation()
+  const [getRejectedReason, { isLoading: isLoadingRejectedReason, data }] =
+    useLazyGetRejectionReasonQuery()
   const [createRejection, { isLoading: isLoadingRejection }] = useCreateRejectionReasonMutation()
   const [deleteReport, { isLoading: isLoadingDelete }] = useDeleteReportMutation()
 
@@ -59,7 +64,26 @@ const ReportFormDetail = ({ report, setShowDetail }: ReportFormDetailProps) => {
     resolver: zodResolver(ReportSchema),
   })
 
+  const handleGetRejectedReason = async () => {
+    if (report?.rejectionReasonId !== null) {
+      await getRejectedReason(report?.rejectionReasonId)
+        .unwrap()
+        .then(() => {})
+        .catch((error) => {
+          console.log(error)
+          toast.error(error.message)
+        })
+    }
+  }
+
+  useEffect(() => {
+    if (report && report.status === 'REJECTED') {
+      handleGetRejectedReason()
+    }
+  }, [report])
+
   const onSubmit = async (data: z.infer<typeof ReportSchema>) => {
+    console.log(data)
     try {
       if (data.status === 'REJECTED' && rejectionReason === '') {
         toast.error('Please provide a reason for rejection')
@@ -96,12 +120,14 @@ const ReportFormDetail = ({ report, setShowDetail }: ReportFormDetailProps) => {
     }
   }
 
-  console.log(rejectionReason)
+  const onError = (error: any) => {
+    console.log(error)
+  }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
         className="max-w-sm min-[550px]:max-w-lg w-full h-fit bg-white rounded-md relative z-[51] animate-in fade-in-95 zoom-in-95 shadow-lg">
         {isLoading ||
           (isLoadingRejection && (
@@ -135,9 +161,9 @@ const ReportFormDetail = ({ report, setShowDetail }: ReportFormDetailProps) => {
           {form.getValues('status') === 'REJECTED' && (
             <Textarea
               rows={5}
-              defaultValue={report?.rejectionReason?.content}
+              defaultValue={data?.content}
               className="disabled:bg-zinc-200 text-black"
-              disabled={!report?.rejectionReason?.content ? false : true}
+              disabled={!data?.content ? false : true}
               onChange={(e) => debounced(e.target.value)}
             />
           )}

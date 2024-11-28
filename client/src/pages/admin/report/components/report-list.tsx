@@ -7,30 +7,29 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { IReport } from '@/schema/report.validate'
+import { ReportType } from '@/schema/report.validate'
 import { useState } from 'react'
 import ReportDetail from './report-detail'
 import TableRowSkeleton from '@/components/skeleton/TableRowSkeleton'
 
 interface ReportListProps {
-  reports?: IReport[]
+  reports?: ReportType[]
   isLoading?: boolean
   isFetching?: boolean
 }
 
 const ReportList = ({ reports, isFetching, isLoading }: ReportListProps) => {
   const [showDetail, setShowDetail] = useState<number | string>('')
-  console.log(reports)
   return (
     <>
       <Table className="relative">
         <TableHeader className="sticky top-0 bg-white">
           <TableRow>
-            <TableHead className='w-[5%]'>ID</TableHead>
-            <TableHead className='w-[25%]'>Title</TableHead>
-            <TableHead className='w-[15%]'>Sent Date</TableHead>
-            <TableHead className='w-[15%]'>Last Update</TableHead>
-            <TableHead className='w-[25%]'>Status</TableHead>
+            <TableHead className="w-[5%]">ID</TableHead>
+            <TableHead className="w-[25%]">Title</TableHead>
+            <TableHead className="w-[15%]">Sent Date</TableHead>
+            <TableHead className="w-[15%]">Last Update</TableHead>
+            <TableHead className="w-[25%]">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -54,12 +53,14 @@ const ReportList = ({ reports, isFetching, isLoading }: ReportListProps) => {
                   <TableCell className="py-4">{report?.id}</TableCell>
                   <TableCell>{report.title}</TableCell>
                   <TableCell>
-                    {new Date(report.createdAt).toLocaleDateString()}
+                    {report.createdAt ? new Date(report.createdAt).toLocaleDateString() : 'N/A'}
                   </TableCell>
                   <TableCell>
                     {report.updatedAt === null
                       ? 'N/A'
-                      : new Date(report.updatedAt).toLocaleDateString()}
+                      : report.updatedAt
+                      ? new Date(report.updatedAt).toLocaleDateString()
+                      : 'N/A'}
                   </TableCell>
                   <TableCell className="uppercase">
                     <Badge
@@ -79,9 +80,7 @@ const ReportList = ({ reports, isFetching, isLoading }: ReportListProps) => {
               ))}
         </TableBody>
       </Table>
-      {showDetail && (
-        <ReportDetail report={showDetail} setShowDetail={setShowDetail} />
-      )}
+      {showDetail && <ReportDetail report={showDetail} setShowDetail={setShowDetail} />}
     </>
   )
 }

@@ -44,9 +44,8 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    public SettingResponse getSettings() {
-        Setting setting = getSetting();
-        return settingMapper.entityToResponse(setting);
+    public SettingResponse getCurrentSetting() {
+        return settingMapper.entityToResponse(getSetting());
     }
 
     @Override

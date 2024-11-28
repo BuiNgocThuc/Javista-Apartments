@@ -23,8 +23,6 @@ public class UserResponse {
 
     Boolean isFirstLogin;
 
-    String password;
-
     String email;
 
     String phone;

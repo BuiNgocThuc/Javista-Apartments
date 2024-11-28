@@ -20,7 +20,6 @@ const BillList = ({ bills, isFetching, isLoading }: BillListProps) => {
         <TableHeader className="bg-white sticky top-0">
           <TableRow>
             <TableHead className="w-[5%]">ID</TableHead>
-            <TableHead>Apartment</TableHead>
             <TableHead>Total</TableHead>
             <TableHead>Monthly</TableHead>
             <TableHead>

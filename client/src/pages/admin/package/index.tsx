@@ -21,7 +21,6 @@ const Index = () => {
     isFetching,
   } = useGetPackagesQuery({
     page: currentPage,
-    includes: ['user'],
     pageSize: pageSize,
   })
 
@@ -68,7 +67,7 @@ const Index = () => {
                 className="w-full"
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
-								setCurrentPage={setCurrentPage}
+                setCurrentPage={setCurrentPage}
               />
               <div className="w-full">
                 <PaginationCustom
@@ -81,16 +80,14 @@ const Index = () => {
                 className="w-full whitespace-nowrap"
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItems={packages?.totalItems}
+                totalElements={packages?.totalElements}
                 loading={isLoading || isFetching}
               />
             </div>
           </div>
         </div>
       </div>
-      {showDetail === -1 && (
-        <PackageDetail mode="create" setShowDetail={setShowDetail} />
-      )}
+      {showDetail === -1 && <PackageDetail mode="create" setShowDetail={setShowDetail} />}
     </>
   )
 }

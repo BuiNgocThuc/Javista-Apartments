@@ -16,7 +16,7 @@ public class PageResponse<T> implements Serializable {
     int totalPages;
     long totalElements;
     int pageSize;
-    int currentPage;
+    int page;
 
     @Builder.Default
     List<T> data = Collections.emptyList();

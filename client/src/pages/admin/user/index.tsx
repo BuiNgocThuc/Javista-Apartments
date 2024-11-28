@@ -56,9 +56,7 @@ const Index = () => {
                   onChange={(e) => handleSearch(e.target.value)}
                 />
               </div>
-              <Select
-                value={filterType}
-                onValueChange={(value) => setFilterType(value)}>
+              <Select value={filterType} onValueChange={(value) => setFilterType(value)}>
                 <SelectTrigger className="w-[130px] h-10">
                   <SelectValue placeholder="Select filter" />
                 </SelectTrigger>
@@ -84,16 +82,13 @@ const Index = () => {
             <UserForm />
           </div>
           <div className="size-full overflow-y-auto">
-            <UserList
-              users={users?.data}
-              isFetching={isFetching}
-              isLoading={isLoading}
-            />
+            <UserList users={users?.data} isFetching={isFetching} isLoading={isLoading} />
           </div>
           <div className="w-full flex justify-between items-center">
             <PageSizeSelector
               className="w-full"
               pageSize={pageSize}
+              setCurrentPage={setCurrentPage}
               onPageSizeChange={setPageSize}
             />
             <div className="w-full">
@@ -107,7 +102,7 @@ const Index = () => {
               className="w-full whitespace-nowrap"
               currentPage={currentPage}
               pageSize={pageSize}
-              totalItems={users?.totalItems}
+              totalElements={users?.totalElements}
               loading={isLoading || isFetching}
             />
           </div>

@@ -21,6 +21,12 @@ public class SettingController {
 
     // test postman Http: http://localhost:8080/javista/settings
 
+    // get
+    @GetMapping
+    SettingResponse getSetting() {
+        return settingService.getCurrentSetting();
+    }
+
     // Update
     @PutMapping("/{id}")
     SettingResponse updateSetting(@PathVariable Integer id, @RequestBody SettingUpdateRequest request) {
