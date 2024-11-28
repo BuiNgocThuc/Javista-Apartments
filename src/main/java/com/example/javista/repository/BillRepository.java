@@ -33,16 +33,11 @@ public interface BillRepository extends JpaRepository<Bill, Integer>, JpaSpecifi
     @EntityGraph(attributePaths = {"relationship"})
     Page<Bill> findAll(Specification<Bill> spec, Pageable pageable);
 
-    @Query("SELECT  b.monthly, SUM(b.totalPrice) " +
-        "FROM Bill b " +
-        "WHERE b.deletedAt IS NULL " +
-        "AND b.status = 'PAID' " +
-        "AND b.monthly BETWEEN :startMonth AND :endMonth " +
-        "GROUP BY b.monthly " +
-        "ORDER BY b.monthly")
-    List<Object[]> getRevenueStatistics
-    (
-        @Param("startMonth") String startMonth,
-        @Param("endMonth") String endMonth
-    );
+    @Query("SELECT  b.monthly, SUM(b.totalPrice) " + "FROM Bill b "
+            + "WHERE b.deletedAt IS NULL "
+            + "AND b.status = 'PAID' "
+            + "AND b.monthly BETWEEN :startMonth AND :endMonth "
+            + "GROUP BY b.monthly "
+            + "ORDER BY b.monthly")
+    List<Object[]> getRevenueStatistics(@Param("startMonth") String startMonth, @Param("endMonth") String endMonth);
 }
