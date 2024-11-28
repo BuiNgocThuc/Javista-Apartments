@@ -9,12 +9,28 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ApartmentFormSchema } from '@/schema/apartment.validate'
+import { useLazyGetRelationshipsQuery } from '@/features/relationships/relationshipsSlice'
+import { useEffect } from 'react'
 
 interface ColumnDisplayTableProps {
   apartmentData?: ApartmentFormSchema
 }
 
 const ColumnDisplayTable = ({ apartmentData }: ColumnDisplayTableProps) => {
+  const [getRelationships, { data: relationships }] = useLazyGetRelationshipsQuery()
+  const handleGetRelationships = async () => {
+    await getRelationships({ apartmentId: apartmentData?.id, page: 1 })
+      .unwrap()
+      .then((payload) => {
+      })
+      .catch(() => {})
+  }
+  useEffect(() => {
+    if (apartmentData) {
+      handleGetRelationships()
+    }
+  }, [apartmentData])
+
   return (
     <div className="size-full flex flex-col space-y-2">
       <p className="flex items-center gap-2 text-lg font-medium uppercase">
@@ -36,7 +52,7 @@ const ColumnDisplayTable = ({ apartmentData }: ColumnDisplayTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {apartmentData?.relationships?.map((relationship, index) => (
+            {relationships?.data.map((relationship, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{relationship.user?.fullName}</TableCell>

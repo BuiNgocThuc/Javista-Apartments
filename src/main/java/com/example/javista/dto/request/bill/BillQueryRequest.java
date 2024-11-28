@@ -29,4 +29,6 @@ public class BillQueryRequest extends PageRequest {
     String status;
 
     String relationshipId;
+
+    String relationship_user_Id;
 }

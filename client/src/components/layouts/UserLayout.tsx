@@ -21,7 +21,7 @@ const UserLayout = () => {
         relationships?.some((relationship) => relationship.role === role)
 
       if (userType === 'RESIDENT') {
-        if (hasRole('OWNER') && !hasRole('USER')) {
+        if (hasRole('OWNER') && !hasRole('TENANT')) {
           if (
             !matchPath({ path: '/bills/:id?', end: true }, location.pathname) &&
             location.pathname !== ROUTES.HOME

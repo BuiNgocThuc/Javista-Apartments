@@ -19,7 +19,7 @@ export const billSlice = apiSlice.injectEndpoints({
           url += `&PageSize=${params.pageSize}`
         }
         if (params.Relationship_UserId) {
-          url += `&Relationship_UserId=eq:${params.Relationship_UserId}`
+          url += `&relationship_user_Id=eq:${params.Relationship_UserId}`
         }
         if (params.monthly) {
           url += `&Monthly=eq:${params.monthly}`
@@ -105,7 +105,11 @@ export const billSlice = apiSlice.injectEndpoints({
       query: (params) => ({
         url: `statistics/revenue?startMonth=${params.startDate}&endMonth=${params.endDate}`,
       }),
-      transformResponse(baseQueryReturnValue: { result?: { monthlyRevenueStatistics: Statistic[] } }, meta, arg) {
+      transformResponse(
+        baseQueryReturnValue: { result?: { monthlyRevenueStatistics: Statistic[] } },
+        meta,
+        arg,
+      ) {
         return baseQueryReturnValue.result?.monthlyRevenueStatistics || []
       },
     }),
@@ -121,5 +125,5 @@ export const {
   useUpdateBillMutation,
   useDeleteBillMutation,
   useUpdateWaterReadingsMutation,
-	useStatisticsRevenueQuery,
+  useStatisticsRevenueQuery,
 } = billSlice

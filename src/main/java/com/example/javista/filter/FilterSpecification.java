@@ -23,9 +23,17 @@ public class FilterSpecification<T> {
                     case EQUAL_TO:
                         if (criteria.getColumn().contains(".")) {
                             String[] column = criteria.getColumn().split("\\.");
-                            Predicate equal =
-                                    criteriaBuilder.equal(root.get(column[0]).get(column[1]), criteria.getValue());
-                            predicates.add(equal);
+                            if (column.length == 2) {
+                                Predicate equal = criteriaBuilder.equal(
+                                        root.get(column[0]).get(column[1]), criteria.getValue());
+                                predicates.add(equal);
+                            }
+                            if (column.length == 3) {
+                                Predicate equal = criteriaBuilder.equal(
+                                        root.get(column[0]).get(column[1]).get(column[2]), criteria.getValue());
+                                predicates.add(equal);
+                            }
+
                         } else {
                             Predicate equal =
                                     criteriaBuilder.equal(root.get(criteria.getColumn()), criteria.getValue());

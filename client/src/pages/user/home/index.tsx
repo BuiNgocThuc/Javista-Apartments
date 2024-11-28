@@ -16,14 +16,10 @@ import FunctionBoxList from './components/function-box-list'
 import ColumnDisplayInformation from './components/column-display-information'
 import ColumnDisplayTable from './components/column-display-table'
 import TableRowSkeleton from '@/components/skeleton/TableRowSkeleton'
-import { useLazyGetRelationshipsQuery } from '@/features/relationships/relationshipsSlice'
-import { useLazyGetUserByIdQuery } from '@/features/user/userSlice'
 const Index = () => {
   useDocumentTitle('Home')
   const date = new Date() // Current date
   const [getApartment, { isLoading }] = useLazyGetApartmentQuery()
-  const [getUser, { isLoading: isLoadingUser }] = useLazyGetUserByIdQuery()
-  const [getRelationships, { isLoading: isLoadingRelationships }] = useLazyGetRelationshipsQuery()
   const [apartmentData, setApartmentData] = useState<ApartmentFormSchema | undefined>(undefined)
   const [houses, setHouses] = useState<string[]>([])
   const [selectedHouse, setSelectedHouse] = useState<string>(houses[0])
@@ -47,24 +43,21 @@ const Index = () => {
   }, [user])
   useEffect(() => {
     const handleGetApartment = async () => {
-      if (user) {
+      if (user && selectedHouse) {
         await getApartment({
           id: selectedHouse,
         })
           .unwrap()
-          .then(async (payloadApt) => {
-            await getRelationships({ apartmentId: payloadApt.id })
-              .unwrap()
-              .then(async (payloadRel) => {
-               
-              })
-              .catch(() => {})
+          .then((payload) => {
+            console.log(payload)
+            setApartmentData(payload)
           })
           .catch(() => {})
       }
     }
     handleGetApartment()
   }, [user, selectedHouse])
+
 
   return (
     <>
@@ -115,9 +108,13 @@ const Index = () => {
               <ColumnDisplayTable apartmentData={apartmentData} />
             )}
           </div>
-          <div className="w-full grid grid-cols-1 min-[600px]:grid-cols-2 md:grid-cols-4 gap-4 col-span-1 md:col-span-2 lg:col-span-4">
-            <FunctionBoxList />
-          </div>
+          {user &&
+            user?.userType === 'RESIDENT' &&
+            user.relationships?.some((user) => user.role == 'OWNER') && (
+              <div className="w-full grid grid-cols-1 min-[600px]:grid-cols-2 md:grid-cols-4 gap-4 col-span-1 md:col-span-2 lg:col-span-4">
+                <FunctionBoxList />
+              </div>
+            )}
         </div>
       </div>
       {user && user.isFirstLogin && <FirstLogin />}
