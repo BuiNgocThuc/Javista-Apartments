@@ -22,9 +22,6 @@ public class UserCreationRequest {
     @NotNull
     String username;
 
-    @NotNull
-    Boolean isFirstLogin;
-
     @NotNull(message = "EMAIL_INVALID")
     String email;
 

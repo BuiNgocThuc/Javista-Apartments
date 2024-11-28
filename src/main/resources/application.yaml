@@ -7,7 +7,7 @@ spring:
         datasource:
                 url: "jdbc:mysql://localhost:3306/JAVISTA"
                 username: root
-                password: root
+                password: Admin@123
         jpa:
                 hibernate:
                         ddl-auto: update
@@ -43,7 +43,7 @@ cloudinary:
         apiKey: "723427193596933"
         secretKey: "NJufPii1Wh2R9SQsR3s71SSDbRc"
         secure: true
-        defaultImage: "https://res.cloudinary.com/dloeqfbwm/image/upload/v1731292748/zity/assets/default_avt.jpg"
+
 
 jwt:
         signerKey: "gKzxk9xGfL9xFiyxQ7ng+CLmK2POHD8Z3LkgqMDlx3AQcjZ6a3CcdGeLRSF2HJak"
@@ -69,3 +69,5 @@ app:
                 resident:
                         default-password: "123456"
                         changed-password: "12345678"
+                        avatar: "https://res.cloudinary.com/dloeqfbwm/image/upload/v1731292748/zity/assets/default_avt.jpg"
+
