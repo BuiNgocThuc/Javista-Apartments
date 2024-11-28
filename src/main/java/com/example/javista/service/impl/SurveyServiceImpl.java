@@ -1,13 +1,5 @@
 package com.example.javista.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-
 import com.example.javista.dto.request.survey.*;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.survey.SurveyResponse;
@@ -21,11 +13,18 @@ import com.example.javista.mapper.UserAnswerMapper;
 import com.example.javista.repository.*;
 import com.example.javista.service.SurveyService;
 import com.example.javista.utils.QueryUtils;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -61,7 +60,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public SurveyResponse getSurveyById(Integer id) {
         return surveyMapper.entityToResponse(
-                surveyRepository.findById(id).orElseThrow(() -> new RuntimeException("Survey Not Found")));
+            surveyRepository.findById(id).orElseThrow(() -> new RuntimeException("Survey Not Found")));
     }
 
     @Override
@@ -69,7 +68,7 @@ public class SurveyServiceImpl implements SurveyService {
         Survey survey = surveyMapper.creationRequestToEntity(request);
 
         survey.setUser(
-                userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
+            userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
         return surveyMapper.entityToResponse(surveyRepository.save(survey));
     }
 
@@ -78,7 +77,7 @@ public class SurveyServiceImpl implements SurveyService {
         Survey survey = surveyRepository.findById(id).orElseThrow(() -> new RuntimeException("Survey Not Found"));
 
         survey.setUser(
-                userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
+            userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User Not Found")));
 
         surveyMapper.updateRequestToEntity(survey, request);
         return surveyMapper.entityToResponse(surveyRepository.save(survey));
@@ -102,31 +101,37 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public Void createFullSurvey(FullSurveyCreationRequest request) {
-        // add survey first
+        // Find the user first
+        User user = userRepository
+            .findById(request.getUserId())
+            .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // Create survey and set user
         Survey survey = surveyMapper.fullCreationRequestToEntity(request);
-        survey.setUser(userRepository
-                .findById(request.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+        survey.setUser(user);
 
+        // Prepare lists to store
+        List<Question> questions = new ArrayList<>();
+
+        // Process questions and answers
+        for (QuestionRequest questionRequest : request.getQuestions()) {
+            Question question = surveyMapper.questionDtoToEntity(questionRequest);
+            question.setSurvey(survey); // Set survey reference
+
+            List<Answer> answers = new ArrayList<>();
+            for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
+                Answer answer = surveyMapper.answerDtoToEntity(answerRequest);
+                answer.setQuestion(question); // Set question reference
+                answers.add(answer);
+            }
+            question.setAnswers(new HashSet<>(answers));
+            questions.add(question);
+        }
+
+        survey.setQuestions(new HashSet<>(questions));
+
+        // Save the survey
         surveyRepository.save(survey);
-
-        // add questions
-        List<Question> questions = surveyMapper.mapQuestions(request.getQuestions());
-        AtomicInteger idx = new AtomicInteger();
-        questions.forEach(question -> {
-            question.setSurvey(survey);
-            // save question
-            questionRepository.save(question);
-
-            // add answers
-            List<Answer> answers = surveyMapper.mapAnswers(
-                    request.getQuestions().get(idx.getAndIncrement()).getAnswers());
-            answers.forEach(answer -> {
-                answer.setQuestion(question);
-                // save answer
-                answerRepository.save(answer);
-            });
-        });
 
         return null;
     }
@@ -137,11 +142,11 @@ public class SurveyServiceImpl implements SurveyService {
             // find user by id
             OtherAnswer otherAnswerEntity = otherAnswerMapper.creationRequestToEntity(otherAnswer);
             otherAnswerEntity.setUser(userRepository
-                    .findById(otherAnswer.getUserId())
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+                .findById(otherAnswer.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
             otherAnswerEntity.setQuestion(questionRepository
-                    .findById(otherAnswer.getQuestionId())
-                    .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND)));
+                .findById(otherAnswer.getQuestionId())
+                .orElseThrow(() -> new AppException(ErrorCode.QUESTION_NOT_FOUND)));
 
             otherAnswerRepository.save(otherAnswerEntity);
         });
@@ -150,11 +155,11 @@ public class SurveyServiceImpl implements SurveyService {
             // find user by id
             UserAnswer userAnswerEntity = userAnswerMapper.creationRequestToEntity(userAnswer);
             userAnswerEntity.setUser(userRepository
-                    .findById(userAnswer.getUserId())
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+                .findById(userAnswer.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
             userAnswerEntity.setAnswer(answerRepository
-                    .findById(userAnswer.getAnswerId())
-                    .orElseThrow(() -> new AppException(ErrorCode.ANSWER_NOT_FOUND)));
+                .findById(userAnswer.getAnswerId())
+                .orElseThrow(() -> new AppException(ErrorCode.ANSWER_NOT_FOUND)));
 
             userAnswerRepository.save(userAnswerEntity);
         });
