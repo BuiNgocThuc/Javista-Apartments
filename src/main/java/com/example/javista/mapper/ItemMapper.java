@@ -29,5 +29,6 @@ public interface ItemMapper {
 
     // mapping entity to dto response
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user", target = "user")
     ItemResponse entityToResponse(Item item);
 }

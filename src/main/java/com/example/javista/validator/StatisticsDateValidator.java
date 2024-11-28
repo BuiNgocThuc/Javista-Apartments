@@ -1,13 +1,15 @@
 package com.example.javista.validator;
 
-import com.example.javista.dto.request.statistics.RevenueStatisticsRequest;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 import java.time.DateTimeException;
 import java.time.YearMonth;
 
-public class StatisticsDateValidator implements ConstraintValidator<StatisticsDateConstraint, RevenueStatisticsRequest> {
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+import com.example.javista.dto.request.statistics.RevenueStatisticsRequest;
+
+public class StatisticsDateValidator
+        implements ConstraintValidator<StatisticsDateConstraint, RevenueStatisticsRequest> {
     @Override
     public void initialize(StatisticsDateConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

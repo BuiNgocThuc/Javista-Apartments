@@ -1,8 +1,8 @@
 package com.example.javista.mapper;
 
-import com.example.javista.dto.response.answer.AnswerResponse;
-import com.example.javista.dto.response.otherAnswer.OtherAnswerResponse;
-import com.example.javista.entity.Answer;
+import java.util.List;
+import java.util.Set;
+
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,11 +11,11 @@ import org.mapstruct.MappingTarget;
 import com.example.javista.dto.request.question.QuestionCreationRequest;
 import com.example.javista.dto.request.question.QuestionPatchRequest;
 import com.example.javista.dto.request.question.QuestionUpdateRequest;
+import com.example.javista.dto.response.answer.AnswerResponse;
+import com.example.javista.dto.response.otherAnswer.OtherAnswerResponse;
 import com.example.javista.dto.response.question.QuestionResponse;
+import com.example.javista.entity.Answer;
 import com.example.javista.entity.Question;
-
-import java.util.List;
-import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {

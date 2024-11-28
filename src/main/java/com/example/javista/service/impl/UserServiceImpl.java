@@ -7,6 +7,7 @@ import java.util.Map;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,11 +31,13 @@ import com.example.javista.service.media.CloudinaryService;
 import com.example.javista.service.media.EmailService;
 import com.example.javista.service.media.SMSService;
 import com.example.javista.utils.QueryUtils;
+import com.example.javista.utils.RandomPassword;
 import com.example.javista.utils.SecurityUtils;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +53,10 @@ public class UserServiceImpl implements UserService {
     SMSService smsService;
 
     SecurityUtils securityUtils;
+
+    @Value("${app.default.resident.avatar}")
+    @NonFinal
+    String defaultAvatar;
 
     @Override
     public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
@@ -77,10 +84,11 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
         User user = userMapper.creationRequestToEntity(request);
-
+        String randomPassword = RandomPassword.generateRandomPassword(8);
         // Encrypt the password
-        user.setPassword(securityUtils.encryptPassword(request.getPassword()));
-
+        user.setPassword(securityUtils.encryptPassword(randomPassword));
+        user.setAvatar(defaultAvatar);
+        user.setIsFirstLogin(true);
         // Save the user
         user = userRepository.save(user);
 
@@ -88,7 +96,7 @@ public class UserServiceImpl implements UserService {
         try {
             Map<String, Object> props = new HashMap<>();
             props.put("username", user.getUsername());
-            props.put("password", request.getPassword());
+            props.put("password", randomPassword);
             props.put("fullName", user.getFullName());
 
             MailSendRequest mailRequest = MailSendRequest.builder()

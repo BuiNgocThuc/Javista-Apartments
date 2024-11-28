@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PageRequest {
     int page = 1;
-    int size = 10;
+    int pageSize = 10;
     String sort = "createdAt";
 }

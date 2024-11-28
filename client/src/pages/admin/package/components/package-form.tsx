@@ -51,7 +51,7 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
     data: apartments,
     isLoading: isLoadingApartment,
     isFetching: isFetchingApartment,
-  } = useGetApartmentsQuery({ page: 1, pageSize: 60 })
+  } = useGetApartmentsQuery({ page: 1, pageSize: 60, status:'IN_USE' })
   const [getUser, { data: user }] = useLazyGetUserByIdQuery()
   const [getRelationships] = useLazyGetRelationshipsQuery()
   const [apartmentSelected, setApartmentSelected] = useState<string | undefined>(undefined)
@@ -92,7 +92,11 @@ const PackageForm = ({ packagee, setOpen }: PackageFormProps) => {
         toast.success('Package updated successfully')
         setOpen(undefined)
       } else {
-        const newPackage = await createPackage(data).unwrap()
+        const certainData = {
+          description: data.description,
+          userId: data.userId,
+        }
+        const newPackage = await createPackage(certainData).unwrap()
         const formData = new FormData()
         formData.append('file', data.image)
         await updateImagePackage({ id: newPackage.id, image: formData })

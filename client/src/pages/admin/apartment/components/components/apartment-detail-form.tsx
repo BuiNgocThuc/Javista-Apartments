@@ -45,12 +45,12 @@ const ApartmentFormDetail = ({ apartment }: IApartmentFormDetailProps) => {
   const [deleteApartment, { isLoading: isLoadingDelete }] = useDeleteApartmentMutation()
   const onSubmit = async (data: z.infer<typeof ApartmentSchema>) => {
     try {
-      const result = await updateApartment({ id: data.id, body: data })
+      const { id, ...rest } = data;
+      const result = await updateApartment({ id: data.id, body: rest })
       if (result.error) {
         throw new Error('Something went wrong')
       } else {
         toast.success('Apartment updated successfully')
-        navigate('/admin/apartments')
       }
     } catch (error: any) {
       console.log(error)
@@ -91,7 +91,7 @@ const ApartmentFormDetail = ({ apartment }: IApartmentFormDetailProps) => {
                 <FormItem>
                   <FormLabel>Floor Number</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" readOnly className="read-only:bg-zinc-100" />
+                    <Input {...field} type="number" readOnly className="read-only:bg-zinc-100" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

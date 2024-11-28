@@ -18,7 +18,7 @@ export const relationshipsSlice = apiSlice.injectEndpoints({
           url += `&pageSize=${params.pageSize}`
         }
         if (params.apartmentId) {
-          url += `&apartmentId=eq:${params.apartmentId}`
+          url += `&apartment_Id=eq:${params.apartmentId}`
         }
 				if (params.userId) {
 					url += `&user_Id=eq:${params.userId}`

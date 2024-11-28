@@ -12,6 +12,8 @@ import com.example.javista.exception.AppException;
 import com.example.javista.exception.ErrorCode;
 import com.example.javista.mapper.StatisticsMapper;
 import com.example.javista.mapper.SurveyMapper;
+import com.example.javista.mapper.StatisticsMapper;
+import com.example.javista.mapper.SurveyMapper;
 import com.example.javista.repository.BillRepository;
 import com.example.javista.repository.QuestionRepository;
 import com.example.javista.repository.SurveyRepository;
@@ -52,6 +54,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             log.info(String.valueOf(revenueStatistics.size()));
             // log revenue statistics
             revenueStatistics.forEach(stat -> {
+                log.info("Revenue statistics: {}", stat[0] + " - " + stat[1]);
                 monthlyRevenueStatistics.add(
                     MonthlyRevenueStatisticsResponse.builder()
                         .month(stat[0].toString())
@@ -59,6 +62,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                         .build()
                 );
             });
+
 
         return RevenueStatisticsResponse.builder()
             .monthlyRevenueStatistics(monthlyRevenueStatistics)

@@ -6,6 +6,4 @@ import com.example.javista.dto.response.statistics.survey.SurveyStatisticsRespon
 
 public interface StatisticsService {
     RevenueStatisticsResponse getRevenueStatistics(RevenueStatisticsRequest request);
-
-    SurveyStatisticsResponse getSurveyStatistics(Integer surveyId);
 }

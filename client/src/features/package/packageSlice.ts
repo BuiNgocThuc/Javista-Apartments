@@ -83,7 +83,7 @@ const packageApiSlice = apiSlice.injectEndpoints({
       IPackage,
       {
         id?: number
-        body: Partial<IPackage> & Pick<IPackage, 'description' | 'isReceive'>
+        body: Partial<IPackage> & Pick<IPackage, 'description'>
       }
     >({
       query: (data) => ({
@@ -109,7 +109,7 @@ const packageApiSlice = apiSlice.injectEndpoints({
     }),
     createPackage: builder.mutation<
       IPackage,
-      Pick<IPackage, 'image' | 'description' | 'isReceive'>
+      Pick<IPackage, 'description' | 'userId'>
     >({
       query: (data) => ({
         url: 'items',

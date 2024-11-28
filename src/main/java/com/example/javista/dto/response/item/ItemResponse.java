@@ -2,6 +2,7 @@ package com.example.javista.dto.response.item;
 
 import java.time.LocalDateTime;
 
+import com.example.javista.dto.response.user.UserResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.*;
@@ -28,4 +29,6 @@ public class ItemResponse {
     LocalDateTime updatedAt;
 
     Integer userId;
+
+    UserResponse user;
 }

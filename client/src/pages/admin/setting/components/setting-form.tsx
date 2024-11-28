@@ -21,6 +21,7 @@ import ButtonOverdue from './components/button-overdue'
 import ButtonPrepayment from './components/button-prepayment'
 import ButtonPayment from './components/button-payment'
 import ButtonDelinquent from './components/button-delinquent'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 interface SettingFormProps {
   setting?: z.infer<typeof SettingSchema>
@@ -35,7 +36,16 @@ const SettingForm = ({ setting, isLoading, isFetching }: SettingFormProps) => {
   )
   const [patchSetting, { isLoading: isUpdateSetting }] = usePatchSettingMutation()
 
-  const form = useForm<z.infer<typeof SettingSchema>>()
+  const form = useForm<z.infer<typeof SettingSchema>>({
+    defaultValues: {
+      currentMonthly: setting?.currentMonthly ?? '',
+      systemStatus: setting?.systemStatus ?? 'PAYMENT',
+      roomPricePerM2: setting?.roomPricePerM2 ?? 0,
+      waterPricePerM3: setting?.waterPricePerM3 ?? 0,
+      waterVat: setting?.waterVat ?? 0,
+      envProtectionTax: setting?.envProtectionTax ?? 0,
+    },
+  })
 
   const onSubmit = async (data: z.infer<typeof SettingSchema>) => {
     // console.log(data)
@@ -105,10 +115,7 @@ const SettingForm = ({ setting, isLoading, isFetching }: SettingFormProps) => {
                         <Input
                           type="number"
                           step={1000}
-                          defaultValue={field.value}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          ref={field.ref}
+                          {...field}
                           placeholder="Enter room price per m2"
                         />
                       </FormControl>
@@ -125,10 +132,7 @@ const SettingForm = ({ setting, isLoading, isFetching }: SettingFormProps) => {
                         <Input
                           type="number"
                           step={1000}
-                          defaultValue={field.value}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          ref={field.ref}
+                          {...field}
                           placeholder="Enter water price per m3"
                         />
                       </FormControl>
@@ -142,14 +146,7 @@ const SettingForm = ({ setting, isLoading, isFetching }: SettingFormProps) => {
                     <FormItem>
                       <FormLabel>Water VAT (%)</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          defaultValue={field.value}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          ref={field.ref}
-                          placeholder="Enter water VAT"
-                        />
+                        <Input type="number" placeholder="Enter water VAT" {...field} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -163,10 +160,7 @@ const SettingForm = ({ setting, isLoading, isFetching }: SettingFormProps) => {
                       <FormControl>
                         <Input
                           type="number"
-                          defaultValue={field.value}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          ref={field.ref}
+                          {...field}
                           placeholder="Enter environment protection tax"
                         />
                       </FormControl>

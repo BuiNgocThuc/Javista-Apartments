@@ -46,8 +46,8 @@ const PackageList = ({ packages, isLoading, isFetching }: PackageListProps) => {
         <TableHeader className="bg-white sticky top-0">
           <TableRow>
             <TableHead>ID</TableHead>
-            {/* <TableHead>Shipping to</TableHead>
-            <TableHead>Phone</TableHead> */}
+            <TableHead>Shipping to</TableHead>
+            <TableHead>Phone</TableHead>
             <TableHead>Delivery Date</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Description</TableHead>
@@ -69,8 +69,8 @@ const PackageList = ({ packages, isLoading, isFetching }: PackageListProps) => {
             packages.map((packagee, index) => (
               <TableRow key={index} className="font-medium cursor-pointer">
                 <TableCell className="w-[5%] py-3">{packagee.id}</TableCell>
-                {/* <TableCell className="w-[25%]">{packagee.user?.fullName}</TableCell>
-                <TableCell className="w-[10%]">{packagee.user?.phone}</TableCell> */}
+                <TableCell className="w-[25%]">{packagee.user?.fullName}</TableCell>
+                <TableCell className="w-[10%]">{packagee.user?.phone}</TableCell>
                 <TableCell className="w-[10%]">
                   {formatDateWithSlash(new Date(packagee.createdAt))}
                 </TableCell>

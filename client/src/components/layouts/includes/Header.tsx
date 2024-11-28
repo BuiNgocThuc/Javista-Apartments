@@ -38,12 +38,12 @@ const Header = () => {
     // If the user is a RESIDENT
     if (userType === 'RESIDENT') {
       const isOwner = hasRole('OWNER')
-      const isUser = hasRole('USER')
+      const isUser = hasRole('TENANT')
 
       if (!isOwner && isUser) {
         // Case 1: User has USER role but not OWNER
         return sideBarLists.filter(
-          (sidebar) => Array.isArray(sidebar.role) && sidebar.role.includes('USER'),
+          (sidebar) => Array.isArray(sidebar.role) && sidebar.role.includes('TENANT'),
         )
       } else if (isOwner && !isUser) {
         // Case 2: User has OWNER role but not USER
@@ -55,7 +55,7 @@ const Header = () => {
         return sideBarLists.filter(
           (sidebar) =>
             Array.isArray(sidebar.role) &&
-            (sidebar.role.includes('OWNER') || sidebar.role.includes('USER')),
+            (sidebar.role.includes('OWNER') || sidebar.role.includes('TENANT')),
         )
       }
     }

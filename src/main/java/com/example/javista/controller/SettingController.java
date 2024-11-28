@@ -1,6 +1,5 @@
 package com.example.javista.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.javista.dto.request.setting.SettingPatchRequest;
@@ -12,6 +11,7 @@ import com.example.javista.service.SettingService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -31,11 +31,11 @@ public class SettingController {
 
     // Update
     @PutMapping("/{id}")
-    ApiResponse<SettingResponse>  updateSetting(@PathVariable Integer id, @RequestBody SettingUpdateRequest request) {
+    ApiResponse<SettingResponse> updateSetting(@PathVariable Integer id, @RequestBody SettingUpdateRequest request) {
         return ApiResponse.<SettingResponse>builder()
-            .message("update setting successfully!")
-            .result(settingService.updateSetting(id, request))
-            .build();
+                .message("update setting successfully!")
+                .result(settingService.updateSetting(id, request))
+                .build();
     }
 
     // Patch

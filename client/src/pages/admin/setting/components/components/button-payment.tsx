@@ -24,7 +24,7 @@ const ButtonPayment = () => {
         })
         .catch((error: any) => {
           console.error('Failed to update to Payment status:', error)
-          toast.error(error.data.detail)
+          toast.error(error.data.message)
         })
     } catch (error) {
       console.error('Failed to update to Payment status:', error)
