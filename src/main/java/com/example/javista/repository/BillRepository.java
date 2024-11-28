@@ -1,6 +1,11 @@
 package com.example.javista.repository;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,16 +22,16 @@ public interface BillRepository extends JpaRepository<Bill, Integer>, JpaSpecifi
     @Query("SELECT b FROM Bill b WHERE b.relationship = :relationship AND b.monthly = :monthly")
     Bill findByRelationshipAndMonthly(Relationship relationship, String monthly);
 
-    @Query("SELECT b FROM Bill b " +
-        "JOIN FETCH b.relationship r " +
-        "JOIN FETCH r.apartment a " +
-        "WHERE b.id = :id")
+    @Query("SELECT b FROM Bill b " + "JOIN FETCH b.relationship r " + "JOIN FETCH r.apartment a " + "WHERE b.id = :id")
     Bill findByIdAndJoinApartment(Integer id);
 
     // find all bills that have not been calculated water price
     List<Bill> findByDeletedAtIsNullAndMonthlyAndNewWaterIsNull(String monthly);
 
     List<Bill> findByDeletedAtIsNullAndMonthlyAndStatus(String monthly, BillStatus status);
+
+    @EntityGraph(attributePaths = {"relationship"})
+    Page<Bill> findAll(Specification<Bill> spec, Pageable pageable);
 
     @Query("SELECT  b.monthly, SUM(b.totalPrice) " +
         "FROM Bill b " +
