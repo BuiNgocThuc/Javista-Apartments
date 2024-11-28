@@ -1,11 +1,9 @@
 package com.example.javista.dto.response.statistics.survey;
 
-import com.example.javista.dto.response.otherAnswer.OtherAnswerResponse;
+import java.util.Set;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
