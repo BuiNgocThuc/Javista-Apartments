@@ -32,6 +32,7 @@ public enum ErrorCode {
     WATER_NOT_RECORDED(1018, "There are still bills that not have been recorded water", HttpStatus.BAD_REQUEST),
     BILL_IS_OVERDUE(1019, "Bill is overdue", HttpStatus.BAD_REQUEST),
     SURVEY_NOT_FOUND(1020, "Survey not found", HttpStatus.NOT_FOUND),
+    APARTMENT_NOT_FOUND(1021, "Apartment not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;
