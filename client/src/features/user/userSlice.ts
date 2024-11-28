@@ -118,6 +118,9 @@ const userApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags(result, error, arg, meta) {
+        return [{ type: 'Users', id: 'LIST' }]
+      },
     }),
     updateUser: builder.mutation<
       void,
@@ -165,7 +168,7 @@ export const { getQrScanInformation, getUserInformation } = userSlice.actions
 export const {
   useGetUsersQuery,
   useGetUsersInScrollQuery,
-	useLazyGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
   useGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
