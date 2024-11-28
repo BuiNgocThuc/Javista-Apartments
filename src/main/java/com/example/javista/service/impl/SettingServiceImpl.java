@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.example.javista.dto.request.setting.SettingPatchRequest;
@@ -27,6 +28,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -59,6 +61,7 @@ public class SettingServiceImpl implements SettingService {
     public SettingResponse patchSetting(Integer id, SettingPatchRequest request) {
         Setting setting = getSetting();
         settingMapper.patchRequestToEntity(setting, request);
+        log.info("Setting: {}, Request: {}", setting, request);
         return settingMapper.entityToResponse(settingRepository.save(setting));
     }
 
