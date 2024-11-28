@@ -83,8 +83,12 @@ const surveyApiSlice = apiSlice.injectEndpoints({
     }),
     getSurveyStatistics: builder.query<ISurveyStatistics, number | undefined>({
       query: (id) => ({
-        url: `surveys/${id}/statistic`,
+        url: `statistics/surveys/${id}`,
       }),
+      transformResponse(baseQueryReturnValue : {result: ISurveyStatistics}, meta, arg) {
+        const data = baseQueryReturnValue.result as ISurveyStatistics
+        return data;
+      },
     }),
     createSurvey: builder.mutation<
       ISurvey,

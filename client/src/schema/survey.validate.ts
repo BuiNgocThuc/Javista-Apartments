@@ -54,5 +54,5 @@ export interface OtherAnswer {
 export interface ISurveyStatistics {
   survey: ISurvey
   totalParticipants: number
-  questionStatistics: Question[]
+  questions: Question[]
 }
