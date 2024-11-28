@@ -208,7 +208,7 @@ const ApartmentDetailAddPeople = ({
                       </span>
                     </Label>
                     <div className="flex gap-2">
-                      {['USER', 'OWNER'].map((role) => (
+                      {['TENANT', 'OWNER'].map((role) => (
                         <Button
                           key={role}
                           type="button"

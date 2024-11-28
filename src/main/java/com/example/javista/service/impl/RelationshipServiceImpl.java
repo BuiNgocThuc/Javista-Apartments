@@ -2,9 +2,6 @@ package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
 
-import com.example.javista.exception.AppException;
-import com.example.javista.exception.ErrorCode;
-import com.example.javista.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -16,10 +13,13 @@ import com.example.javista.dto.request.relationship.RelationshipUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.relationship.RelationshipResponse;
 import com.example.javista.entity.Relationship;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.RelationshipMapper;
 import com.example.javista.repository.ApartmentRepository;
 import com.example.javista.repository.RelationshipRepository;
+import com.example.javista.repository.UserRepository;
 import com.example.javista.service.RelationshipService;
 import com.example.javista.utils.QueryUtils;
 

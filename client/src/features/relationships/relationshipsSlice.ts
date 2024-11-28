@@ -58,7 +58,11 @@ export const relationshipsSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: 'relationships',
         method: 'POST',
-        body: data,
+        body: {
+          role: data.role,
+          userId: data.userId,
+          apartmentId: data.apartmentId,
+        },
       }),
       invalidatesTags(result, error, arg, meta) {
         return [{ type: 'Relationships', id: 'LIST' }]

@@ -26,25 +26,25 @@ export const sideBarLists: SideBarProps[] = [
     label: 'Home',
     icon: <House />,
     to: ROUTES.HOME,
-    role: ['OWNER', 'USER'],
+    role: ['OWNER', 'TENANT'],
   },
   {
     label: 'Packages',
     icon: <Package />,
     to: ROUTES.PACKAGES,
-    role: ['USER'],
+    role: ['TENANT'],
   },
   {
     label: 'Surveys',
     icon: <NotebookText />,
     to: ROUTES.SURVEYS,
-    role: ['USER'],
+    role: ['TENANT'],
   },
   {
     label: 'Reports',
     icon: <Flag />,
     to: ROUTES.REPORTS,
-    role: ['USER'],
+    role: ['TENANT'],
   },
   {
     label: 'Bills',
@@ -104,7 +104,7 @@ export const sideBarLists: SideBarProps[] = [
     label: 'Ask For Support',
     icon: <MessageCircleQuestion />,
     to: ROUTES.CHAT,
-    role: ['USER'],
+    role: ['TENANT'],
   },
   {
     label: 'Setting Admin',

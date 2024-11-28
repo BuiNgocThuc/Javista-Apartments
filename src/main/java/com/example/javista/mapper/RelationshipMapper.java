@@ -16,6 +16,8 @@ public interface RelationshipMapper {
     // mapping dto creation request to entity
     @Mapping(target = "apartment", ignore = true)
     @Mapping(target = "user", ignore = true)
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "apartmentId", target = "apartment.id")
     Relationship creationRequestToEntity(RelationshipCreationRequest request);
 
     // mapping dto update request to entity
