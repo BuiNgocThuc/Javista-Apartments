@@ -95,7 +95,7 @@ export const billSlice = apiSlice.injectEndpoints({
       {
         query: (data) => ({
           url: `bills/update-water-readings`,
-          method: 'PATCH',
+          method: 'PUT',
           body: data.body,
         }),
         invalidatesTags: (result, error) => [{ type: 'Bills' }],
