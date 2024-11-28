@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const StatisticSchema = z.object({
 	month: z.string(),
-	totalRevenue: z.number(),
+	revenue: z.number(),
 })
 export const StatisticQuerySchema = z
   .object({

@@ -22,11 +22,11 @@ const StatisticsRevenue = ({ data, chartConfigData }: StatisticsRevenueProps) =>
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-						tickFormatter={(value) => chartConfig['totalRevenue']?.label || value}
+						tickFormatter={(value) => chartConfig['revenue']?.label || value}
           />
           <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
           <Bar
-            dataKey="totalRevenue"
+            dataKey="revenue"
             strokeWidth={2}
             radius={8}
             activeIndex={2}

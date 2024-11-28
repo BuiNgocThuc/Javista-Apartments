@@ -103,8 +103,11 @@ export const billSlice = apiSlice.injectEndpoints({
     ),
     statisticsRevenue: builder.query<Statistic[], StatisticQuery>({
       query: (params) => ({
-        url: `bills/statistics-revenue?startDate=${params.startDate}&endDate=${params.endDate}`,
+        url: `statistics/revenue?startMonth=${params.startDate}&endMonth=${params.endDate}`,
       }),
+      transformResponse(baseQueryReturnValue: { result?: { monthlyRevenueStatistics: Statistic[] } }, meta, arg) {
+        return baseQueryReturnValue.result?.monthlyRevenueStatistics || []
+      },
     }),
   }),
 })

@@ -7,20 +7,34 @@ import { useStatisticsRevenueQuery } from '@/features/bill/billSlice'
 import { useDebounceCallback } from 'usehooks-ts'
 import { Statistic } from '@/schema/statistic.validate'
 import { ChartConfig } from '@/components/ui/chart'
+import { validateDates } from '@/helpers/error-handling'
+import { toast } from 'sonner'
 
 const Index = () => {
   const currentYear = new Date().getFullYear()
   const [startDate, setStartDate] = useState<string>(`${currentYear}-01`)
   const [endDate, setEndDate] = useState<string>(`${currentYear}-12`)
-  const debounceStartDate = useDebounceCallback(setStartDate, 500)
-  const debounceEndDate = useDebounceCallback(setEndDate, 500)
+  const debounceStartDate = useDebounceCallback((value: string) => {
+    if(validateDates(value, endDate)) {
+      setStartDate(value)
+    }else {
+      toast.error('Start date must be less than end date')
+    }
+  }, 500)
+  const debounceEndDate = useDebounceCallback((value: string) => {
+    if(validateDates(startDate, value)) {
+      setEndDate(value)
+    }else {
+      toast.error('End date must be greater than start date')
+    }
+  }, 500)
   const { data, isLoading, isError, isFetching } = useStatisticsRevenueQuery({ startDate, endDate })
 
   const transformChartData = (data?: Statistic[]) => {
     return data?.map((item, index) => {
       return {
         month: item.month,
-        totalRevenue: item.totalRevenue,
+        revenue: item.revenue,
         fill: `hsl(var(--chart-${index + 1}))`,
       }
     })
@@ -36,9 +50,6 @@ const Index = () => {
       }, {} as ChartConfig) || ({} as ChartConfig)
     )
   }
-
-  console.log(startDate, endDate)
-
   return (
     <div className="w-full sm:h-screen h-full flex flex-col bg-gray-100">
       <Breadcrumb paths={[{ label: 'statistics', to: '/admin/statistics' }]} />
