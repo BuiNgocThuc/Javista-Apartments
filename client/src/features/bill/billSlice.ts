@@ -1,6 +1,6 @@
 import { IBill, IUpdateWaterReading } from '@/schema/bill.validate'
 import { apiSlice } from '../api/apiSlice'
-import { Statistic } from '@/schema/statistic.validate'
+import { Statistic, StatisticQuery } from '@/schema/statistic.validate'
 
 export const billSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -101,7 +101,7 @@ export const billSlice = apiSlice.injectEndpoints({
         invalidatesTags: (result, error) => [{ type: 'Bills' }],
       },
     ),
-    statisticsRevenue: builder.query<Statistic[], { startDate: string; endDate: string }>({
+    statisticsRevenue: builder.query<Statistic[], StatisticQuery>({
       query: (params) => ({
         url: `bills/statistics-revenue?startDate=${params.startDate}&endDate=${params.endDate}`,
       }),

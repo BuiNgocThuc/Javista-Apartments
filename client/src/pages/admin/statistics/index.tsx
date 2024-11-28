@@ -9,8 +9,9 @@ import { Statistic } from '@/schema/statistic.validate'
 import { ChartConfig } from '@/components/ui/chart'
 
 const Index = () => {
-  const [startDate, setStartDate] = useState<string>('2024-01')
-  const [endDate, setEndDate] = useState<string>('2025-12')
+  const currentYear = new Date().getFullYear()
+  const [startDate, setStartDate] = useState<string>(`${currentYear}-01`)
+  const [endDate, setEndDate] = useState<string>(`${currentYear}-12`)
   const debounceStartDate = useDebounceCallback(setStartDate, 500)
   const debounceEndDate = useDebounceCallback(setEndDate, 500)
   const { data, isLoading, isError, isFetching } = useStatisticsRevenueQuery({ startDate, endDate })
@@ -36,7 +37,7 @@ const Index = () => {
     )
   }
 
-	console.log(startDate, endDate)
+  console.log(startDate, endDate)
 
   return (
     <div className="w-full sm:h-screen h-full flex flex-col bg-gray-100">

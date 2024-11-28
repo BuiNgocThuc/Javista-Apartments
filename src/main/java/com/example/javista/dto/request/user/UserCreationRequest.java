@@ -22,12 +22,6 @@ public class UserCreationRequest {
     @NotNull
     String username;
 
-    @Size(min = 8, message = "Password must be at least 8 characters")
-    @NotNull
-    String password;
-
-    String avatar;
-
     @NotNull
     Boolean isFirstLogin;
 

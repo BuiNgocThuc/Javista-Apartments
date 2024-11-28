@@ -43,6 +43,7 @@ cloudinary:
         apiKey: "723427193596933"
         secretKey: "NJufPii1Wh2R9SQsR3s71SSDbRc"
         secure: true
+        defaultImage: "https://res.cloudinary.com/dloeqfbwm/image/upload/v1731292748/zity/assets/default_avt.jpg"
 
 jwt:
         signerKey: "gKzxk9xGfL9xFiyxQ7ng+CLmK2POHD8Z3LkgqMDlx3AQcjZ6a3CcdGeLRSF2HJak"

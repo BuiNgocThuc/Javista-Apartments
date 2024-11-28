@@ -30,6 +30,7 @@ import com.example.javista.service.media.CloudinaryService;
 import com.example.javista.service.media.EmailService;
 import com.example.javista.service.media.SMSService;
 import com.example.javista.utils.QueryUtils;
+import com.example.javista.utils.RandomPassword;
 import com.example.javista.utils.SecurityUtils;
 
 import lombok.AccessLevel;
@@ -77,10 +78,10 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.USERNAME_EXISTED);
         }
         User user = userMapper.creationRequestToEntity(request);
-
+        String randomPassword = RandomPassword.generateRandomPassword(8);
         // Encrypt the password
-        user.setPassword(securityUtils.encryptPassword(request.getPassword()));
-
+        user.setPassword(securityUtils.encryptPassword(randomPassword));
+        user.setAvatar("${cloudinary.defaultAvatar}");
         // Save the user
         user = userRepository.save(user);
 
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
         try {
             Map<String, Object> props = new HashMap<>();
             props.put("username", user.getUsername());
-            props.put("password", request.getPassword());
+            props.put("password", randomPassword);
             props.put("fullName", user.getFullName());
 
             MailSendRequest mailRequest = MailSendRequest.builder()
