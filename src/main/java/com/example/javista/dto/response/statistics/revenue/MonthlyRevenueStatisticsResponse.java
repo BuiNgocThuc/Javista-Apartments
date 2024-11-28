@@ -1,4 +1,4 @@
-package com.example.javista.dto.response.statistics;
+package com.example.javista.dto.response.statistics.revenue;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

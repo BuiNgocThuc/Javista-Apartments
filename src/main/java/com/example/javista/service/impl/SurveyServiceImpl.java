@@ -1,8 +1,9 @@
 package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -102,31 +103,37 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public Void createFullSurvey(FullSurveyCreationRequest request) {
-        // add survey first
-        Survey survey = surveyMapper.fullCreationRequestToEntity(request);
-        survey.setUser(userRepository
+        // Find the user first
+        User user = userRepository
                 .findById(request.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        // Create survey and set user
+        Survey survey = surveyMapper.fullCreationRequestToEntity(request);
+        survey.setUser(user);
+
+        // Prepare lists to store
+        List<Question> questions = new ArrayList<>();
+
+        // Process questions and answers
+        for (QuestionRequest questionRequest : request.getQuestions()) {
+            Question question = surveyMapper.questionDtoToEntity(questionRequest);
+            question.setSurvey(survey); // Set survey reference
+
+            List<Answer> answers = new ArrayList<>();
+            for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
+                Answer answer = surveyMapper.answerDtoToEntity(answerRequest);
+                answer.setQuestion(question); // Set question reference
+                answers.add(answer);
+            }
+            question.setAnswers(new HashSet<>(answers));
+            questions.add(question);
+        }
+
+        survey.setQuestions(new HashSet<>(questions));
+
+        // Save the survey
         surveyRepository.save(survey);
-
-        // add questions
-        List<Question> questions = surveyMapper.mapQuestions(request.getQuestions());
-        AtomicInteger idx = new AtomicInteger();
-        questions.forEach(question -> {
-            question.setSurvey(survey);
-            // save question
-            questionRepository.save(question);
-
-            // add answers
-            List<Answer> answers = surveyMapper.mapAnswers(
-                    request.getQuestions().get(idx.getAndIncrement()).getAnswers());
-            answers.forEach(answer -> {
-                answer.setQuestion(question);
-                // save answer
-                answerRepository.save(answer);
-            });
-        });
 
         return null;
     }
