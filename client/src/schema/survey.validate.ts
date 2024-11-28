@@ -8,7 +8,7 @@ export const SurveySchema = z
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
     totalQuestions: z.number().optional(),
-    userCreateId: z.number().optional(),
+    userId: z.number().optional(),
     questions: z.array(QuestionSchema), // Assuming questions can be any structure, adjust if necessary
     userCreate: z.any().nullable(), // Adjust the type based on the actual structure
   })

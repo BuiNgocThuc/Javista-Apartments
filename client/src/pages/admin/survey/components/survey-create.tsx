@@ -42,7 +42,7 @@ const SurveyCreate = () => {
           ],
         },
       ],
-      userCreateId: user?.id,
+      userId: user?.id,
       startDate: new Date(),
       endDate: new Date(),
     },

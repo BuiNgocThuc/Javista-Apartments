@@ -67,7 +67,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
         const survey = surveyResult.data as ISurvey
         // Fetch questions using the survey ID
         const questionsResult = await fetchWithBQ(
-          `/questions?SurveyId=eq:${survey.id}&includes=Answers`,
+          `/questions?Survey_Id=eq:${survey.id}`,
         )
         if (questionsResult.error) return { error: questionsResult.error as FetchBaseQueryError }
         const questions = (questionsResult.data as ResponseDataType<IQuestion>).data

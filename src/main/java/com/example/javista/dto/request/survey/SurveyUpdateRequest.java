@@ -1,5 +1,8 @@
 package com.example.javista.dto.request.survey;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,4 +17,10 @@ public class SurveyUpdateRequest {
     Integer totalQuestions;
 
     Integer userId;
+
+    LocalDateTime startDate;
+
+    LocalDateTime endDate;
+
+    List<QuestionRequest> questions;
 }
