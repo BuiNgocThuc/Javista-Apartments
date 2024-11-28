@@ -29,7 +29,6 @@ const Index = () => {
     page: currentPage,
     Relationship_UserId: user?.id,
   })
-  console.log(bills)
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }

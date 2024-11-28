@@ -19,7 +19,6 @@ const Index = () => {
   const { data: packages } = useGetPackagesQuery({
     page: currentPage,
     userId: user?.id,
-    includes: ['user'],
   })
 
   // Filter packages based on the active filter

@@ -28,7 +28,6 @@ const packageApiSlice = apiSlice.injectEndpoints({
       {
         page?: number
         pageSize?: number
-        includes?: string[]
         sort?: string[]
       } & Partial<IPackage>
     >({
@@ -41,13 +40,10 @@ const packageApiSlice = apiSlice.injectEndpoints({
           url += `&isReceive=eq:${params.isReceive}`
         }
         if (params?.userId) {
-          url += `&UserId=eq:${params.userId}`
+          url += `&User_Id=eq:${params.userId}`
         }
         if (params?.pageSize) {
           url += `&pageSize=${params.pageSize}`
-        }
-        if (params?.includes && params?.includes.length > 0) {
-          url += `&includes=${params.includes.join(',')}`
         }
         if (params?.sort && params?.sort.length > 0) {
           url += `&sort=${params.sort.join(',')}`
@@ -67,12 +63,9 @@ const packageApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Packages', id: 'LIST' }],
     }),
-    getPackage: builder.query<IPackage, { id?: number; includes?: string[] }>({
+    getPackage: builder.query<IPackage, { id?: number }>({
       query: (params) => {
         let url = `items/${params.id}`
-        if (params.includes) {
-          url += `?includes=${params.includes.join(',')}`
-        }
         return {
           url: url,
         }
@@ -107,10 +100,7 @@ const packageApiSlice = apiSlice.injectEndpoints({
         { type: 'Packages', id: 'LIST' },
       ],
     }),
-    createPackage: builder.mutation<
-      IPackage,
-      Pick<IPackage, 'description' | 'userId'>
-    >({
+    createPackage: builder.mutation<IPackage, Pick<IPackage, 'description' | 'userId'>>({
       query: (data) => ({
         url: 'items',
         method: 'POST',

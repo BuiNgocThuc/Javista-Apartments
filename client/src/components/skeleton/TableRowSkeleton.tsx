@@ -1,10 +1,9 @@
 import { TableCell } from '../ui/table'
-import { Skeleton } from '../ui/skeleton'
 
 const TableRowSkeleton = () => {
   return (
     <TableCell>
-      <Skeleton className="h-9 w-full" />
+      <p className="h-9 w-full bg-gray-100 animate-pulse"></p>
     </TableCell>
   )
 }
