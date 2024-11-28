@@ -50,7 +50,7 @@ public class QueryUtils {
             int page = (int) getCurrentPageMethod.invoke(queryDto);
 
             // Get the `getSize` method and invoke it
-            Method getSizeMethod = queryDto.getClass().getMethod("getSize");
+            Method getSizeMethod = queryDto.getClass().getMethod("getPageSize");
             int size = (int) getSizeMethod.invoke(queryDto);
 
             // Get the `getSort` method and invoke it

@@ -23,9 +23,11 @@ function App() {
         await getCurrentUser()
           .unwrap()
           .then(async (payloadUser) => {
+						console.log(payloadUser)
             await getRelationships({ userId: payloadUser.id, page: 1 })
               .unwrap()
               .then((payload) => {
+								console.log(payload)
                 dispatch(getUserInformation({ ...payloadUser, relationships: payload.data }))
               })
           })
