@@ -16,6 +16,9 @@ export const apartmentSlice = apiSlice.injectEndpoints({
         if (params.pageSize) {
           url += `&PageSize=${params.pageSize}`
         }
+        if(params.status){
+          url += `&status=eq:${params.status}`
+        }
         if (params.id) {
           url += `&id=like:${params.id}`
         }

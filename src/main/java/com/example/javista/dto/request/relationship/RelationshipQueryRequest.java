@@ -14,7 +14,7 @@ public class RelationshipQueryRequest extends PageRequest {
 
     String role;
 
-    String apartmentId;
+    String apartment_Id;
 
     String user_Id;
 
