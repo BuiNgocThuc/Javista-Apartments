@@ -7,6 +7,7 @@ import java.util.Map;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.criteria.Join;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,7 @@ import com.example.javista.utils.SecurityUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +53,10 @@ public class UserServiceImpl implements UserService {
     SMSService smsService;
 
     SecurityUtils securityUtils;
+
+    @Value("${app.default.resident.avatar}")
+    @NonFinal
+    String defaultAvatar;
 
     @Override
     public PageResponse<UserResponse> getUsers(UserQueryRequest query) {
@@ -81,7 +87,8 @@ public class UserServiceImpl implements UserService {
         String randomPassword = RandomPassword.generateRandomPassword(8);
         // Encrypt the password
         user.setPassword(securityUtils.encryptPassword(randomPassword));
-        user.setAvatar("${cloudinary.defaultAvatar}");
+        user.setAvatar(defaultAvatar);
+        user.setIsFirstLogin(true);
         // Save the user
         user = userRepository.save(user);
 
