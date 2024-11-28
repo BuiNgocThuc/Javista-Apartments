@@ -1,5 +1,6 @@
 package com.example.javista.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.javista.dto.request.setting.SettingPatchRequest;
@@ -12,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/settings")
@@ -29,14 +31,20 @@ public class SettingController {
 
     // Update
     @PutMapping("/{id}")
-    SettingResponse updateSetting(@PathVariable Integer id, @RequestBody SettingUpdateRequest request) {
-        return settingService.updateSetting(id, request);
+    ApiResponse<SettingResponse>  updateSetting(@PathVariable Integer id, @RequestBody SettingUpdateRequest request) {
+        return ApiResponse.<SettingResponse>builder()
+            .message("update setting successfully!")
+            .result(settingService.updateSetting(id, request))
+            .build();
     }
 
     // Patch
     @PatchMapping("/{id}")
-    void patchSetting(@PathVariable Integer id, @RequestBody SettingPatchRequest request) {
-        settingService.patchSetting(id, request);
+    ApiResponse<SettingResponse> patchSetting(@PathVariable Integer id, @RequestBody SettingPatchRequest request) {
+        return ApiResponse.<SettingResponse>builder()
+                .message("patch setting successfully!")
+                .result(settingService.patchSetting(id, request))
+                .build();
     }
 
     // change status to Prepayment

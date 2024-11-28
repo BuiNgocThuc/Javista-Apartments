@@ -51,4 +51,4 @@ dist
 dist-ssr
 *.local
 
-application.yaml
+*.yaml

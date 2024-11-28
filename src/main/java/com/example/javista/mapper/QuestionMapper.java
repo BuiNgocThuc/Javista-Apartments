@@ -1,5 +1,8 @@
 package com.example.javista.mapper;
 
+import com.example.javista.dto.response.answer.AnswerResponse;
+import com.example.javista.dto.response.otherAnswer.OtherAnswerResponse;
+import com.example.javista.entity.Answer;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,6 +13,9 @@ import com.example.javista.dto.request.question.QuestionPatchRequest;
 import com.example.javista.dto.request.question.QuestionUpdateRequest;
 import com.example.javista.dto.response.question.QuestionResponse;
 import com.example.javista.entity.Question;
+
+import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
@@ -27,5 +33,15 @@ public interface QuestionMapper {
 
     // mapping entity to dto response
     @Mapping(source = "survey.id", target = "surveyId")
+    @Mapping(source = "answers", target = "answers")
+    @Mapping(source = "otherAnswers", target = "otherAnswers")
     QuestionResponse entityToResponse(Question question);
+
+    AnswerResponse entityAnswerToResponse(Answer answer);
+
+    OtherAnswerResponse entityOtherAnswerToResponse(Answer otherAnswer);
+
+    List<AnswerResponse> entityAnswersToResponses(Set<Answer> answers);
+
+    List<OtherAnswerResponse> entityOtherAnswersToResponses(Set<Answer> otherAnswers);
 }

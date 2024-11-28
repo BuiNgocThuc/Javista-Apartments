@@ -1,7 +1,10 @@
 package com.example.javista.dto.response.question;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.example.javista.dto.response.answer.AnswerResponse;
+import com.example.javista.dto.response.otherAnswer.OtherAnswerResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.*;
@@ -24,4 +27,8 @@ public class QuestionResponse {
     LocalDateTime updatedAt;
 
     Integer surveyId;
+
+    List<AnswerResponse> answers = List.of();
+
+    List<OtherAnswerResponse> otherAnswers = List.of();
 }
