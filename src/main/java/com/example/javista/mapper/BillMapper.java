@@ -26,6 +26,8 @@ public interface BillMapper {
     void patchRequestToEntity(@MappingTarget Bill bill, BillPatchRequest request);
 
     // mapping entity to response
-    @Mapping(source = "relationship.id", target = "relationshipId")
+    //    @Mapping(source = "relationship.id", target = "relationshipId")
+    @Mapping(source = "relationship.apartment.id", target = "relationship.apartmentId")
+    @Mapping(source = "relationship.user.id", target = "relationship.userId")
     BillResponse entityToResponse(Bill bill);
 }
