@@ -15,12 +15,18 @@ import {
 import FunctionBoxList from './components/function-box-list'
 import ColumnDisplayInformation from './components/column-display-information'
 import ColumnDisplayTable from './components/column-display-table'
-import TableRowSkeleton from '@/components/skeleton/TableRowSkeleton'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useLazyGetBillsQuery } from '@/features/bill/billSlice'
+import { useGetSettingsQuery } from '@/features/setting/settingSlice'
+import IsBillOverdue from '../isBillOverdue'
 const Index = () => {
   useDocumentTitle('Home')
   const date = new Date() // Current date
   const [getApartment, { isLoading }] = useLazyGetApartmentQuery()
+  const [getBills, { isLoading: isLoadingBills }] = useLazyGetBillsQuery()
+  const { data: setting, isLoading: isLoadingSetting } = useGetSettingsQuery()
   const [apartmentData, setApartmentData] = useState<ApartmentFormSchema | undefined>(undefined)
+  const [isOverdue, setIsOverdue] = useState<boolean>(false)
   const [houses, setHouses] = useState<string[]>([])
   const [selectedHouse, setSelectedHouse] = useState<string>(houses[0])
   const user = useAppSelector((state) => state.userReducer.user)
@@ -42,6 +48,31 @@ const Index = () => {
     }
   }, [user])
   useEffect(() => {
+    const handleGetBills = async () => {
+      if (user) {
+        try {
+          const payload = await getBills({
+            Relationship_UserId: user.id,
+            page: 1,
+          }).unwrap()
+          const hasUnpaidBills = payload.data.some((bill) => bill.status === 'UNPAID')
+          const isSystemOverdue = setting?.systemStatus === 'OVERDUE'
+
+          console.log('Has Unpaid Bills:', hasUnpaidBills)
+          console.log('Is System Overdue:', isSystemOverdue)
+
+          if (hasUnpaidBills && isSystemOverdue) {
+            setIsOverdue(true)
+          }
+        } catch (error) {
+          console.error('Error fetching bills:', error)
+        }
+      }
+    }
+
+    handleGetBills()
+  }, [user, setting])
+  useEffect(() => {
     const handleGetApartment = async () => {
       if (user && selectedHouse) {
         await getApartment({
@@ -49,7 +80,6 @@ const Index = () => {
         })
           .unwrap()
           .then((payload) => {
-            console.log(payload)
             setApartmentData(payload)
           })
           .catch(() => {})
@@ -57,7 +87,6 @@ const Index = () => {
     }
     handleGetApartment()
   }, [user, selectedHouse])
-
 
   return (
     <>
@@ -80,13 +109,13 @@ const Index = () => {
         </div>
         <div className="size-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="w-full lg:col-span-1 lg:row-span-3 lg:row-start-1 lg:col-start-1 bg-white rounded-md border border-zinc-200 p-4 flex">
-            {isLoading ? (
+            {isLoading && isLoadingBills && isLoadingSetting ? (
               <div className="size-full bg-gray-100 animate-pulse">
-                <div className="w-full h-9 bg-gray-200 rounded-md mb-4"></div>
-                <div className="w-full h-9 bg-gray-200 rounded-md mb-4"></div>
-                <div className="w-full h-9 bg-gray-200 rounded-md mb-4"></div>
-                <div className="w-full h-9 bg-gray-200 rounded-md mb-4"></div>
-                <div className="w-full h-9 bg-gray-200 rounded-md mb-4"></div>
+                <Skeleton className="w-full h-10" />
+                <Skeleton className="w-full h-10" />
+                <Skeleton className="w-full h-10" />
+                <Skeleton className="w-full h-10" />
+                <Skeleton className="w-full h-10" />
               </div>
             ) : (
               <ColumnDisplayInformation
@@ -97,12 +126,12 @@ const Index = () => {
             )}
           </div>
           <div className="w-full lg:col-span-3 lg:row-span-3 lg:row-start-1 lg:col-start-2 bg-white rounded-md border border-zinc-200 p-4 flex">
-            {isLoading ? (
+            {isLoading && isLoadingBills && isLoadingSetting ? (
               <div className="size-full bg-gray-100 animate-pulse">
-                <TableRowSkeleton />
-                <TableRowSkeleton />
-                <TableRowSkeleton />
-                <TableRowSkeleton />
+                <Skeleton className="w-full h-10 rounded-none" />
+                <Skeleton className="w-full h-10 rounded-none" />
+                <Skeleton className="w-full h-10 rounded-none" />
+                <Skeleton className="w-full h-10 rounded-none" />
               </div>
             ) : (
               <ColumnDisplayTable apartmentData={apartmentData} />
@@ -118,6 +147,7 @@ const Index = () => {
         </div>
       </div>
       {user && user.isFirstLogin && <FirstLogin />}
+      {user && isOverdue && <IsBillOverdue />}
     </>
   )
 }

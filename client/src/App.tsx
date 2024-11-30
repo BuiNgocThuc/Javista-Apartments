@@ -4,12 +4,12 @@ import 'react-day-picker/dist/style.css'
 import { useEffect } from 'react'
 import Cookies from 'universal-cookie'
 import { getUserInformation, useLazyGetCurrentUserQuery } from './features/user/userSlice'
-import { useAppDispath } from './store'
+import { useAppDispatch } from './store'
 import { userLoggedIn } from './features/auth/authSlice'
 import { useLazyGetRelationshipsQuery } from './features/relationships/relationshipsSlice'
 function App() {
   const cookie = new Cookies(null, { path: '/' })
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const [getCurrentUser, { data: user }] = useLazyGetCurrentUserQuery()
   const [getRelationships] = useLazyGetRelationshipsQuery()
   useEffect(() => {

@@ -21,7 +21,7 @@ import { useDocumentTitle } from 'usehooks-ts'
 import Logo from '@/assets/logo.svg'
 import { UserLoginSchema } from '@/schema/user.validate'
 import Cookies from 'universal-cookie'
-import { useAppDispath } from '@/store'
+import { useAppDispatch } from '@/store'
 import { getUserInformation, useLazyGetCurrentUserQuery } from '@/features/user/userSlice'
 import { useLazyGetRelationshipsQuery } from '@/features/relationships/relationshipsSlice'
 
@@ -31,7 +31,7 @@ export default function Index() {
   const cookie = new Cookies(null, { path: '/' })
   const [isShowing, setIsShowing] = useState<boolean>(false)
 
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const [Login, { isLoading }] = useLoginMutation()
 
   const handleShowPassword = () => {

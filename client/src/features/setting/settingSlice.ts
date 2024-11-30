@@ -1,5 +1,24 @@
 import { ISetting } from '@/schema/setting.validate'
 import { apiSlice } from '../api/apiSlice'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+interface SettingState {
+  setting?: ISetting
+}
+
+const initialState: SettingState = {
+  setting: undefined,
+}
+
+const settingSlice = createSlice({
+  name: 'setting',
+  initialState,
+  reducers: {
+    getSetting: (state, action: PayloadAction<ISetting>) => {
+      state.setting = action.payload
+    },
+  },
+})
 
 const settingApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -48,11 +67,14 @@ const settingApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
       invalidatesTags(result, error, arg, meta) {
-        return [{ type: 'Settings' }, { type: 'Apartments',id: "LIST" }]
+        return [{ type: 'Settings' }, { type: 'Apartments', id: 'LIST' }]
       },
     }),
   }),
 })
+
+export default settingSlice.reducer
+export const { getSetting } = settingSlice.actions
 
 export const {
   useGetSettingsQuery,

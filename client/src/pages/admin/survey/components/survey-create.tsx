@@ -15,7 +15,7 @@ import {
   useCreateFullSurveyMutation,
 } from '@/features/survey/surveySlice'
 import { SurveySchema } from '@/schema/survey.validate'
-import { useAppDispath, useAppSelector } from '@/store'
+import { useAppDispatch, useAppSelector } from '@/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronLeft, Loader } from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -24,7 +24,7 @@ import { z } from 'zod'
 import QuestionItem from './question-item'
 
 const SurveyCreate = () => {
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.userReducer.user)
   const [createFullSurvey, { isLoading }] = useCreateFullSurveyMutation()
 

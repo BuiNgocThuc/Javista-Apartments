@@ -31,7 +31,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
         pageSize?: number
         includes?: string[]
         sort?: string[]
-      }
+      } & Partial<ISurvey>
     >({
       query: (params = { page: 1 }) => {
         let url = `surveys?page=${params.page}`

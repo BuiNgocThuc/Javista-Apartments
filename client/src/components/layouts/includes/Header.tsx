@@ -11,7 +11,7 @@ import Logo from '@/assets/logo.svg'
 import LogoMobile from '@/assets/logoMobile.svg'
 import { ApartmentUserRole } from '@/enums'
 import { useMemo, useState } from 'react'
-import { useAppDispath, useAppSelector } from '@/store'
+import { useAppDispatch, useAppSelector } from '@/store'
 import { ROUTES } from '@/configs/endpoint'
 import Cookies from 'universal-cookie'
 import { userLoggedOut } from '@/features/auth/authSlice'
@@ -23,7 +23,7 @@ const Header = () => {
   const navigate = useNavigate()
   const cookies = new Cookies(null, { path: '/' })
   const user = useAppSelector((state) => state.userReducer.user)
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const [panelRightOpen, setPanelRightOpen] = useState<boolean>(false)
 
   const filteredSidebars = useMemo(() => {

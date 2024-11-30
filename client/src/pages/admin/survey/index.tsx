@@ -2,7 +2,7 @@ import BreadCrumb from '@/components/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createNewSurvey, useGetSurverysQuery } from '@/features/survey/surveySlice'
-import { RootState, useAppDispath } from '@/store'
+import { RootState, useAppDispatch } from '@/store'
 import { Filter, Search } from 'lucide-react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -19,7 +19,7 @@ const Index = () => {
   useDocumentTitle('Survey')
   const [pageSize, setPageSize] = useState<number>(10)
   const params = useParams()
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const isCreateNewSurvey = useSelector((state: RootState) => state.surveyReducer.isCreateNewSurvey)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { data: surveys, isLoading, isFetching } = useGetSurverysQuery({ page: currentPage })
