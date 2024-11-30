@@ -2,6 +2,7 @@ package com.example.javista.dto.response.relationship;
 
 import java.time.LocalDateTime;
 
+import com.example.javista.dto.response.apartment.ApartmentResponse;
 import com.example.javista.dto.response.user.UserResponse;
 import com.example.javista.enums.RelationshipRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,4 +31,6 @@ public class RelationshipResponse {
     String apartmentId;
 
     UserResponse user;
+
+    ApartmentResponse apartment;
 }

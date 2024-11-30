@@ -1,7 +1,10 @@
 import { useDocumentTitle } from 'usehooks-ts'
 
 import { useAppSelector } from '@/store'
-import { useLazyGetApartmentQuery } from '@/features/apartment/apartmentSlice'
+import {
+  useLazyGetApartmentQuery,
+  useLazyGetApartmentsQuery,
+} from '@/features/apartment/apartmentSlice'
 import { useEffect, useState } from 'react'
 import { ApartmentFormSchema } from '@/schema/apartment.validate'
 import FirstLogin from '../firstLogin'
@@ -19,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useLazyGetBillsQuery } from '@/features/bill/billSlice'
 import { useGetSettingsQuery } from '@/features/setting/settingSlice'
 import IsBillOverdue from '../isBillOverdue'
+import IsHouseDisrupted from '../isHouseDisrupted'
 const Index = () => {
   useDocumentTitle('Home')
   const date = new Date() // Current date
@@ -27,6 +31,7 @@ const Index = () => {
   const { data: setting, isLoading: isLoadingSetting } = useGetSettingsQuery()
   const [apartmentData, setApartmentData] = useState<ApartmentFormSchema | undefined>(undefined)
   const [isOverdue, setIsOverdue] = useState<boolean>(false)
+  const [isHouseDisrupted, setIsHouseDisrupted] = useState<boolean>(false)
   const [houses, setHouses] = useState<string[]>([])
   const [selectedHouse, setSelectedHouse] = useState<string>(houses[0])
   const user = useAppSelector((state) => state.userReducer.user)
@@ -39,6 +44,12 @@ const Index = () => {
   useEffect(() => {
     if (user) {
       const housesList = user.relationships?.map((item) => item.apartmentId) as string[]
+      const isHouseDisrupted = user.relationships?.some(
+        (item) => item.apartment?.status === 'DISRUPTION',
+      )
+      if (isHouseDisrupted) {
+        setIsHouseDisrupted(true)
+      }
       const housesSet = new Set(housesList)
       setHouses([...housesSet])
 
@@ -69,7 +80,6 @@ const Index = () => {
         }
       }
     }
-
     handleGetBills()
   }, [user, setting])
   useEffect(() => {
@@ -148,6 +158,7 @@ const Index = () => {
       </div>
       {user && user.isFirstLogin && <FirstLogin />}
       {user && isOverdue && <IsBillOverdue />}
+      {user && isHouseDisrupted && <IsHouseDisrupted />}
     </>
   )
 }

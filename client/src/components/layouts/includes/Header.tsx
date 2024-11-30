@@ -71,7 +71,6 @@ const Header = () => {
 
   const handleLogout = () => {
     cookies.remove('accessToken')
-    cookies.remove('refreshToken')
     dispatch(userLoggedOut())
     navigate('/login', { replace: true })
   }

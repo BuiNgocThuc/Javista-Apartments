@@ -31,6 +31,7 @@ public interface RelationshipMapper {
 
     // mapping entity to dto response
     @Mapping(source = "apartment.id", target = "apartmentId")
+    @Mapping(source = "apartment", target = "apartment")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user", target = "user")
     RelationshipResponse entityToResponse(Relationship relationship);
