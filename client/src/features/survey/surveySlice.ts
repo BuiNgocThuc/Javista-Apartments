@@ -31,7 +31,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
         pageSize?: number
         includes?: string[]
         sort?: string[]
-      }
+      } & Partial<ISurvey>
     >({
       query: (params = { page: 1 }) => {
         let url = `surveys?page=${params.page}`
@@ -51,7 +51,7 @@ const surveyApiSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Surveys' as const,
                 id,
               })),
@@ -67,10 +67,10 @@ const surveyApiSlice = apiSlice.injectEndpoints({
         const survey = surveyResult.data as ISurvey
         // Fetch questions using the survey ID
         const questionsResult = await fetchWithBQ(
-          `/questions?SurveyId=eq:${survey.id}&includes=Answers`,
+          `/questions?Survey_Id=eq:${survey.id}`,
         )
         if (questionsResult.error) return { error: questionsResult.error as FetchBaseQueryError }
-        const questions = (questionsResult.data as ResponseDataType<IQuestion>).contents
+        const questions = (questionsResult.data as ResponseDataType<IQuestion>).data
         // Combine survey data with questions and return the combined result
         return {
           data: {
@@ -83,8 +83,12 @@ const surveyApiSlice = apiSlice.injectEndpoints({
     }),
     getSurveyStatistics: builder.query<ISurveyStatistics, number | undefined>({
       query: (id) => ({
-        url: `surveys/${id}/statistic`,
+        url: `statistics/surveys/${id}`,
       }),
+      transformResponse(baseQueryReturnValue : {result: ISurveyStatistics}, meta, arg) {
+        const data = baseQueryReturnValue.result as ISurveyStatistics
+        return data;
+      },
     }),
     createSurvey: builder.mutation<
       ISurvey,

@@ -21,11 +21,9 @@ import { useDocumentTitle } from 'usehooks-ts'
 import Logo from '@/assets/logo.svg'
 import { UserLoginSchema } from '@/schema/user.validate'
 import Cookies from 'universal-cookie'
-import { useAppDispath } from '@/store'
-import {
-  getUserInformation,
-  useLazyGetCurrentUserQuery,
-} from '@/features/user/userSlice'
+import { useAppDispatch } from '@/store'
+import { getUserInformation, useLazyGetCurrentUserQuery } from '@/features/user/userSlice'
+import { useLazyGetRelationshipsQuery } from '@/features/relationships/relationshipsSlice'
 
 export default function Index() {
   useDocumentTitle('Login')
@@ -33,14 +31,14 @@ export default function Index() {
   const cookie = new Cookies(null, { path: '/' })
   const [isShowing, setIsShowing] = useState<boolean>(false)
 
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const [Login, { isLoading }] = useLoginMutation()
 
   const handleShowPassword = () => {
     setIsShowing(!isShowing)
   }
-  const [getCurrentUser, { isLoading: isLoadingCurrentUser }] =
-    useLazyGetCurrentUserQuery()
+  const [getCurrentUser, { isLoading: isLoadingCurrentUser }] = useLazyGetCurrentUserQuery()
+  const [getRelationships] = useLazyGetRelationshipsQuery()
   const form = useForm<z.infer<typeof UserLoginSchema>>({
     resolver: zodResolver(UserLoginSchema),
     defaultValues: {
@@ -53,32 +51,25 @@ export default function Index() {
     await Login({ body: data })
       .unwrap()
       .then(async (res) => {
-        dispatch(userLoggedIn(res))
+        console.log(res)
+        dispatch(userLoggedIn({ token: res.result.token }))
         await getCurrentUser()
           .unwrap()
-          .then((payload) => {
-            dispatch(getUserInformation(payload))
-            if (payload.userType === 'ADMIN') {
-              navigate('/admin')
-            } else {
-              if (
-                payload.relationships &&
-                payload?.relationships[0]?.role === 'OWNER'
-              ) {
-                navigate('/')
-              } else {
-                navigate('/bills')
-              }
-            }
-            toast.success('Login successful')
-            cookie.set('accessToken', res.token, {
-              path: '/',
-              expires: new Date(new Date().setDate(new Date().getDate() + 7)),
-            })
-            cookie.set('refreshToken', res.refreshToken, {
-              path: '/',
-              expires: new Date(new Date().setDate(new Date().getDate() + 7)),
-            })
+          .then(async (payloadUser) => {
+            console.log(payloadUser)
+						await getRelationships({ userId: payloadUser.id, page: 1 }).unwrap().then((payload) => {
+							dispatch(getUserInformation({ ...payloadUser, relationships: payload.data }))
+							if (payloadUser.userType === 'ADMIN') {
+								navigate('/admin')
+							} else {
+								navigate('/')
+							}
+							toast.success('Login successful')
+							cookie.set('accessToken', res.result.token, {
+								path: '/',
+								expires: new Date(new Date().setDate(new Date().getDate() + 7)),
+							})
+						})
           })
           .catch((error) => {
             console.log(error)
@@ -86,7 +77,7 @@ export default function Index() {
           })
       })
       .catch((error) => {
-        console.log(error)
+        toast.error(error.data.message)
       })
   }
 
@@ -101,9 +92,7 @@ export default function Index() {
           </p>
         </div>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
@@ -124,20 +113,20 @@ export default function Index() {
                 <FormItem className="relative">
                   <div className="flex items-center">
                     <FormLabel>Password</FormLabel>
-                    <Link
-                      to="/forgot-password"
-                      className="ml-auto inline-block text-sm underline">
+                    <Link to="/forgot-password" className="ml-auto inline-block text-sm underline">
                       Forgot your password?
                     </Link>
                   </div>
                   <FormControl>
-                    <Input type={!isShowing ? 'password' : 'text'} {...field} />
+                    <Input
+                      placeholder="Enter password..."
+                      type={!isShowing ? 'password' : 'text'}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
 
-                  <span
-                    onClick={handleShowPassword}
-                    className="absolute top-7 right-2">
+                  <span onClick={handleShowPassword} className="absolute top-7 right-2">
                     {!isShowing ? <Eye size={20} /> : <EyeOff size={20} />}
                   </span>
                 </FormItem>

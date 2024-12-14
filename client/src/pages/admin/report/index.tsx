@@ -41,7 +41,7 @@ const Index = () => {
           </section>
           <div className="size-full overflow-y-auto">
             <ReportList
-              reports={reports?.contents}
+              reports={reports?.data}
               isLoading={isLoading}
               isFetching={isFetching}
             />
@@ -51,6 +51,7 @@ const Index = () => {
               className="w-full"
               pageSize={pageSize}
               onPageSizeChange={setPageSize}
+							setCurrentPage={setCurrentPage}
             />
             <div className="w-full">
               <PaginationCustom
@@ -63,7 +64,7 @@ const Index = () => {
               className="w-full whitespace-nowrap"
               currentPage={currentPage}
               pageSize={pageSize}
-              totalItems={reports?.totalItems}
+              totalElements={reports?.totalElements}
               loading={isLoading || isFetching}
             />
           </div>

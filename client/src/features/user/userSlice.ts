@@ -49,6 +49,9 @@ const userApiSlice = apiSlice.injectEndpoints({
         if (params.pageSize && params.pageSize != 10) {
           baseUrl += `&pageSize=${params.pageSize}`
         }
+        if (params.id) {
+          baseUrl += `&id=eq:${params.id}`
+        }
         if (params.email && params.email != '') {
           baseUrl += `&email=like:${params.email}`
         }
@@ -68,7 +71,7 @@ const userApiSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Users' as const,
                 id,
               })),
@@ -82,7 +85,7 @@ const userApiSlice = apiSlice.injectEndpoints({
         return endpointName
       },
       merge(currentCacheData, responseData) {
-        currentCacheData.contents.push(...responseData.contents)
+        currentCacheData.data.push(...responseData.data)
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg
@@ -93,7 +96,7 @@ const userApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, id) => [{ type: 'Users', id }],
     }),
     getCurrentUser: builder.query<User, void>({
-      query: () => 'users/me?includes=relationships',
+      query: () => 'users/me',
     }),
     createUser: builder.mutation<
       void,
@@ -111,10 +114,13 @@ const userApiSlice = apiSlice.injectEndpoints({
         >
     >({
       query: (data) => ({
-        url: '/users',
+        url: 'users',
         method: 'POST',
         body: data,
       }),
+      invalidatesTags(result, error, arg, meta) {
+        return [{ type: 'Users', id: 'LIST' }]
+      },
     }),
     updateUser: builder.mutation<
       void,
@@ -128,24 +134,30 @@ const userApiSlice = apiSlice.injectEndpoints({
       }
     >({
       query: (data) => ({
-        url: `/users/${data.id}`,
-        method: 'PUT',
+        url: `users/${data.id}`,
+        method: 'PATCH',
         body: data.body,
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Users', id }],
     }),
     deleteUser: builder.mutation<void, string | number | undefined>({
       query: (id) => ({
-        url: `/users/${id}`,
+        url: `users/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, id) => [{ type: 'Users' }],
     }),
     updatePassord: builder.mutation<void, { body: FirstLogin }>({
       query: (data) => ({
-        url: 'auth/first-login/update-password',
-        method: 'PATCH',
+        url: 'users/me/first-login',
+        method: 'POST',
         body: data.body,
+      }),
+    }),
+    notifyReceivedPackage: builder.mutation<void, { id?: number }>({
+      query: (data) => ({
+        url: `users/${data.id}/notify-sms`,
+        method: 'POST',
       }),
     }),
   }),
@@ -156,6 +168,7 @@ export const { getQrScanInformation, getUserInformation } = userSlice.actions
 export const {
   useGetUsersQuery,
   useGetUsersInScrollQuery,
+  useLazyGetUserByIdQuery,
   useGetUserByIdQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
@@ -163,4 +176,5 @@ export const {
   useGetCurrentUserQuery,
   useLazyGetCurrentUserQuery,
   useUpdatePassordMutation,
+  useNotifyReceivedPackageMutation,
 } = userApiSlice

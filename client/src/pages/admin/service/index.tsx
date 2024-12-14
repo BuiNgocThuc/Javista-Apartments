@@ -57,7 +57,7 @@ const Index = () => {
             </div>
             <div className="size-full overflow-y-auto">
               <ServiceList
-                services={services?.contents}
+                services={services?.data}
                 isFetching={isFetching}
                 isLoading={isLoading}
               />
@@ -67,6 +67,7 @@ const Index = () => {
                 className="w-full"
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
+                setCurrentPage={setCurrentPage}
               />
               <div className="w-full">
                 <PaginationCustom
@@ -79,7 +80,7 @@ const Index = () => {
                 className="w-full whitespace-nowrap"
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItems={services?.totalItems}
+                totalElements={services?.totalElements}
                 loading={isLoading || isFetching}
               />
             </div>

@@ -1,14 +1,5 @@
 import { Button } from '@/components/ui/button'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-
-import {
   Form,
   FormControl,
   FormField,
@@ -34,13 +25,17 @@ import { Checkbox } from '@/components/ui/checkbox'
 import QrCodeScanner from '@/components/qrcode/QrCodeScanner'
 import { parseDateFromString } from '@/utils/ExtractTime'
 import { useCreateUserMutation } from '@/features/user/userSlice'
-import { useState } from 'react'
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Overlay from '@/components/overlay/Overlay'
 
-const UserForm = () => {
-  const [open, setOpen] = useState<boolean>(false)
+interface UserFormProps {
+  open: boolean
+  onClose: (value: boolean) => void
+}
+
+const UserForm = ({ open, onClose }: UserFormProps) => {
   const [createUser, { isLoading }] = useCreateUserMutation()
   const form = useForm<Omit<z.infer<typeof UserSchema>, 'id'>>({
     mode: 'onSubmit',
@@ -64,7 +59,7 @@ const UserForm = () => {
         .then(() => {
           toast.success('User created successfully')
           form.reset()
-          setOpen(false)
+          onClose(false)
         })
         .catch((error) => {
           throw new Error(error)
@@ -72,8 +67,8 @@ const UserForm = () => {
     } catch (error) {
       console.error(error)
       toast.error('Failed to create user')
+      onClose(false)
     } finally {
-      setOpen(false)
     }
   }
 
@@ -83,10 +78,7 @@ const UserForm = () => {
     form.setValue('nationId', data.nationID)
     form.setValue('gender', data.gender == 'Nam' ? 'MALE' : 'FEMALE')
     console.log(form.getValues('gender'))
-    form.setValue(
-      'dateOfBirth',
-      (data.dob && parseDateFromString(data.dob)) ?? undefined,
-    ) // Adjust as necessary
+    form.setValue('dateOfBirth', (data.dob && parseDateFromString(data.dob)) ?? undefined) // Adjust as necessary
   }
 
   const onError = (error: any) => {
@@ -94,32 +86,21 @@ const UserForm = () => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="w-full sm:w-[160px]" variant={'default'} size={'lg'}>
-          New User
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        className="max-w-sm min-[450px]:max-w-md lg:max-w-2xl"
-        aria-describedby={undefined}>
+    <Overlay>
+      <div className="lg:min-w-[600px] lg:max-w-5xl rounded-md bg-white flex flex-col space-y-2 p-4">
         {isLoading && (
           <div className="absolute inset-0 size-full rounded-md flex justify-center items-center bg-white/50 backdrop-blur-md">
             <Loader className="animate-spin text-primary" size={52} />
           </div>
         )}
-        <DialogHeader>
-          <DialogTitle className="text-2xl">New User</DialogTitle>
-        </DialogHeader>
+        <p className="text-2xl font-medium">New User</p>
         <Separator />
         <div className="flex items-center gap-4">
           <h2 className="font-medium">Personal Information</h2>
           <QrCodeScanner handleQrScanSuccess={handleQrScanSuccess} />
         </div>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, onError)}
-            className="space-y-2 lg:space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-2 lg:space-y-4">
             <FormField
               control={form.control}
               name="fullName"
@@ -268,9 +249,7 @@ const UserForm = () => {
                   <FormControl>
                     <Checkbox checked={field.value} onChange={field.onChange} />
                   </FormControl>
-                  <FormLabel className="font-medium uppercase">
-                    Is staying
-                  </FormLabel>
+                  <FormLabel className="font-medium uppercase">Is staying</FormLabel>
                   <FormMessage />
                 </FormItem>
               )}
@@ -297,12 +276,13 @@ const UserForm = () => {
                               <FormControl>
                                 <Checkbox
                                   {...field}
-                                  checked={field.value == (role as UserRole)}
+                                  checked={field.value === (role as UserRole)}
+                                  onCheckedChange={() => {
+                                    field.onChange(role)
+                                  }}
                                 />
                               </FormControl>
-                              <FormLabel className="text-sm font-normal">
-                                {role}
-                              </FormLabel>
+                              <FormLabel className="text-sm font-normal">{role}</FormLabel>
                             </FormItem>
                           )
                         }}
@@ -314,23 +294,17 @@ const UserForm = () => {
               )}
             />
             <div className="w-full flex justify-end gap-4">
-              <DialogClose asChild>
-                <Button
-                  onClick={() => setOpen(false)}
-                  type="button"
-                  size={'lg'}
-                  variant={'ghost'}>
-                  Cancel
-                </Button>
-              </DialogClose>
+              <Button onClick={() => onClose(false)} type="button" size={'lg'} variant={'ghost'}>
+                Cancel
+              </Button>
               <Button type="submit" size={'lg'} variant={'default'}>
                 Save
               </Button>
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </Overlay>
   )
 }
 

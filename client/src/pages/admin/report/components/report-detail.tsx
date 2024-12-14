@@ -1,6 +1,7 @@
 import { useGetReportQuery } from '@/features/reports/reportSlice'
 import ReportDetailForm from './components/report-detail-form'
 import { Loader } from 'lucide-react'
+import { memo } from 'react'
 
 interface ReportDetailProps {
   report: number | string
@@ -32,4 +33,4 @@ const ReportDetail = ({ setShowDetail, report }: ReportDetailProps) => {
   )
 }
 
-export default ReportDetail
+export default memo(ReportDetail)

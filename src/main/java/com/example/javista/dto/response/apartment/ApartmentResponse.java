@@ -22,4 +22,6 @@ public class ApartmentResponse {
     String apartmentNumber;
 
     ApartmentStatus status;
+
+    Integer currentWaterNumber;
 }

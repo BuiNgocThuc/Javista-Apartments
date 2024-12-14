@@ -1,13 +1,7 @@
 package com.example.javista.service.impl;
 
-import com.example.javista.configuration.EsmsConfig;
-import com.example.javista.dto.request.contact.SMSCreationRequest;
-import com.example.javista.dto.request.contact.SMSSendRequest;
-import com.example.javista.dto.response.contact.SMSResponse;
-import com.example.javista.service.media.SMSService;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Objects;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,7 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import com.example.javista.configuration.EsmsConfig;
+import com.example.javista.dto.request.contact.SMSCreationRequest;
+import com.example.javista.dto.request.contact.SMSSendRequest;
+import com.example.javista.dto.response.contact.SMSResponse;
+import com.example.javista.service.media.SMSService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -30,15 +32,15 @@ public class SMSServiceImpl implements SMSService {
     public SMSResponse sendSMS(SMSSendRequest request) {
 
         SMSCreationRequest smsCreationRequest = SMSCreationRequest.builder()
-            .phone(request.getPhoneNumber())
-//            .content(request.getMessage())
-            .content(esmsConfig.getContent())
-            .apiKey(esmsConfig.getApiKey())
-            .secretKey(esmsConfig.getSecretKey())
-            .brandName(esmsConfig.getBrandName())
-            .smsType(esmsConfig.getSmsType())
-            .isUnicode(esmsConfig.getIsUnicode())
-            .build();
+                .phone(request.getPhoneNumber())
+                //            .content(request.getMessage())
+                .content(esmsConfig.getContent())
+                .apiKey(esmsConfig.getApiKey())
+                .secretKey(esmsConfig.getSecretKey())
+                .brandName(esmsConfig.getBrandName())
+                .smsType(esmsConfig.getSmsType())
+                .isUnicode(esmsConfig.getIsUnicode())
+                .build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
@@ -47,20 +49,18 @@ public class SMSServiceImpl implements SMSService {
 
         log.info("Sending SMS with payload: {}", smsCreationRequest);
         try {
-            ResponseEntity<SMSResponse> response = restTemplate.exchange(
-                esmsConfig.getUrl(),
-                HttpMethod.POST,
-                httpEntity,
-                SMSResponse.class
-            );
+            ResponseEntity<SMSResponse> response =
+                    restTemplate.exchange(esmsConfig.getUrl(), HttpMethod.POST, httpEntity, SMSResponse.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                log.info("SMS sent successfully with id: {}" , Objects.requireNonNull(response.getBody()).getSmsId());
+                log.info(
+                        "SMS sent successfully with id: {}",
+                        Objects.requireNonNull(response.getBody()).getSmsId());
                 return response.getBody();
             } else {
                 System.out.println("Error: " + response.getStatusCode());
                 throw new Exception("Failed to send sms: "
-                    + Objects.requireNonNull(response.getBody()).getSmsId());
+                        + Objects.requireNonNull(response.getBody()).getSmsId());
             }
 
         } catch (Exception e) {

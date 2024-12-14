@@ -15,8 +15,8 @@ import com.example.javista.entity.Item;
 public interface ItemMapper {
     // mapping dto creation request to entity
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "image", ignore = true)  // Ignore the image field
-    @Mapping(target = "isReceive", expression = "java(false)")  // Default isReceive to false
+    @Mapping(target = "image", ignore = true) // Ignore the image field
+    @Mapping(target = "isReceive", expression = "java(false)") // Default isReceive to false
     Item creationRequestToEntity(ItemCreationRequest request);
 
     // mapping dto update request to entity
@@ -29,5 +29,6 @@ public interface ItemMapper {
 
     // mapping entity to dto response
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user", target = "user")
     ItemResponse entityToResponse(Item item);
 }

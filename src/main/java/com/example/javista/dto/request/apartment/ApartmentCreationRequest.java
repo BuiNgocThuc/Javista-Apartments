@@ -1,6 +1,5 @@
 package com.example.javista.dto.request.apartment;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import com.example.javista.enums.ApartmentStatus;

@@ -64,7 +64,8 @@ const SurveyForm = ({ mode = 'create', initialData }: SurveyFormProps) => {
   }
 
   const onSubmit = async (data: z.infer<typeof SurveySchema>) => {
-    const result = await updateSurvey({ id: initialData?.id, body: data })
+    const {id, questions,...rest} = data
+    const result = await updateSurvey({ id: initialData?.id, body: rest })
     if (result.error) {
       toast.error(result.data)
     } else {

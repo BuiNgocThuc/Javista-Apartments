@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.rejectionReason;
 
 import com.example.javista.dto.request.PageRequest;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

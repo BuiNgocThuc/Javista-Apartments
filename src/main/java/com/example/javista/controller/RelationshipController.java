@@ -1,6 +1,5 @@
 package com.example.javista.controller;
 
-import com.example.javista.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.javista.dto.request.relationship.RelationshipCreationRequest;

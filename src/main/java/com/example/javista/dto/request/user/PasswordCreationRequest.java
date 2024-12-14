@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.user;
 
 import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,4 +17,3 @@ public class PasswordCreationRequest {
     @NotNull
     String confirmPassword;
 }
-

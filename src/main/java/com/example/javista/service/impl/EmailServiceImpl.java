@@ -34,12 +34,12 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             sendEmail(
-                MailSendRequest.builder()
-                    .to(email)
-                    .subject("Test Email")
-                    .props(props)
-                    .build()
-                , "ConfirmationEmail");
+                    MailSendRequest.builder()
+                            .to(email)
+                            .subject("Test Email")
+                            .props(props)
+                            .build(),
+                    "ConfirmationEmail");
             return true;
         } catch (MessagingException e) {
             e.printStackTrace();

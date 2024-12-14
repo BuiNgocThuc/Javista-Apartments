@@ -1,11 +1,11 @@
 package com.example.javista.service;
 
-import com.example.javista.dto.request.user.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.javista.dto.request.user.*;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.user.UserResponse;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     @PreAuthorize("hasRole('ADMIN')")
@@ -30,5 +30,4 @@ public interface UserService {
     UserResponse uploadAvatar(MultipartFile avatar);
 
     Void notifySmsNewItems(Integer id);
-
 }

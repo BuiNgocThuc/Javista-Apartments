@@ -1,10 +1,7 @@
 package com.example.javista.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.example.javista.enums.RelationshipRole;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -16,16 +13,20 @@ import com.example.javista.dto.request.relationship.RelationshipUpdateRequest;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.relationship.RelationshipResponse;
 import com.example.javista.entity.Relationship;
+import com.example.javista.exception.AppException;
+import com.example.javista.exception.ErrorCode;
 import com.example.javista.filter.FilterSpecification;
 import com.example.javista.mapper.RelationshipMapper;
 import com.example.javista.repository.ApartmentRepository;
 import com.example.javista.repository.RelationshipRepository;
+import com.example.javista.repository.UserRepository;
 import com.example.javista.service.RelationshipService;
 import com.example.javista.utils.QueryUtils;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -36,6 +37,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     RelationshipRepository relationshipRepository;
 
     ApartmentRepository apartmentRepository;
+    UserRepository userRepository;
 
     FilterSpecification<Relationship> filterSpecification;
 
@@ -65,7 +67,11 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         relationship.setApartment(apartmentRepository
                 .findById(request.getApartmentId())
-                .orElseThrow(() -> new RuntimeException("Apartment Not Found")));
+                .orElseThrow(() -> new AppException(ErrorCode.APARTMENT_NOT_FOUND)));
+
+        relationship.setUser(userRepository
+                .findById(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
 
         return relationshipMapper.entityToResponse(relationshipRepository.save(relationship));
     }

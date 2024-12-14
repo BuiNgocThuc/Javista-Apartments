@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PageRequest {
-    int currentPage = 1;
-    int size = 10;
-    String sort = "id";
+    int page = 1;
+    int pageSize = 10;
+    String sort = "createdAt";
 }

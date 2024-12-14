@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.survey;
 
 import jakarta.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

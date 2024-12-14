@@ -28,7 +28,6 @@ const packageApiSlice = apiSlice.injectEndpoints({
       {
         page?: number
         pageSize?: number
-        includes?: string[]
         sort?: string[]
       } & Partial<IPackage>
     >({
@@ -41,13 +40,10 @@ const packageApiSlice = apiSlice.injectEndpoints({
           url += `&isReceive=eq:${params.isReceive}`
         }
         if (params?.userId) {
-          url += `&UserId=eq:${params.userId}`
+          url += `&User_Id=eq:${params.userId}`
         }
         if (params?.pageSize) {
           url += `&pageSize=${params.pageSize}`
-        }
-        if (params?.includes && params?.includes.length > 0) {
-          url += `&includes=${params.includes.join(',')}`
         }
         if (params?.sort && params?.sort.length > 0) {
           url += `&sort=${params.sort.join(',')}`
@@ -59,7 +55,7 @@ const packageApiSlice = apiSlice.injectEndpoints({
       providesTags: (results) =>
         results
           ? [
-              ...results.contents.map(({ id }) => ({
+              ...results.data.map(({ id }) => ({
                 type: 'Packages' as const,
                 id,
               })),
@@ -67,15 +63,20 @@ const packageApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Packages', id: 'LIST' }],
     }),
-    getPackage: builder.query<IPackage, number | undefined>({
-      query: (id) => `items/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Packages', id }],
+    getPackage: builder.query<IPackage, { id?: number }>({
+      query: (params) => {
+        let url = `items/${params.id}`
+        return {
+          url: url,
+        }
+      },
+      providesTags: (result, error, { id }) => [{ type: 'Packages', id }],
     }),
     updatePackage: builder.mutation<
       IPackage,
       {
-        id: number
-        body: Partial<IPackage> & Pick<IPackage, 'description' | 'isReceive'>
+        id?: number
+        body: Partial<IPackage> & Pick<IPackage, 'description'>
       }
     >({
       query: (data) => ({
@@ -85,7 +86,7 @@ const packageApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Packages', id }],
     }),
-    updateImagePackage: builder.mutation<void, { id: number; image: FormData }>({
+    updateImagePackage: builder.mutation<void, { id?: number; image: FormData }>({
       query: ({ id, image }) => ({
         url: `items/${id}/image`,
         method: 'POST',
@@ -94,22 +95,21 @@ const packageApiSlice = apiSlice.injectEndpoints({
           'Content-Type': undefined,
         },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Packages', id }],
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Packages', id },
+        { type: 'Packages', id: 'LIST' },
+      ],
     }),
-    createPackage: builder.mutation<
-      IPackage,
-      Pick<IPackage, 'image' | 'description' | 'isReceive'>
-    >({
+    createPackage: builder.mutation<IPackage, Pick<IPackage, 'description' | 'userId'>>({
       query: (data) => ({
         url: 'items',
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: [{ type: 'Packages', id: 'LIST' }],
     }),
-    deletePackage: builder.mutation<void, string>({
-      query: (id) => ({
-        url: `items/${id}`,
+    deletePackage: builder.mutation<void, { id?: number }>({
+      query: (data) => ({
+        url: `items/${data.id}`,
         method: 'DELETE',
       }),
       invalidatesTags: [{ type: 'Packages', id: 'LIST' }],

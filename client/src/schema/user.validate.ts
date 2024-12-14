@@ -1,6 +1,6 @@
 import { GenderSchema, UserRoleSchema } from '@/enums'
 import { z } from 'zod'
-import { IRelationships } from './relationship.validate'
+import { RelationshipsTypeSchema } from './relationship.validate'
 
 // Zod schema for the User interface
 export const UserSchema = z.object({
@@ -9,10 +9,7 @@ export const UserSchema = z.object({
     .string()
     .min(3, 'Username must be at least 3 characters long')
     .max(20, 'Username must be at most 20 characters long')
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      'Username can only contain letters, numbers, and underscores',
-    ),
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
   avatar: z
     .string()
     .url()
@@ -40,22 +37,12 @@ export const UserSchema = z.object({
   userType: UserRoleSchema,
   dateOfBirth: z.coerce
     .date()
-    .refine(
-      (date) => date <= new Date(),
-      'Date of birth cannot be in the future',
-    )
+    .refine((date) => date <= new Date(), 'Date of birth cannot be in the future')
     .refine((date) => {
       const age = new Date().getFullYear() - date.getFullYear()
       return age <= 100 // Check if age is 100 years or less
     }, 'Bro are you a vampire?'),
   isStaying: z.boolean().optional(),
-})
-
-const AddtionalSchema = z.object({
-  items: z.array(z.string()).optional(),
-  otherAnswers: z.array(z.string()).optional(),
-  surveys: z.array(z.string()).optional(),
-  userAnswers: z.array(z.string()).optional(),
 })
 
 export type UserFormSchema = z.infer<typeof UserSchema>
@@ -72,16 +59,13 @@ export interface UserLogin extends z.infer<typeof UserLoginSchema> {}
 
 // Example Zod schema for UserPartial (Partial<User>)
 
-export interface User
-  extends UserFormSchema,
-    BaseEntity,
-    z.infer<typeof AddtionalSchema> {
-  relationships?: IRelationships[]
+export interface User extends UserFormSchema, BaseEntity {
+  relationships?: RelationshipsTypeSchema[]
 }
 
 export const FirstLoginSchema = z
   .object({
-    newPassword: z
+    password: z
       .string()
       .min(6, 'Password must be at least 6 characters')
       .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -90,7 +74,7 @@ export const FirstLoginSchema = z
       .regex(/[\W_]/, 'Password must contain at least one special character'),
     confirmPassword: z.string(),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword'],
   })

@@ -25,6 +25,7 @@ const StatisticsSurvey = ({
     isFetching,
   } = useGetSurveyStatisticsQuery(surveyId)
 
+  console.log(surveyStat)
   const transformSurveyData = (
     answers?: Answer[],
     otherAnswers?: OtherAnswer[],
@@ -133,7 +134,7 @@ const StatisticsSurvey = ({
           </div>
           <div className="w-full lg:h-[650px] flex flex-col gap-4 overflow-y-auto overflow-x-hidden">
             {surveyStat &&
-              surveyStat?.questionStatistics.map((item, index) => (
+              surveyStat?.questions.map((item, index) => (
                 <div
                   key={index}
                   className="p-4 border border-black w-full flex justify-between">
@@ -192,12 +193,12 @@ const StatisticsSurvey = ({
                     <PieChartItem
                       key={index}
                       chartConfigData={transformChartConfig(
-                        surveyStat?.questionStatistics[index].answers,
-                        surveyStat?.questionStatistics[index].otherAnswers,
+                        surveyStat?.questions[index].answers,
+                        surveyStat?.questions[index].otherAnswers,
                       )}
                       data={transformSurveyData(
-                        surveyStat?.questionStatistics[index].answers,
-                        surveyStat?.questionStatistics[index].otherAnswers,
+                        surveyStat?.questions[index].answers,
+                        surveyStat?.questions[index].otherAnswers,
                       )}
                     />
                   </div>

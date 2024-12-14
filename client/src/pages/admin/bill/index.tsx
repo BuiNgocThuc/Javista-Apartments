@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { Filter, Search } from 'lucide-react'
+import { Droplets, Filter, Search } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import BillList from './components/bill-list'
 import { useDocumentTitle } from 'usehooks-ts'
@@ -9,19 +9,38 @@ import { useState } from 'react'
 import PaginationCustom from '@/components/pagination/PaginationCustom'
 import PageSizeSelector from '@/components/table/page-size-selector'
 import PaginationInfo from '@/components/table/page-info'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import BillUpdateWaterReading from './components/bill-update-water-reading'
+import FilterPanel, { FilterValues } from './components/bill-filter-panel'
 const Index = () => {
   useDocumentTitle('Bill')
+  const [isOpenWaterReading, setIsOpenWaterReading] = useState<boolean>(false)
   const [pageSize, setPageSize] = useState<number>(10)
   const [currentPage, setCurrentPage] = useState<number>(1)
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false)
+  const [filters, setFilters] = useState<FilterValues>({
+    id: undefined,
+    monthly: undefined,
+    status: undefined,
+  })
   const {
     data: bills,
     isLoading,
     isFetching,
   } = useGetBillsQuery({
     page: currentPage,
-    includes: ['Relationship'],
     pageSize: pageSize,
+    ...(filters.id !== null ? { id: filters.id } : {}),
+    ...(filters.monthly ? { monthly: filters.monthly } : {}),
+    ...(filters.status ? { status: filters.status } : {}),
   })
+
+  const handleApplyFilters = (newFilters: FilterValues) => {
+    setFilters(newFilters)
+    setCurrentPage(1) // Reset to first page when filters change
+  }
+
+  const activeFilterCount = Object.values(filters).filter(Boolean).length
 
   return (
     <>
@@ -29,33 +48,49 @@ const Index = () => {
         <BreadCrumb paths={[{ label: 'bill', to: '/bill' }]} />
         <div className="size-full p-4 overflow-hidden">
           <div className="size-full p-4 bg-white rounded-md flex flex-col space-y-2">
-            <div className="w-full h-auto flex justify-between items-center">
-              <div className="w-full flex gap-4 items-center">
-                <div className="lg:w-1/4 flex items-center border px-3 py-0.5 relative rounded-md focus-within:border-primary transition-all">
-                  <Search size={20} />
-                  <Input
-                    placeholder="Search something"
-                    className="border-none shadow-none focus-visible:ring-0"
-                  />
+            <div className="w-full flex flex-col space-y-2">
+              <div className="w-full h-auto flex justify-between items-center">
+                <div className="w-full flex gap-4 items-center">
+                  <Button
+                    className={`${isFilterOpen ? 'bg-primary' : ''}`}
+                    size={'lg'}
+                    variant={'secondary'}
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}>
+                    <Filter size={20} />
+                    Filter
+                    {activeFilterCount > 0 && (
+                      <span className="ml-2 px-2 py-0.5 bg-primary text-white text-xs rounded-full">
+                        {activeFilterCount}
+                      </span>
+                    )}
+                  </Button>
                 </div>
-                <Button className="gap-1" size={'lg'} variant={'secondary'}>
-                  <Filter size={20} />
-                  Filter
-                </Button>
+                <div className="flex gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="button"
+                        onClick={() => setIsOpenWaterReading(true)}
+                        size={'icon'}
+                        variant={'outline'}>
+                        <Droplets size={20} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Update water reading</TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
+              <FilterPanel isOpen={isFilterOpen} onApplyFilters={handleApplyFilters} />
             </div>
             <div className="size-full overflow-y-auto">
-              <BillList
-                bills={bills?.contents}
-                isFetching={isFetching}
-                isLoading={isLoading}
-              />
+              <BillList bills={bills?.data} isFetching={isFetching} isLoading={isLoading} />
             </div>
             <div className="w-full flex justify-between items-center">
               <PageSizeSelector
                 className="w-full"
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
+                setCurrentPage={setCurrentPage}
               />
               <div className="w-full">
                 <PaginationCustom
@@ -68,13 +103,16 @@ const Index = () => {
                 className="w-full whitespace-nowrap"
                 currentPage={currentPage}
                 pageSize={pageSize}
-                totalItems={bills?.totalItems}
+                totalElements={bills?.totalElements}
                 loading={isLoading || isFetching}
               />
             </div>
           </div>
         </div>
       </div>
+      {isOpenWaterReading && (
+        <BillUpdateWaterReading setIsOpenWaterReading={setIsOpenWaterReading} />
+      )}
     </>
   )
 }

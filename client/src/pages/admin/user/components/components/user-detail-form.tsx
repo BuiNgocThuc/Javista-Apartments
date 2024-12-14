@@ -25,10 +25,7 @@ import { Separator } from '@/components/ui/separator'
 import { z } from 'zod'
 import { User, UserSchema } from '@/schema/user.validate'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  useDeleteUserMutation,
-  useUpdateUserMutation,
-} from '@/features/user/userSlice'
+import { useDeleteUserMutation, useUpdateUserMutation } from '@/features/user/userSlice'
 import { toast } from 'sonner'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -41,9 +38,7 @@ interface UserDetailFormProps {
 const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
   const [updateUser, { isLoading }] = useUpdateUserMutation()
   const [deleteUser, { isLoading: isLoadingDelete }] = useDeleteUserMutation()
-  const [selectedImage, setSelectedImage] = useState<string | undefined>(
-    undefined,
-  )
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined)
 
   const form = useForm<z.infer<typeof UserSchema>>({
     mode: 'onSubmit',
@@ -231,9 +226,7 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
                 <FormItem className="w-full flex-[1_1_150px]">
                   <FormLabel>Gender</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
@@ -266,9 +259,7 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
               )}
             />
           </div>
-          <p className="text-gray-500 font-medium text-sm">
-            Account Information
-          </p>
+          <p className="text-gray-500 font-medium text-sm">Account Information</p>
           <div className="w-full flex gap-4">
             <FormField
               control={form.control}
@@ -280,6 +271,8 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
                     <Input
                       placeholder="Enter email..."
                       type="email"
+                      className="read-only:bg-gray-100 cursor-not-allowed"
+                      readOnly
                       {...field}
                     />
                   </FormControl>
@@ -307,7 +300,12 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
                 <FormItem className="w-full">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter username..." {...field} />
+                    <Input
+                      placeholder="Enter username..."
+                      className="read-only:bg-gray-100 cursor-not-allowed"
+                      {...field}
+                      readOnly
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -327,7 +325,7 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
                     }}
                   />
                 </FormControl>
-                <FormLabel className={`uppercase ${field.value ? "font-medium" : "font-normal"}`}>
+                <FormLabel className={`uppercase ${field.value ? 'font-medium' : 'font-normal'}`}>
                   Is staying
                 </FormLabel>
                 <FormMessage />
@@ -356,12 +354,16 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
                             <FormControl>
                               <Checkbox
                                 checked={field.value === role}
+                                disabled
                                 onCheckedChange={() => {
                                   field.onChange(role)
                                 }}
                               />
                             </FormControl>
-                            <FormLabel className={`text-sm ${field.value === role ? 'font-medium' : 'font-normal'}`}>
+                            <FormLabel
+                              className={`text-sm ${
+                                field.value === role ? 'font-medium' : 'font-normal'
+                              }`}>
                               {role}
                             </FormLabel>
                           </FormItem>
@@ -383,10 +385,7 @@ const UserDetailForm = ({ user, setShowDetail }: UserDetailFormProps) => {
             isLoading={isLoadingDelete}
           />
           <div className="flex gap-2">
-            <Button
-              onClick={() => setShowDetail(null)}
-              type="button"
-              variant={'ghost'}>
+            <Button onClick={() => setShowDetail(null)} type="button" variant={'ghost'}>
               Cancel
             </Button>
             <Button type="submit" variant={'info'}>

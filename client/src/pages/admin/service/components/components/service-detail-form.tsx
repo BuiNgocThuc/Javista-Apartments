@@ -15,10 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
-import {
-  useCreateServiceMutation,
-  useUpdateServiceMutation,
-} from '@/features/service/serviceSlice'
+import { useCreateServiceMutation, useUpdateServiceMutation } from '@/features/service/serviceSlice'
 import { Loader } from 'lucide-react'
 
 interface IServiceDetailFormProps {
@@ -26,14 +23,9 @@ interface IServiceDetailFormProps {
   initialData?: z.infer<typeof ServiceSchema>
 }
 
-const ServiceDetailForm = ({
-  setOpen,
-  initialData,
-}: IServiceDetailFormProps) => {
-  const [createService, { isLoading: isLoadingCreate }] =
-    useCreateServiceMutation()
-  const [updateService, { isLoading: isLoadingUpdate }] =
-    useUpdateServiceMutation()
+const ServiceDetailForm = ({ setOpen, initialData }: IServiceDetailFormProps) => {
+  const [createService, { isLoading: isLoadingCreate }] = useCreateServiceMutation()
+  const [updateService, { isLoading: isLoadingUpdate }] = useUpdateServiceMutation()
 
   const form = useForm<z.infer<typeof ServiceSchema>>({
     defaultValues: initialData || {
@@ -47,18 +39,20 @@ const ServiceDetailForm = ({
   const onSubmit = async (data: z.infer<typeof ServiceSchema>) => {
     try {
       let result
+      const { name, description, price } = data
       if (initialData) {
-        result = await updateService({ id: initialData.id, body: data })
+        result = await updateService({
+          id: initialData.id,
+          body: { name: name, description: description, price: price },
+        })
       } else {
-        result = await createService(data)
+        result = await createService({ name: name, description: description, price: price })
       }
 
       if ('error' in result) {
         throw new Error('Something went wrong')
       } else {
-        toast.success(
-          `Service ${initialData ? 'updated' : 'created'} successfully`,
-        )
+        toast.success(`Service ${initialData ? 'updated' : 'created'} successfully`)
         setOpen(false)
       }
     } catch (error: any) {
@@ -123,20 +117,14 @@ const ServiceDetailForm = ({
             <FormItem className="w-full">
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea
-                  {...field}
-                  placeholder="Enter service description"></Textarea>
+                <Textarea {...field} placeholder="Enter service description"></Textarea>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="w-full flex justify-end gap-4">
-          <Button
-            onClick={() => setOpen(false)}
-            type="button"
-            size="lg"
-            variant="ghost">
+          <Button onClick={() => setOpen(false)} type="button" size="lg" variant="ghost">
             Cancel
           </Button>
           <Button type="submit" size="lg" variant="default">

@@ -3,6 +3,7 @@ package com.example.javista.dto.response.report;
 import java.time.LocalDateTime;
 
 import com.example.javista.enums.ReportStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -21,8 +22,10 @@ public class ReportResponse {
 
     ReportStatus status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime updatedAt;
 
     Integer relationshipId;

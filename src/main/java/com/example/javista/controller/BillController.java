@@ -1,9 +1,9 @@
 package com.example.javista.controller;
 
-import com.example.javista.dto.request.bill.*;
-import com.example.javista.dto.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.javista.dto.request.bill.*;
+import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.PageResponse;
 import com.example.javista.dto.response.bill.BillResponse;
 import com.example.javista.service.BillService;
@@ -60,7 +60,7 @@ public class BillController {
     ApiResponse<Void> updateWaterReadings(@RequestBody WaterReadingsUpdateRequest request) {
         billService.updateWaterReadings(request);
         return ApiResponse.<Void>builder()
-            .message("Water readings updated successfully")
-            .build();
+                .message("Water readings updated successfully")
+                .build();
     }
 }

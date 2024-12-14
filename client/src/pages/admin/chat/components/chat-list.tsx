@@ -24,7 +24,8 @@ const ChatList = () => {
     const isNearBottom =
       scrollHeight - (scrollTop + clientHeight) <= scrollThreshold
     // console.log(isNearBottom)
-    if (isNearBottom) {
+    if (isNearBottom && data?.data.length != data?.totalElements) {
+			console.log(data)
       console.log('Fetching more data')
       setCurrentPage((prev) => prev + 1)
       setPageSize(5)
@@ -52,7 +53,7 @@ const ChatList = () => {
           <Loader2 className='animate-spin text-primary' />
         </div>
       ) : (
-        data?.contents.map((user, index) => (
+        data?.data.map((user, index) => (
           <div
             key={index}
             onClick={() => navigate(`/admin/chat/${user.id}`)}
@@ -60,7 +61,7 @@ const ChatList = () => {
             <Avatar>
               <AvatarImage src={user.avatar ?? DefaultAvatar} />
               <AvatarFallback>
-                {user.fullName.charAt(0).toUpperCase()}
+                AVT
               </AvatarFallback>
             </Avatar>
             <div className="w-full h-full grid grid-cols-[1fr_40px]">

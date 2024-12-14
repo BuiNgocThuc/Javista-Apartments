@@ -10,18 +10,11 @@ const Index = () => {
   useDocumentTitle('Survey')
   const params = useParams()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const {
-    data: surveys,
-    isLoading,
-    isFetching,
-  } = useGetSurverysQuery({page: currentPage})
+  const { data: surveys, isLoading, isFetching } = useGetSurverysQuery({ page: currentPage })
   return (
     <div className="w-ful h-full flex flex-col bg-zinc-100">
       <BreadCrumb
-        paths={[
-          { label: 'survey', to: '/surveys' },
-          ...(params.id ? [{ label: params.id }] : []),
-        ]}
+        paths={[{ label: 'survey', to: '/surveys' }, ...(params.id ? [{ label: params.id }] : [])]}
       />
       <div className="size-full p-4 overflow-hidden">
         <div className="size-full flex flex-col bg-white rounded-md space-y-4 p-4">
@@ -30,7 +23,7 @@ const Index = () => {
           ) : (
             <>
               <SurveyListUser
-                surveys={surveys?.contents}
+                surveys={surveys?.data}
                 isFetching={isFetching}
                 isLoading={isLoading}
               />

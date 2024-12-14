@@ -15,7 +15,7 @@ import {
   useUpdatePassordMutation,
 } from '@/features/user/userSlice'
 import { FirstLoginSchema } from '@/schema/user.validate'
-import { useAppDispath } from '@/store'
+import { useAppDispatch } from '@/store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -23,11 +23,11 @@ import { z } from 'zod'
 
 const Index = () => {
   const [updatePassword, { isLoading }] = useUpdatePassordMutation()
-  const dispatch = useAppDispath()
+  const dispatch = useAppDispatch()
   const { refetch: refetchCurrentUser } = useGetCurrentUserQuery()
   const form = useForm<z.infer<typeof FirstLoginSchema>>({
     defaultValues: {
-      newPassword: '',
+      password: '',
       confirmPassword: '',
     },
     resolver: zodResolver(FirstLoginSchema),
@@ -67,7 +67,7 @@ const Index = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="newPassword"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>New Password</FormLabel>

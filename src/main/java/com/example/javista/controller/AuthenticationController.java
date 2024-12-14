@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.javista.dto.request.authentication.AuthenticationRequest;
-import com.example.javista.dto.request.authentication.IntrospectRequest;
 import com.example.javista.dto.request.authentication.LogoutRequest;
 import com.example.javista.dto.request.authentication.RefreshTokenRequest;
 import com.example.javista.dto.response.ApiResponse;
 import com.example.javista.dto.response.authentication.AuthenticationResponse;
-import com.example.javista.dto.response.authentication.IntrospectResponse;
 import com.example.javista.service.authentication.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 
@@ -38,15 +36,15 @@ public class AuthenticationController {
                 .build();
     }
 
-//    @PostMapping("/introspect")
-//    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
-//            throws ParseException, JOSEException {
-//        var response = authenticationService.introspect(request);
-//        return ApiResponse.<IntrospectResponse>builder()
-//                .message("Introspect Successfully")
-//                .result(response)
-//                .build();
-//    }
+    //    @PostMapping("/introspect")
+    //    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request)
+    //            throws ParseException, JOSEException {
+    //        var response = authenticationService.introspect(request);
+    //        return ApiResponse.<IntrospectResponse>builder()
+    //                .message("Introspect Successfully")
+    //                .result(response)
+    //                .build();
+    //    }
 
     @PostMapping("/logout")
     ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {

@@ -1,6 +1,7 @@
 package com.example.javista.dto.request.bill;
 
 import com.example.javista.dto.request.PageRequest;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +29,6 @@ public class BillQueryRequest extends PageRequest {
     String status;
 
     String relationshipId;
+
+    String relationship_user_Id;
 }
